@@ -1,0 +1,9 @@
+{
+    "name": "@webhelpers/formula",
+    "version": "0.1.0",
+    "description": "Formula is a library for creating store-backed HTML 5 forms in JavaScript",
+    "type": "module",
+    "dependencies": {
+        "nanostores": "0.8.0"
+    }
+}
