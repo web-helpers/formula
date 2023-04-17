@@ -24,8 +24,8 @@ function getRadioGroupParent(el) {
 
 /**
  * Sets the ARIA role for the given element based on its input type.
- * @param {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement} el - The form element.
- * @param {HTMLInputElement[] | HTMLSelectElement[] | HTMLTextAreaElement[]} elements - A collection of form elements.
+ * @param {import('../shared/fields.mjs').FormEl} el - The form element.
+ * @param {import('../shared/fields.mjs').FormEl[]} elements - A collection of form elements.
  */
 export function setAriaRole(el, elements) {
   if (el.hasAttribute('aria-role')) {
@@ -33,9 +33,9 @@ export function setAriaRole(el, elements) {
   }
 
   /**
-   * 
-   * @param {string} role 
-   * @returns 
+   *
+   * @param {string} role
+   * @returns
    */
   const setRole = (role) => el.setAttribute('aria-role', role);
 
@@ -69,7 +69,7 @@ export function setAriaRole(el, elements) {
 
 /**
  * Sets ARIA states based on the attributes of the form element.
- * @param {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement} el - The form element.
+ * @param {import('../shared/fields.mjs').FormEl} el - The form element.
  */
 export function setAriaStates(el) {
   if (el.hasAttribute('required')) {
@@ -79,8 +79,8 @@ export function setAriaStates(el) {
 
 /**
  * Updates the ARIA checked state for the given element and other elements in the group.
- * @param {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement} element - The form element.
- * @param {HTMLInputElement[] | HTMLSelectElement[] | HTMLTextAreaElement[]} elGroup - A collection of form elements.
+ * @param {import('../shared/fields.mjs').FormEl} element - The form element.
+ * @param {import('../shared/fields.mjs').FormEl[]} elGroup - A collection of form elements.
  */
 export function setAriaValue(element, elGroup) {
   if (element.type === 'radio') {

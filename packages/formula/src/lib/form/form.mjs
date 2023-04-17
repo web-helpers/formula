@@ -1,24 +1,46 @@
-import { getFormFields, getGroupFields } from '../shared/fields';
-import { createHandler, createSubmitHandler } from './event';
-import { createReset } from './init';
-import { createTouchHandlers } from './touch';
-import { createDirtyHandler } from './dirty';
+import { getFormFields, getGroupFields } from '../shared/fields.mjs';
+import { createHandler, createSubmitHandler } from './event.mjs';
+import { createReset } from './init.mjs';
+import { createTouchHandlers } from './touch.mjs';
+import { createDirtyHandler } from './dirty.mjs';
 
-import { createFormStores } from '../shared/stores';
+import { createFormStores } from '../shared/stores.mjs';
 import {
   setAriaButtons,
   setAriaContainer,
   setAriaRole,
   setAriaStates,
-} from './aria';
+} from './aria.mjs';
+
+/**
+ * Optional settings for Formula - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
+ * @typedef {object} FormulaOptions
+ * @property {Record<string, Record<string, string>=} messages - Provide customised messages to the application, these messages replace the default browser messages for the provided error types and are useful for internationalisation or custom domain messages
+ * @property {import('./errors.mjs').ValidationRules=} validators - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
+ * @property {import('./errors.mjs').ValidationRules=} validators - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
+ * @property {import('./enrichment.mjs').EnrichFields=} enrich - An object containing enrichers for the provided fields, each field enricher returns a value that is added to the `enriched` field.
+ * @property {Record<string, any>=} defaultValues - Default values are used as initial values for the form fields if there is no value already set on the form
+ * @property {() => void=} preChanges -Method called as soon as a change has been detected, before any values are read or stores are updated
+ * @property {(values: Record<string, any>) => void=} postChanges - Method called after all updates to the stores have been made
+ */
+
+/**
+ * The Formula form object, this is returned from the `formula.init` method and is the DOM instance of the form
+ * @typedef {object} Formula
+ * @property {(node: HTMLElement) => { elements: HTMLElement[], destroy: () => void }} init
+ * @property {(updatedOpts?: import('./src/lib/form/form.mjs').FormulaOptions) => void} updateForm
+ * @property {() => void} destroyForm
+ * @property {() => void} resetForm
+ * @property {import('../shared/stores.mjs').FormulaStores} stores
+ */
 
 /**
  * Creates the form action
- * @param {FormulaOptions} options
- * @param {Map<string, FormulaStores>} globalStore
+ * @param {import('./form.mjs').FormulaOptions} options
+ * @param {Map<string, import('../shared/stores.mjs').FormulaStores>} globalStore
  * @param {string} groupName
  * @param {Record<string, any>} initialData
- * @returns {import('../../../index.mjs').Formula}
+ * @returns {Formula}
  */
 export function createForm(options, globalStore, groupName, initialData) {
   const eventHandlers = new Map();

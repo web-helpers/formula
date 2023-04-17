@@ -1,4 +1,8 @@
 /**
+ * A form element that can be an input, select or text area
+ * @typedef {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement} FormEl
+ */
+/**
  * Extract all fields from the form that are valid inputs with `name` property that are not part of a form group
  *
  * @private
@@ -13,3 +17,7 @@ export function getFormFields(rootEl: HTMLElement): FormEl[];
  * @returns {FormEl[]} Array of form elements
  */
 export function getGroupFields(rootEl: HTMLElement): FormEl[];
+/**
+ * A form element that can be an input, select or text area
+ */
+export type FormEl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;

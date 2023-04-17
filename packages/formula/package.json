@@ -1,25 +1,42 @@
 {
   "name": "@webhelpers/formula",
-  "version": "0.1.0",
-  "description": "Formula is a library for creating store-backed HTML 5 forms in JavaScript",
+  "version": "0.0.1-rc.3",
+  "description": "Formula is a web component and library for creating store-backed reactive HTML 5 forms in JavaScript",
   "type": "module",
+  "keywords": ["forms", "html5", "reactive", "nanostores"],
+  "license": "MIT",
+  "author": {
+    "name": "Tane Piper",
+    "url": "https://tane.dev"
+  },
+  "homepage": "https://webhelpers.tools",
+  "bugs": {
+    "url": "https://github.com/web-helpers/formula/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-helpers/formula.git"
+  },
   "dependencies": {
     "nanostores": "0.8.0"
   },
-  "scripra": {
-    "build": "tsc .",
+  "scripts": {
+    "build": "tsc",
     "test": "playwright test"
   },
   "main": "./index.mjs",
   "exports": {
     ".": {
       "import": "./index.mjs"
+    },
+    "./webcomponent": {
+      "import": "./src/lib/webcomponent/index.mjs"
     }
   },
+  "readme": "./README.md",
   "types": "./types/index.d.mts",
   "devDependencies": {
     "@playwright/test": "1.32.3",
     "typescript": "5.0.4"
-  },
-  "scripts": {}
+  }
 }

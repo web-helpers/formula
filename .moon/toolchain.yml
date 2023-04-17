@@ -61,7 +61,7 @@ typescript:
 
   # Update a project's `tsconfig.json` to route the `outDir` compiler option
   # to moon's `.moon/cache` directory.
-  routeOutDirToCache: true
+  routeOutDirToCache: false
 
   # Sync a project's `dependsOn` as project references within the
   # project's `tsconfig.json` and the workspace root `tsconfig.json`.

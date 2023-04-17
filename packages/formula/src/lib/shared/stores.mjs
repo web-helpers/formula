@@ -1,6 +1,5 @@
 import { atom, map } from 'nanostores';
 
-
 /**
  * A set of stores used by Formula to store the current state
  * @typedef {object} FormulaStores
@@ -12,6 +11,21 @@ import { atom, map } from 'nanostores';
  * @property {import('nanostores').MapStore} validity
  * @property {import('nanostores').MapStore} formValidity
  * @property {import('nanostores').MapStore} enrichment
+ * @property {import('nanostores').Atom} isFormValid
+ * @property {import('nanostores').Atom} isFormReady
+ */
+
+/**
+ * A set of stores used by Formula to store the current state
+ * @typedef {object} BeakerStores
+ * @property {import('nanostores').Atom} formValues
+ * @property {import('nanostores').Atom} submitValues
+ * @property {import('nanostores').Atom} initialValues
+ * @property {import('nanostores').Atom} touched
+ * @property {import('nanostores').Atom} dirty
+ * @property {import('nanostores').Atom} validity
+ * @property {import('nanostores').Atom} formValidity
+ * @property {import('nanostores').Atom} enrichment
  * @property {import('nanostores').Atom} isFormValid
  * @property {import('nanostores').Atom} isFormReady
  */
@@ -42,8 +56,8 @@ function generateInitialState(keys, initialState, stateGenerator) {
  * @private
  * @internal
  *
- * @param {FormulaOptions=} options Initial options to use
- * @param {any} initialData
+ * @param {import('../form/form.mjs').FormulaOptions=} options Initial options to use
+ * @param {Record<string, any>=} initialData Initial data to use
  */
 function createFirstState(options, initialData) {
   const initialValues = { ...options?.defaultValues, ...initialData };
@@ -101,8 +115,8 @@ function createFirstState(options, initialData) {
 /**
  * Create the stores for the the form instance, these can be set using the `defaultValue` property
  * of FormulaOptions
- * @param {FormulaOptions} options
- * @param {any} initialData
+ * @param {import('../form/form.mjs').FormulaOptions=} options
+ * @param {Record<string, any>=} initialData
  *
  * @returns {FormulaStores} An object containing the stores for the form instance
  */
@@ -124,8 +138,8 @@ export function createFormStores(options, initialData) {
 
 /**
  * Create a group store which contains arrays of form store values
- * @param {BeakerOptions} options
- * @returns {BeakerStores<T>}
+ * @param {import('../group/group.mjs').BeakerOptions=} options
+ * @returns {BeakerStores}
  */
 export function createGroupStores(options) {
   const defaultValues = options?.defaultValues || [];

@@ -1,8 +1,8 @@
 /**
  * Create the form reset method
  * @param {HTMLElement} node
- * @param {[string, FormEl[]][]} allGroups
+ * @param {[string, import('../shared/fields.mjs').FormEl[]][]} allGroups
  * @param {import('../shared/stores.mjs').FormulaStores} stores
- * @param {import('../../../index.mjs').FormulaOptions} options
+ * @param {import('./form.mjs').FormulaOptions} options
  */
-export function createReset(node: HTMLElement, allGroups: [string, FormEl[]][], stores: import('../shared/stores.mjs').FormulaStores, options: import('../../../index.mjs').FormulaOptions): () => void;
+export function createReset(node: HTMLElement, allGroups: [string, import('../shared/fields.mjs').FormEl[]][], stores: import('../shared/stores.mjs').FormulaStores, options: import('./form.mjs').FormulaOptions): () => void;

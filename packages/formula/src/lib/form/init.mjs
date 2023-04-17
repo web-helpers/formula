@@ -1,12 +1,12 @@
-import { createFieldExtract } from './extract';
-import { createEnrichField } from './enrichment';
+import { createFieldExtract } from './extract.mjs';
+import { createEnrichField } from './enrichment.mjs';
 
 /**
  * Initialise the stores with data from the form, it will also use any default values provided
  * @param {HTMLElement} node
- * @param {[string, FormEl[]][]} allGroups
- * @param {FormulaStores} stores
- * @param {FormulaOptions} options
+ * @param {[string, import('../shared/fields.mjs').FormEl[]][]} allGroups
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
+ * @param {import('./form.mjs').FormulaOptions} options
  * @returns {[Record<string, unknown | unknown[]>, Record<string, FormulaError>, Record<string, Record<string, unknown>>]}
  */
 function getInitialFormValues(node, allGroups, stores, options) {
@@ -48,9 +48,9 @@ function getInitialFormValues(node, allGroups, stores, options) {
 /**
  * Create the form reset method
  * @param {HTMLElement} node
- * @param {[string, FormEl[]][]} allGroups
+ * @param {[string, import('../shared/fields.mjs').FormEl[]][]} allGroups
  * @param {import('../shared/stores.mjs').FormulaStores} stores
- * @param {import('../../../index.mjs').FormulaOptions} options
+ * @param {import('./form.mjs').FormulaOptions} options
  */
 export function createReset(node, allGroups, stores, options) {
   const [formValues, validityValues, enrichmentValues] = getInitialFormValues(

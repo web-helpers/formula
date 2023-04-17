@@ -1,4 +1,9 @@
 /**
+ * A form element that can be an input, select or text area
+ * @typedef {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement} FormEl
+ */
+
+/**
  * Extract all fields from the form that are valid inputs with `name` property that are not part of a form group
  *
  * @private

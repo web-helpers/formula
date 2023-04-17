@@ -8,8 +8,8 @@
     "node_modules",
     "test-app",
     "tests",
-    "src/**/*.spec.mjs",
-],
+    "src/**/*.spec.mjs"
+  ],
   "compilerOptions": {
     "baseUrl": ".",
     "checkJs": false,

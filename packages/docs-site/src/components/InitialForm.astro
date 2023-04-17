@@ -1,3 +1,9 @@
+---
+const options = {defaultValues: {firstName: 'John'}};
+console.log(options);
+---
+
+<formula-webcomponent>
 <form id='test-form'>
   <div class='form-item mb-6'>
     <label
@@ -27,42 +33,29 @@
     >Submit</button
   >
 </form>
-
+</formula-webcomponent>
 <div class='output'>
   <h3>Output</h3>
   <pre id='json-output'></pre>
 </div>
 
 <script>
-  import { formula } from '@webhelpers/formula';
-  const formEl = document.getElementById('test-form') as HTMLFormElement;
-  const formInstance = formula({
-    preChanges: () => {},
-    postChanges: () => {
-      if (formEl) {
-        formEl && formEl.querySelector('.form-item')?.classList.remove('error');
-        const errorMessage =
-          formEl &&
-          (formEl.querySelector(
-            '.form-item .error-message'
-          ) as HTMLParagraphElement);
-        if (errorMessage) errorMessage.style.display = 'none';
-      }
-
-      Object.entries(formInstance.stores.validity.get()).forEach(([key, value]) => {
-        if (formEl) {
-          const errorEl = formEl.querySelector(`#${key} ~ .error-message`) as HTMLParagraphElement;
-          if (errorEl) {
-            errorEl.style.display = 'block';
-          }
-        }
-      });
-    },
+  import '@webhelpers/formula/webcomponent';
+  const formulaEl = document.querySelector('formula-webcomponent') as HTMLElement;
+  const jsonOutput = document.getElementById('json-output') as HTMLPreElement;
+  formulaEl.addEventListener('formValues', (e: any) => {
+    jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });
-  formInstance.init(formEl);
-  const jsonOutput = document.getElementById('json-output');
-
-  formInstance.stores.formValues.subscribe((values: any) => {
-    if (jsonOutput) jsonOutput.innerHTML = JSON.stringify(values, null, 2);
+  formulaEl.addEventListener('validity', (e: any) => {
+    Object.entries(e.detail).forEach(([key, value]: [string, any]) => {
+      
+      const input = document.querySelector(`[name="${key}"]`) as HTMLInputElement;
+      const errorMessage = input && input.parentElement?.querySelector('.error-message') as HTMLParagraphElement;
+      if (errorMessage) {
+        errorMessage.style.display = value?.invalid && errorMessage ? 'block' : 'none';
+      }
+    });
+    console.log('validity', e.detail);
+    //jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });
 </script>

@@ -4,5 +4,10 @@
     "checkJs": false,
     "allowJs": true,
     "outDir": "../../.moon/cache/types/packages/docs-site"
-  }
+  },
+  "references": [
+    {
+      "path": "../formula"
+    }
+  ]
 }

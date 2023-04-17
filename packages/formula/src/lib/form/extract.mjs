@@ -1,5 +1,5 @@
-import { createValidationChecker } from './errors';
-import { setAriaValue } from './aria';
+import { createValidationChecker } from './errors.mjs';
+import { setAriaValue } from './aria.mjs';
 
 /**
  * Get selected option values from a multi-select element
@@ -20,10 +20,10 @@ function getMultiSelectOptionValues(collection) {
 
 /**
  * Sets the value of the element
- * @param {FormEl} element
+ * @param {import('../shared/fields.mjs').FormEl} element
  * @param {unknown | unknown[]} value
  * @param {boolean} isMultiValue
- * @param {FormEl[]} elementGroup
+ * @param {import('../shared/fields.mjs').FormEl[]} elementGroup
  */
 function setElementValue(element, value, isMultiValue, elementGroup) {
   if (isMultiValue) {
@@ -53,9 +53,9 @@ function setElementValue(element, value, isMultiValue, elementGroup) {
 
 /**
  * Get the value or values from an element
- * @param {FormEl} element
+ * @param {import('../shared/fields.mjs').FormEl} element
  * @param {boolean} isMultiValue
- * @param {FormEl[]} elementGroup
+ * @param {import('../shared/fields.mjs').FormEl[]} elementGroup
  * @returns {unknown | unknown[]}
  */
 function getElementValues(element, isMultiValue, elementGroup) {
@@ -103,9 +103,9 @@ function getElementValues(element, isMultiValue, elementGroup) {
 /**
  * Create a data handler for any type of input field
  * @param {string} name
- * @param {FormEl[]} elementGroup
- * @param {FormulaOptions} options
- * @param {FormulaStores} stores
+ * @param {import('../shared/fields.mjs').FormEl[]} elementGroup
+ * @param {import('./form.mjs').FormulaOptions} options
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
  */
 export function createFieldExtract(name, elementGroup, options, stores) {
   const validator = createValidationChecker(name, elementGroup, options);
@@ -115,20 +115,23 @@ export function createFieldExtract(name, elementGroup, options, stores) {
    * Function called on every element update, can also be called at initial value
    * Welcome to edge-case hell
    */
-  return (element, isInit, isReset) => {
+  const fn = (instanceOpts, element, isInit, isReset) => {
     let value;
-
-    if (isInit && options?.defaultValues?.[name]) {
+    if (isInit && instanceOpts?.defaultValues?.[name]) {
       value = isMultiValue
-        ? options?.defaultValues?.[name] || []
-        : options?.defaultValues?.[name] || '';
+        ? instanceOpts?.defaultValues?.[name] || []
+        : instanceOpts?.defaultValues?.[name] || '';
     } else {
-      value = stores.formValues.get(name) || (isMultiValue ? [] : '');
+      value = stores.formValues.get(name)?.[name] ?? (isMultiValue ? [] : '');
     }
+    console.log('extract', name, value, isInit, isReset);
 
     if (!isReset) {
       const elValue = getElementValues(element, isMultiValue, elementGroup);
-      value = isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
+      if (elValue !== null) {
+        value = isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
+      }
+      
     }
 
     if (isInit || isReset) {
@@ -146,5 +149,6 @@ export function createFieldExtract(name, elementGroup, options, stores) {
       value,
       ...validator(element, value),
     };
-  };
+  }
+  return fn.bind(this, options);
 }

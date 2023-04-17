@@ -1,0 +1,10 @@
+{
+  "name": "@webhelpers/formula/webcomponent",
+  "description": "A Web Component that is provided for Formula",
+  "main": "./index.mjs",
+  "exports": {
+    ".": {
+      "import": "./index.mjs"
+    }
+  }
+}

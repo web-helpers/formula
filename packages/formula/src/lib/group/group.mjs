@@ -1,12 +1,35 @@
-import { createGroupStores } from '../shared/stores';
-import { createForm } from '../form/form';
+import { createGroupStores } from '../shared/stores.mjs';
+import { createForm } from '../form/form.mjs';
+
+/**
+ * Optional settings for Beaker - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
+ * @typedef {object} BeakerOptions
+ * @property {Record<string, Record<string, string>=} messages - Provide customised messages to the application, these messages replace the default browser messages for the provided error types and are useful for internationalisation or custom domain messages
+ * @property {import('../form/errors.mjs').ValidationRules=} validators - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
+ * @property {import('../form/errors.mjs').ValidationRules=} validators - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
+ * @property {import('../form/enrichment.mjs').EnrichFields=} enrich - An object containing enrichers for the provided fields, each field enricher returns a value that is added to the `enriched` field.
+ * @property {Record<string, any>=} defaultValues - Default values are used as initial values for the form fields if there is no value already set on the form
+ */
+
+  /**
+   * @typedef {object} Beaker
+   * @property {function} group - Creates a group of forms
+   * @property {function} update - Updates the options for the group
+   * @property {function} destroy - Destroys the group
+   * @property {Map} forms - A map of the forms in the group
+   * @property {Map} stores - A map of the stores in the group
+   * @property {function} init - Initialises the group with the provided data
+   * @property {function} add - Adds a new row to the group
+   * @property {function} set - Sets the row at the provided index
+   * @property {function} delete - Removes the row at the provided index
+   */
 
 let groupCounter = 0;
 
 /**
  * Creates a group, which is a collection of forms for row data
  * @param {BeakerOptions} options
- * @param {Map<string, BeakerStores>} beakerStores
+ * @param {Map<string, import('../shared/stores.mjs').BeakerStores>} beakerStores
  * @returns {Beaker}
  */
 export function createGroup(options, beakerStores) {
@@ -91,6 +114,7 @@ export function createGroup(options, beakerStores) {
     groupHasChanged(Array.from(rows));
   }
 
+
   return {
     group: (node) => {
       if (node.id) {
@@ -138,9 +162,9 @@ export function createGroup(options, beakerStores) {
       groupStores.formValues.set(newState);
     },
     /**
-     * 
-     * @param {number} index 
-     * @returns 
+     *
+     * @param {number} index
+     * @returns
      */
     delete: (index) =>
       Object.keys(groupStores).forEach((key) => {

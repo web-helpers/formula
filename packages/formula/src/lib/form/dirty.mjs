@@ -13,7 +13,7 @@ const matchingArrays = (array1, array2) =>
  * @private
  *
  * @param {string} name - The name of the group to create the blur handlers for.
- * @param {HTMLInputElement[] | HTMLSelectElement[]| HTMLTextAreaElement[] } elements - The elements that belong to the named group.
+ * @param {import('../shared/fields.mjs').FormEl} elements - The elements that belong to the named group.
  * @param {import("../shared/stores.mjs").FormulaStores} stores - The stores for the form instance.
  *
  * @returns {() => void} - Function that when called will remove all blur event listeners from the elements, if not removed by user action.

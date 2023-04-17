@@ -4,15 +4,27 @@ import Layout from '../layouts/Base.astro';
 
 const CODE = `# Install via NPM
 npm install @webhelpers/formula`
+
+const CODE2 = `<script type="module">
+import "@webhelpers/formula/webcomponent";
+</script>
+
+<formula-webcomponent>
+  <form id="my-form" method="POST" action="/post.php">
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="submit" value="Submit">
+</formula-webcomponent>
+`
 ---
 
 <Layout title="Manual">
 	<main>
     <div class="max-w-6xl mx-auto dark:text-white md:py-32 md:flex">
       <div class="p-8 md:w-1/2">
-        <h1 class="text-6xl font-bold my-4">Manual</h1>
+        <h1 class="text-6xl font-bold my-4">@WebHelpers</h1>
         <p class="text-2xl my-8">
-          Build <b class="text-green-600 dark:text-green-400">robust</b>, <b class="text-green-600 dark:text-green-400">modern</b> documentation sites with the Manual theme.
+          Libraries for the <b class="text-green-600 dark:text-green-400">Modern Web</b> focused on the <b class="text-green-600 dark:text-green-400">Developer Experience</b>
         </p>
         <a href="/docs/get-started/introduction" class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded">
           GET STARTED
@@ -20,6 +32,8 @@ npm install @webhelpers/formula`
       </div>
       <div class="w-full p-8 md:w-1/2 [&_pre]:p-4 [&_pre]:rounded-2xl [&_pre]:shadow-xl [&_pre]:border-2 [&_pre]:border-green-500">
         <Code code={CODE} lang="sh"/>
+
+        <Code code={CODE2} lang="js"/>
       </div>
     </div>
     <div class="bg-green-700 dark:bg-zinc-800">

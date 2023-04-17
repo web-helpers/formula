@@ -1,11 +1,25 @@
-import { createFieldExtract } from './extract';
-import { createEnrichField } from './enrichment';
+import { createFieldExtract } from './extract.mjs';
+import { createEnrichField } from './enrichment.mjs';
+
+/**
+ * @typedef { object } FormulaError
+ * @property { boolean } valid - If the field is valid
+ * @property { boolean } invalid - If the field is invalid
+ * @property { string } message- The message returned from the HTML element
+ * @property { Record<string, boolean> } errors - The errors from the {@link https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation|Contraint Validation API}
+ */
+
+/**
+ * @typedef { FormulaError } FormulaField
+ * @property { string } name - The name of the field being handled
+ * @property { unknown | unknown[] } value - The value of the field being handled
+ */
 
 /**
  * Do validation on the form and set the form validity state and set the form to invalid if there
  * are any form validations
- * @param {Record<string, ValidationFn>} formValidators
- * @param {FormulaStores} stores
+ * @param {Record<string, import('./errors.mjs').ValidationFn>} formValidators
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
  */
 function formValidation(formValidators, stores) {
   const currentValues = stores.formValues.get();
@@ -29,8 +43,8 @@ function formValidation(formValidators, stores) {
 /**
  * Update the value and error stores, also update form validity
  * @param {FormulaField} details
- * @param {FormulaStores} stores
- * @param {FormulaOptions} options
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
+ * @param {import('./form.mjs').FormulaOptions} options
  * @param {Map<string, HTMLInputElement[]>} hiddenFields
  * @param {(value: unknown | unknown[]) => Record<string, unknown>} enrich
  */
@@ -67,8 +81,8 @@ export function valueUpdate(details, stores, options, hiddenFields, enrich) {
 /**
  * Creates an event handler for the passed element with it's data handler
  * @param {(el) => FormulaField} extractor
- * @param {FormulaStores<any>} stores
- * @param {FormulaOptions} options
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
+ * @param {import('./form.mjs').FormulaOptions} options
  * @param {Map<string, HTMLInputElement[]>} hiddenFields
  * @param { (value: unknown | unknown[]) => Record<string, unknown>} enrich
  */
@@ -83,7 +97,8 @@ function createHandlerForData(
     if (typeof options?.preChanges === 'function') options.preChanges();
     setTimeout(() => {
       const el = event.currentTarget || event.target;
-      valueUpdate(extractor(el), stores, options, hiddenFields, enrich);
+      const extracted = extractor(el);
+      valueUpdate(extracted, stores, options, hiddenFields, enrich);
     }, 0);
   };
 }
@@ -114,7 +129,7 @@ export function createHandler(
 /**
  * Create a handler for a form element submission, when called it copies the contents
  * of the current value store to the submit store and then unsubscribes
- * @param {FormulaStores<T>} stores
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
  * @param {HTMLFormElement} form
  */
 export function createSubmitHandler(stores, form) {
