@@ -2,6 +2,11 @@
   "extends": "./tsconfig.options.json",
   "files": [],
   "references": [
-    
+    {
+      "path": "packages/docs-site"
+    },
+    {
+      "path": "packages/formula"
+    }
   ]
 }
