@@ -58,7 +58,12 @@ export function createValidationChecker(inputGroup, elementGroup, options) {
    */
   return (el, elValue) => {
     // Reset the validity
-    elementGroup.forEach((groupEl) => {
+    elementGroup.forEach(
+      /**
+       * 
+       * @param {HTMLElement[]} groupEl 
+       */
+      (groupEl) => {
       groupEl.setCustomValidity('');
       groupEl.removeAttribute('data-formula-invalid');
     });

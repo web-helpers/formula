@@ -1,9 +1,25 @@
 {
-    "name": "@webhelpers/formula",
-    "version": "0.1.0",
-    "description": "Formula is a library for creating store-backed HTML 5 forms in JavaScript",
-    "type": "module",
-    "dependencies": {
-        "nanostores": "0.8.0"
+  "name": "@webhelpers/formula",
+  "version": "0.1.0",
+  "description": "Formula is a library for creating store-backed HTML 5 forms in JavaScript",
+  "type": "module",
+  "dependencies": {
+    "nanostores": "0.8.0"
+  },
+  "scripra": {
+    "build": "tsc .",
+    "test": "playwright test"
+  },
+  "main": "./index.mjs",
+  "exports": {
+    ".": {
+      "import": "./index.mjs"
     }
+  },
+  "types": "./index.d.mts",
+  "devDependencies": {
+    "@playwright/test": "1.32.3",
+    "typescript": "5.0.4"
+  },
+  "scripts": {}
 }

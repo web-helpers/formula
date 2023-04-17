@@ -1,5 +1,37 @@
 import { atom, map } from 'nanostores';
 
+
+/**
+ * A set of stores used by Formula to store the current state
+ * @typedef {object} FormulaStores
+ * @property {import('nanostores').MapStore} formValues
+ * @property {import('nanostores').MapStore} submitValues
+ * @property {import('nanostores').MapStore} initialValues
+ * @property {import('nanostores').MapStore} touched
+ * @property {import('nanostores').MapStore} dirty
+ * @property {import('nanostores').MapStore} validity
+ * @property {import('nanostores').MapStore} formValidity
+ * @property {import('nanostores').MapStore} enrichment
+ * @property {import('nanostores').Atom} isFormValid
+ * @property {import('nanostores').Atom} isFormReady
+ */
+
+/**
+ * Generate initial state for specified key set
+ * @private
+ * @internal
+ *
+ * @param {string[]} keys
+ * @param {any} initialState
+ * @param {function} stateGenerator
+ * @returns {object}
+ */
+function generateInitialState(keys, initialState, stateGenerator) {
+  return keys.reduce((state, key) => {
+    return { ...state, [key]: stateGenerator(key, initialState) };
+  }, {});
+}
+
 /**
  * Function to create initial state values for the store using any passed default values, this is not the final initial
  * state, but is used when the stores are created to ensure required keys are available with any initial state, even if
@@ -14,37 +46,30 @@ import { atom, map } from 'nanostores';
  * @param {any} initialData
  */
 function createFirstState(options, initialData) {
-  let initialValues = options?.defaultValues || {};
-  initialValues = { ...initialValues, ...initialData };
+  const initialValues = { ...options?.defaultValues, ...initialData };
   const initialKeys = Object.keys(initialValues);
 
-  // Generate from default values any initial touched and dirty states
-  const initialFieldState = initialKeys.reduce(
-    (val, key) => ({ ...val, [key]: false }),
-    {}
+  const initialFieldState = generateInitialState(
+    initialKeys,
+    initialValues,
+    () => false
   );
-  // Generate from default values any initial initial validity
-  const initialValidity = initialKeys.reduce(
-    (val, key) => ({
-      ...val,
-      [key]: {
-        valid: true,
-        invalid: false,
-        message: '',
-        errors: {},
-      },
-    }),
-    {}
+  const initialValidity = generateInitialState(
+    initialKeys,
+    initialValues,
+    () => ({
+      valid: true,
+      invalid: false,
+      message: '',
+      errors: {},
+    })
   );
-  // Generate from default values any initial form validity
-  const initialFormValidity = Object.keys(options?.formValidators || {}).reduce(
-    (val, key) => ({
-      ...val,
-      [key]: '',
-    }),
-    {}
+  const initialFormValidity = generateInitialState(
+    Object.keys(options?.formValidators || {}),
+    initialValues,
+    () => ''
   );
-  // Generate from default values any initial enrichment
+
   const initialEnrichment = Object.entries(options?.enrich || {}).reduce(
     (value, [key, fns]) => {
       return {
@@ -62,6 +87,7 @@ function createFirstState(options, initialData) {
     },
     {}
   );
+
   return {
     initialValues,
     initialKeys,
@@ -78,10 +104,10 @@ function createFirstState(options, initialData) {
  * @param {FormulaOptions} options
  * @param {any} initialData
  *
- * @returns An object containing the stores for the form instance
+ * @returns {FormulaStores} An object containing the stores for the form instance
  */
 export function createFormStores(options, initialData) {
-  const initialStoreState = createFirstState < T > (options, initialData);
+  const initialStoreState = createFirstState(options, initialData);
   return {
     formValues: map(initialStoreState.initialValues),
     submitValues: map({}),
@@ -102,34 +128,28 @@ export function createFormStores(options, initialData) {
  * @returns {BeakerStores<T>}
  */
 export function createGroupStores(options) {
-  let initialValues = [];
-  let initialFieldState = [];
-  let initialValidity = [];
-  let initialEnrichment = [];
-  let initialFormValidity = [];
+  const defaultValues = options?.defaultValues || [];
+  const { defaultValues: _, ...restOptions } = options;
 
-  if (options?.defaultValues?.length > 0) {
-    const { defaultValues, ...rest } = options;
-    const eachState = defaultValues.map((d) =>
-      createFirstState({ ...rest, defaultValues: d })
-    );
-    for (let i = 0; i < eachState.length; i++) {
-      initialValues = [...initialValues, eachState[i].initialValues];
-      initialFieldState = [
-        ...initialFieldState,
-        eachState[i].initialFieldState,
-      ];
-      initialValidity = [...initialValidity, eachState[i].initialValidity];
-      initialEnrichment = [
-        ...initialEnrichment,
-        eachState[i].initialEnrichment,
-      ];
-      initialFormValidity = [
-        ...initialFormValidity,
-        eachState[i].initialFormValidity,
-      ];
-    }
-  }
+  const eachState = defaultValues.map((defaultValue) =>
+    createFirstState({ ...restOptions, defaultValues: defaultValue })
+  );
+
+  /**
+   *
+   * @param {string} property
+   * @returns {string[]}
+   */
+  const combineStates = (property) =>
+    eachState.reduce((accumulator, currentState) => {
+      return [...accumulator, currentState[property]];
+    }, []);
+
+  const initialValues = combineStates('initialValues');
+  const initialFieldState = combineStates('initialFieldState');
+  const initialValidity = combineStates('initialValidity');
+  const initialEnrichment = combineStates('initialEnrichment');
+  const initialFormValidity = combineStates('initialFormValidity');
 
   return {
     formValues: atom(initialValues),

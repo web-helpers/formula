@@ -18,7 +18,7 @@ import {
  * @param {Map<string, FormulaStores>} globalStore
  * @param {string} groupName
  * @param {Record<string, any>} initialData
- * @returns {FormulaAction}
+ * @returns {import('../../../index.mjs').Formula}
  */
 export function createForm(options, globalStore, groupName, initialData) {
   const eventHandlers = new Map();
@@ -172,6 +172,7 @@ export function createForm(options, globalStore, groupName, initialData) {
       currentNode = node;
       bindElements(node, options);
       return {
+        elements: groupedMap,
         destroy: () => {
           cleanupSubscriptions();
           currentNode.id && globalStore && globalStore.delete(currentNode.id);

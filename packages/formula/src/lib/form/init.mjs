@@ -1,9 +1,3 @@
-import {
-  FormEl,
-  FormulaError,
-  FormulaOptions,
-  FormulaStores,
-} from '../../types';
 import { createFieldExtract } from './extract';
 import { createEnrichField } from './enrichment';
 
@@ -55,8 +49,8 @@ function getInitialFormValues(node, allGroups, stores, options) {
  * Create the form reset method
  * @param {HTMLElement} node
  * @param {[string, FormEl[]][]} allGroups
- * @param {FormulaStores} stores
- * @param {FormulaOptions} options
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
+ * @param {import('../../../index.mjs').FormulaOptions} options
  */
 export function createReset(node, allGroups, stores, options) {
   const [formValues, validityValues, enrichmentValues] = getInitialFormValues(

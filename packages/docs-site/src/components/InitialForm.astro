@@ -1,0 +1,67 @@
+<form id='test-form'>
+  <div class='form-item mb-6'>
+    <label
+      for='firstName'
+      class='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+      >First Name</label
+    >
+    <input
+      id='firstName'
+      type='text'
+      name='firstName'
+      class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+      placeholder='Enter your first name'
+      required
+    />
+    <p
+      style='display: none;'
+      class='mt-2 text-sm text-red-600 dark:text-red-500 error-message'
+    >
+      <span class='font-medium'>Oops!</span> Please enter your name
+    </p>
+  </div>
+
+  <button
+    type='submit'
+    class='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+    >Submit</button
+  >
+</form>
+
+<div class='output'>
+  <h3>Output</h3>
+  <pre id='json-output'></pre>
+</div>
+
+<script>
+  import { formula } from '@webhelpers/formula';
+  const formEl = document.getElementById('test-form') as HTMLFormElement;
+  const formInstance = formula({
+    postChanges: () => {
+      if (formEl) {
+        formEl && formEl.querySelector('.form-item')?.classList.remove('error');
+        const errorMessage =
+          formEl &&
+          (formEl.querySelector(
+            '.form-item .error-message'
+          ) as HTMLParagraphElement);
+        if (errorMessage) errorMessage.style.display = 'none';
+      }
+
+      Object.entries(formInstance.validity.get()).forEach(([key, value]) => {
+        if (formEl) {
+          const errorEl = formEl.querySelector(`#${key} ~ .error-message`) as HTMLParagraphElement;
+          if (errorEl) {
+            errorEl.style.display = 'block';
+          }
+        }
+      });
+    },
+  });
+  formInstance.form(formEl);
+  const jsonOutput = document.getElementById('json-output');
+
+  formInstance.formValues.subscribe((values: any) => {
+    if (jsonOutput) jsonOutput.innerHTML = JSON.stringify(values, null, 2);
+  });
+</script>

@@ -32,11 +32,16 @@ export function setAriaRole(el, elements) {
     return;
   }
 
+  /**
+   * 
+   * @param {string} role 
+   * @returns 
+   */
   const setRole = (role) => el.setAttribute('aria-role', role);
 
   if (el.type === 'radio') {
     if (elements.length < 2) {
-      el.parentElement.setAttribute('aria-role', 'radiogroup');
+      el?.parentElement?.setAttribute('aria-role', 'radiogroup');
     } else {
       const radioGroup = getRadioGroupParent(el);
       if (radioGroup) radioGroup.setAttribute('aria-role', 'radiogroup');
@@ -82,7 +87,7 @@ export function setAriaValue(element, elGroup) {
     elGroup.forEach((el) => el.removeAttribute('aria-checked'));
   }
 
-  element.setAttribute('aria-checked', element.checked ? 'true' : 'false');
+  element.setAttribute('aria-checked', element?.checked ? 'true' : 'false');
 }
 
 /**

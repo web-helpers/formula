@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src/**/*",
+    "index.mjs"
+  ],
+  "exclude": [
+    "node_modules",
+    "test-app",
+    "tests",
+    "src/**/*.spec.mjs",
+],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "checkJs": false,
+    "allowJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": ".",
+    "emitDeclarationOnly": true
+  }
+}

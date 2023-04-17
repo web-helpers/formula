@@ -137,6 +137,11 @@ export function createGroup(options, beakerStores) {
       newState.splice(index, 1, item);
       groupStores.formValues.set(newState);
     },
+    /**
+     * 
+     * @param {number} index 
+     * @returns 
+     */
     delete: (index) =>
       Object.keys(groupStores).forEach((key) => {
         const state = groupStores[key].get();

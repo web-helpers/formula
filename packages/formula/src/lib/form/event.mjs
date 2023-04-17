@@ -120,6 +120,12 @@ export function createHandler(
 export function createSubmitHandler(stores, form) {
   return () => {
     if (!form.noValidate) form.reportValidity();
-    stores.formValues.subscribe((v) => stores.submitValues.set(v))();
+
+    stores.formValues.subscribe(
+      /**
+       * @param {any} v
+       */
+      (v) => stores.submitValues.set(v)
+    )();
   };
 }

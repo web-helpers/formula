@@ -128,7 +128,7 @@ export function createFieldExtract(name, elementGroup, options, stores) {
 
     if (!isReset) {
       const elValue = getElementValues(element, isMultiValue, elementGroup);
-      value = isInit && elValue.length === 0 ? value : elValue;
+      value = isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
     }
 
     if (isInit || isReset) {
