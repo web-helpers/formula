@@ -9,4 +9,3 @@
  * @returns {() => void} Function that when called will remove all focus handlers from the elements, if not removed by user action
  */
 export function createTouchHandlers(name: string, elements: FormEl[], stores: FormulaStores): () => void;
-//# sourceMappingURL=touch.d.mts.map

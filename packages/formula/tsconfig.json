@@ -15,8 +15,8 @@
     "checkJs": false,
     "allowJs": true,
     "declaration": true,
-    "declarationMap": true,
-    "outDir": ".",
+    "declarationMap": false,
+    "outDir": "./types",
     "emitDeclarationOnly": true
   }
 }

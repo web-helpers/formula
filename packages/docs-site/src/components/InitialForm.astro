@@ -37,6 +37,7 @@
   import { formula } from '@webhelpers/formula';
   const formEl = document.getElementById('test-form') as HTMLFormElement;
   const formInstance = formula({
+    preChanges: () => {},
     postChanges: () => {
       if (formEl) {
         formEl && formEl.querySelector('.form-item')?.classList.remove('error');
@@ -48,7 +49,7 @@
         if (errorMessage) errorMessage.style.display = 'none';
       }
 
-      Object.entries(formInstance.validity.get()).forEach(([key, value]) => {
+      Object.entries(formInstance.stores.validity.get()).forEach(([key, value]) => {
         if (formEl) {
           const errorEl = formEl.querySelector(`#${key} ~ .error-message`) as HTMLParagraphElement;
           if (errorEl) {
@@ -58,10 +59,10 @@
       });
     },
   });
-  formInstance.form(formEl);
+  formInstance.init(formEl);
   const jsonOutput = document.getElementById('json-output');
 
-  formInstance.formValues.subscribe((values: any) => {
+  formInstance.stores.formValues.subscribe((values: any) => {
     if (jsonOutput) jsonOutput.innerHTML = JSON.stringify(values, null, 2);
   });
 </script>

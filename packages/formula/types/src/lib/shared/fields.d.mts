@@ -13,4 +13,3 @@ export function getFormFields(rootEl: HTMLElement): FormEl[];
  * @returns {FormEl[]} Array of form elements
  */
 export function getGroupFields(rootEl: HTMLElement): FormEl[];
-//# sourceMappingURL=fields.d.mts.map

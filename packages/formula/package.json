@@ -16,7 +16,7 @@
       "import": "./index.mjs"
     }
   },
-  "types": "./index.d.mts",
+  "types": "./types/index.d.mts",
   "devDependencies": {
     "@playwright/test": "1.32.3",
     "typescript": "5.0.4"

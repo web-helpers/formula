@@ -26,4 +26,3 @@ export function setAriaContainer(container: HTMLElement, isGroup: boolean): void
  * @param {HTMLElement} container - The container element with buttons.
  */
 export function setAriaButtons(container: HTMLElement): void;
-//# sourceMappingURL=aria.d.mts.map

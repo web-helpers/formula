@@ -6,4 +6,3 @@
  * @param {FormulaStores} stores
  */
 export function createFieldExtract(name: string, elementGroup: FormEl[], options: FormulaOptions, stores: FormulaStores): (element: any, isInit: any, isReset: any) => any;
-//# sourceMappingURL=extract.d.mts.map

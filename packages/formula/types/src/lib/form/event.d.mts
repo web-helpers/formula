@@ -15,4 +15,3 @@ export function createHandler(name: any, eventName: any, element: any, groupElem
  * @param {HTMLFormElement} form
  */
 export function createSubmitHandler(stores: FormulaStores<T>, form: HTMLFormElement): () => void;
-//# sourceMappingURL=event.d.mts.map

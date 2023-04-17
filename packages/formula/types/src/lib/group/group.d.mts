@@ -5,4 +5,3 @@
  * @returns {Beaker}
  */
 export function createGroup(options: BeakerOptions, beakerStores: Map<string, BeakerStores>): Beaker;
-//# sourceMappingURL=group.d.mts.map

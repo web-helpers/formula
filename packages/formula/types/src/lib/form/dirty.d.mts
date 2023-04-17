@@ -11,4 +11,3 @@
  * @returns {() => void} - Function that when called will remove all blur event listeners from the elements, if not removed by user action.
  */
 export function createDirtyHandler(name: string, elements: HTMLInputElement[] | HTMLSelectElement[] | HTMLTextAreaElement[], stores: import("../shared/stores.mjs").FormulaStores): () => void;
-//# sourceMappingURL=dirty.d.mts.map

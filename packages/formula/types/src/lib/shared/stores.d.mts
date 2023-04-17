@@ -28,4 +28,3 @@ export type FormulaStores = {
     isFormValid: import('nanostores').Atom;
     isFormReady: import('nanostores').Atom;
 };
-//# sourceMappingURL=stores.d.mts.map

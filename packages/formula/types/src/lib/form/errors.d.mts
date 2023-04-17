@@ -9,4 +9,3 @@
  * @returns {Function} - Function called each time an element is updated, which returns the field validity state.
  */
 export function createValidationChecker(inputGroup: string, elementGroup: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, options?: FormulaOptions | undefined): Function;
-//# sourceMappingURL=errors.d.mts.map

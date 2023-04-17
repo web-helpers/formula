@@ -168,7 +168,7 @@ export function createForm(options, globalStore, groupName, initialData) {
   }
 
   return {
-    form: (node) => {
+    init: (node) => {
       currentNode = node;
       bindElements(node, options);
       return {

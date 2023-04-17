@@ -3,5 +3,4 @@
  * @param {string} name - The name of the enrichment group
  * @param {import('../../../index.mjs').FormulaOptions} options - The options object
  */
-export function createEnrichField(name: string, options: import('../../../index.mjs').FormulaOptions): (value: any) => {};
-//# sourceMappingURL=enrichment.d.mts.map
+export function createEnrichField(name: string, options: import('../../../index.mjs').FormulaOptions): (value: any) => [string, import("../../../index.mjs").EnrichFn];
