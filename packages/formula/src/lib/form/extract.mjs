@@ -124,14 +124,17 @@ export function createFieldExtract(name, elementGroup, options, stores) {
     } else {
       value = stores.formValues.get(name)?.[name] ?? (isMultiValue ? [] : '');
     }
-    console.log('extract', name, value, isInit, isReset);
 
     if (!isReset) {
       const elValue = getElementValues(element, isMultiValue, elementGroup);
-      if (elValue !== null) {
-        value = isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
+      // Handle empty value fields that return null
+      if (elValue === null && !isInit && value.length > 0) {
+        value = '';
       }
-      
+      if (elValue !== null) {
+        value =
+          isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
+      }
     }
 
     if (isInit || isReset) {
@@ -149,6 +152,6 @@ export function createFieldExtract(name, elementGroup, options, stores) {
       value,
       ...validator(element, value),
     };
-  }
+  };
   return fn.bind(this, options);
 }

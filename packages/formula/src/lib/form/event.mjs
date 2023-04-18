@@ -94,15 +94,25 @@ function createHandlerForData(
   enrich
 ) {
   return (event) => {
-    if (typeof options?.preChanges === 'function') options.preChanges();
-    setTimeout(() => {
-      const el = event.currentTarget || event.target;
+      const el = event?.currentTarget ?? event?.target;
       const extracted = extractor(el);
+      console.log('extracted', extracted)
       valueUpdate(extracted, stores, options, hiddenFields, enrich);
-    }, 0);
   };
 }
 
+/**
+ * Creates an event handler for the passed element with it's data handler and returns a function
+ * to remove it
+ * @param {string} name 
+ * @param {string} eventName 
+ * @param {import('../shared/fields.mjs').FormEl} element 
+ * @param {import('../shared/fields.mjs').FormEl[]} groupElements 
+ * @param {import('../shared/stores.mjs').FormulaStores} stores 
+ * @param {import('./form.mjs').FormulaOptions} options 
+ * @param {HTMLInputElement[]} hiddenGroups 
+ * @returns {() => void)} Function to remove the event listener
+ */
 export function createHandler(
   name,
   eventName,
@@ -122,7 +132,10 @@ export function createHandler(
     hiddenGroups,
     enrich
   );
-  element.addEventListener(eventName, handler);
+  element.addEventListener(eventName, (event) => {
+    if (typeof options?.preChanges === 'function') options.preChanges();
+    handler(event);
+  });
   return () => element.removeEventListener(eventName, handler);
 }
 

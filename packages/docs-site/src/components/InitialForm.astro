@@ -1,9 +1,8 @@
 ---
 const options = {defaultValues: {firstName: 'John'}};
-console.log(options);
 ---
 
-<formula-webcomponent>
+<formula-webcomponent data-options={JSON.stringify(options)}>
 <form id='test-form'>
   <div class='form-item mb-6'>
     <label
@@ -43,6 +42,18 @@ console.log(options);
   import '@webhelpers/formula/webcomponent';
   const formulaEl = document.querySelector('formula-webcomponent') as HTMLElement;
   const jsonOutput = document.getElementById('json-output') as HTMLPreElement;
+
+  formulaEl.addEventListener('init', (e: any) => {
+    console.log('init', e.detail);
+  });
+
+  formulaEl.addEventListener('preChanges', (e: any) => {
+    console.log('preChanges', e.detail);
+  });
+  formulaEl.addEventListener('postChanges', (e: any) => {
+    console.log('postChanges', e.detail);
+  });
+
   formulaEl.addEventListener('formValues', (e: any) => {
     jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });

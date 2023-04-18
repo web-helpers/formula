@@ -9,6 +9,16 @@ import { createForm } from '../form/form.mjs';
  * interact with the form.
  *
  * By subscribing to the formula instance, you can listen to changes in the form and react to them.
+ * 
+ * @example ```html
+ * <formula-webcomponent data-options='{"defaultValues": [{"firstName": "WebHelpers"}]}'>
+ *    <form>
+ *      <label for="firstName">Name</label>
+ *      <input type="text" name="firstName" id="firstName" placeholder="Please enter your first name"/>
+ *      <span class="error-message"></span>
+ *    </form>
+ * </formula-webcomponent>
+ * ```
  */
 export class FormulaWebComponent extends HTMLElement {
   /**
@@ -41,11 +51,15 @@ export class FormulaWebComponent extends HTMLElement {
         this.elementVariable = firstChildComponent;
         this.connectFormula();
       } else {
-        console.warn('No child component found.');
+        console.warn('No child components found inside formula-webcomponent');
       }
     });
   }
 
+  /**
+   * Gets the options and initialises the formula instance with the web component,
+   * and sets up CustomEvent handlers
+   */
   connectFormula() {
     const options = this.dataset?.options
       ? JSON.parse(this.dataset?.options)

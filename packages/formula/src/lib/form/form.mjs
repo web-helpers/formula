@@ -57,7 +57,19 @@ export function createForm(options, globalStore, groupName, initialData) {
 
   let groupedMap = [];
 
-  function bindElements(node, innerOpt) {
+  function bindElements(node, innerOpt = {}) {
+    
+    if (!innerOpt?.preChanges) {
+      innerOpt.preChanges = () => {
+        node?.parentElement?.dispatchEvent(new CustomEvent('preChanges', {detail: undefined}));
+      };
+    }
+    if (!innerOpt?.postChanges) {
+      innerOpt.postChanges = (values) => {
+        node?.parentElement?.dispatchEvent(new CustomEvent('postChanges', { detail: values }));
+      };
+    }
+
     const formElements = isGroup ? getGroupFields(node) : getFormFields(node);
 
     node.setAttribute(`data-formula-${isGroup ? 'row' : 'form'}`, 'true');
