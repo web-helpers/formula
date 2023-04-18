@@ -96,7 +96,6 @@ function createHandlerForData(
   return (event) => {
       const el = event?.currentTarget ?? event?.target;
       const extracted = extractor(el);
-      console.log('extracted', extracted)
       valueUpdate(extracted, stores, options, hiddenFields, enrich);
   };
 }
