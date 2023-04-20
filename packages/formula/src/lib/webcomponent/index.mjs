@@ -19,7 +19,34 @@ import { createForm } from '../form/form.mjs';
  *    </form>
  * </formula-webcomponent>
  * ```
+ * 
+ * There are several events that can be listened to on the web component:
+ * 
+ * ```
+ * const wc = document.querySelector('formula-webcomponent');
+ * wc.addEventListener('init', (e) => {
+ *  console.log('Form initialised');
+ * });
+ * wc.addEventListener('formValues', (e) => {
+ *  console.log('Form values updated', e.detail);
+ * });
+ * ```
+ * 
+ * - init: Fired when the formula instance is initialised
+ * - form: Fired when the form instance is initialised
+ * - formValues: Fired when the formValues store is updated
+ * - submitValues: Fired when the submitValues store is updated
+ * - touched: Fired when the touched store is updated
+ * - dirty: Fired when the dirty store is updated
+ * - validity: Fired when the validity store is updated
+ * - formValidity: Fired when the formValidity store is updated
+ * - enrichment: Fired when the enrichment store is updated
+ * - isFormValid: Fired when the isFormValid store is updated
+ * - isFormReady: Fired when the isFormReady store is updated
+ * - preChanges: Fired before a change is made to the form stores update, useful for UI changes
+ * - postChanges: Fired after a change is made to the form stores update, contains the latest form state
  */
+
 export class FormulaWebComponent extends HTMLElement {
   /**
    * Create the web component root and attach the shadow DOM
@@ -29,6 +56,12 @@ export class FormulaWebComponent extends HTMLElement {
     this.attachShadow({ mode: 'open' });
   }
 
+  /**
+   * In our connected callback we create an inner HTML template and add a slot to it.
+   * We then add an event listener to the slot to listen for changes in the slot.and 
+   * assign the first child component to the element variable.
+   * Once we have the element variable, we can initialise the formula instance.
+   */
   connectedCallback() {
     this.shadowRoot.innerHTML = `
         <style>
@@ -61,17 +94,24 @@ export class FormulaWebComponent extends HTMLElement {
    * and sets up CustomEvent handlers
    */
   connectFormula() {
+
+    /**
+     * @type {import('./../form/form.mjs').FormulaOptions | undefined}
+     */
     const options = this.dataset?.options
       ? JSON.parse(this.dataset?.options)
       : undefined;
     this.formula = createForm(options);
+
     this.dispatchEvent(
       new CustomEvent('init', { bubbles: true, detail: this.formula })
-    );
+    )
+    ;
     this.form = this.formula.init(this.elementVariable);
     this.dispatchEvent(
       new CustomEvent('form', { bubbles: true, detail: this.formula })
     );
+
     Object.entries(this.formula.stores).forEach(([key, store]) =>
       store.subscribe((value) =>
         this.dispatchEvent(
