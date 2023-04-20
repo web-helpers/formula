@@ -1,6 +1,6 @@
 {
   "name": "@webhelpers/formula",
-  "version": "0.0.1-rc.4",
+  "version": "0.0.1-rc.5",
   "description": "Formula is a web component and library for creating store-backed reactive HTML 5 forms in JavaScript",
   "type": "module",
   "keywords": ["forms", "html5", "reactive", "nanostores"],

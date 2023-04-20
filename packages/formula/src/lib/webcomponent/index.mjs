@@ -25,15 +25,15 @@ import { createForm } from '../form/form.mjs';
  * ```
  * const wc = document.querySelector('formula-webcomponent');
  * wc.addEventListener('init', (e) => {
- *  console.log('Form initialised');
+ *  console.log('Formula initialised');
  * });
  * wc.addEventListener('formValues', (e) => {
  *  console.log('Form values updated', e.detail);
  * });
  * ```
  * 
- * - init: Fired when the formula instance is initialised
- * - form: Fired when the form instance is initialised
+ * - init: Fired when the formula instance is initialised, returns the formula instance
+ * - form: Fired when the form instance is initialised, returns the form instance
  * - formValues: Fired when the formValues store is updated
  * - submitValues: Fired when the submitValues store is updated
  * - touched: Fired when the touched store is updated
@@ -53,7 +53,6 @@ export class FormulaWebComponent extends HTMLElement {
    */
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
   }
 
   /**
@@ -63,30 +62,9 @@ export class FormulaWebComponent extends HTMLElement {
    * Once we have the element variable, we can initialise the formula instance.
    */
   connectedCallback() {
-    this.shadowRoot.innerHTML = `
-        <style>
-          :host {
-            display: block;
-          }
-        </style>
-        <slot></slot>
-      `;
-
     // Fetch the first child component and assign it to the element variable
-    const slot = this.shadowRoot.querySelector('slot');
-    slot.addEventListener('slotchange', () => {
-      const nodes = slot.assignedNodes({ flatten: true });
-      const firstChildComponent = nodes.find(
-        (node) => node.nodeType === Node.ELEMENT_NODE
-      );
-
-      if (firstChildComponent) {
-        this.elementVariable = firstChildComponent;
-        this.connectFormula();
-      } else {
-        console.warn('No child components found inside formula-webcomponent');
-      }
-    });
+    this.elementVariable = this.firstElementChild;
+    this.connectFormula();
   }
 
   /**
@@ -94,7 +72,6 @@ export class FormulaWebComponent extends HTMLElement {
    * and sets up CustomEvent handlers
    */
   connectFormula() {
-
     /**
      * @type {import('./../form/form.mjs').FormulaOptions | undefined}
      */
@@ -109,7 +86,7 @@ export class FormulaWebComponent extends HTMLElement {
     ;
     this.form = this.formula.init(this.elementVariable);
     this.dispatchEvent(
-      new CustomEvent('form', { bubbles: true, detail: this.formula })
+      new CustomEvent('form', { bubbles: true, detail: this.form })
     );
 
     Object.entries(this.formula.stores).forEach(([key, store]) =>

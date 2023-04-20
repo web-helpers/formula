@@ -22,7 +22,8 @@ To use as a web component, import from the package
 
     // Get the form values via a custom event
     formulaEl.addEventListener('formValues', (e: any) => {
-        console.log(e.detail);
+        const { userName } = e.detail
+        console.log(`Hello ${userName}`);
     });
 </script>
 ```
@@ -30,9 +31,10 @@ To use as a web component, import from the package
 Now you can use the `formula-webcomponent` to wrap any existing form:
 
 ```html
-<formula-webcomonent>
+<formula-webcomponent>
     <form id="customer-form" method="POST" action="/customer/manage">
-
+        <label for="userName">User Name</label>
+        <input id="userName" name="username" type="text" required />
     </form>
 </formula-webcomponent>
 ```
