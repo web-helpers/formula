@@ -7,7 +7,19 @@
  * @param {(value: unknown | unknown[]) => Record<string, unknown>} enrich
  */
 export function valueUpdate(details: FormulaField, stores: import('../shared/stores.mjs').FormulaStores, options: import('./form.mjs').FormulaOptions, hiddenFields: Map<string, HTMLInputElement[]>, enrich: (value: unknown | unknown[]) => Record<string, unknown>): void;
-export function createHandler(name: any, eventName: any, element: any, groupElements: any, stores: any, options: any, hiddenGroups: any): () => any;
+/**
+ * Creates an event handler for the passed element with it's data handler and returns a function
+ * to remove it
+ * @param {string} name
+ * @param {string} eventName
+ * @param {import('../shared/fields.mjs').FormEl} element
+ * @param {import('../shared/fields.mjs').FormEl[]} groupElements
+ * @param {import('../shared/stores.mjs').FormulaStores} stores
+ * @param {import('./form.mjs').FormulaOptions} options
+ * @param {HTMLInputElement[]} hiddenGroups
+ * @returns {() => void)} Function to remove the event listener
+ */
+export function createHandler(name: string, eventName: string, element: import('../shared/fields.mjs').FormEl, groupElements: import('../shared/fields.mjs').FormEl[], stores: import('../shared/stores.mjs').FormulaStores, options: import('./form.mjs').FormulaOptions, hiddenGroups: HTMLInputElement[]): () => void;
 /**
  * Create a handler for a form element submission, when called it copies the contents
  * of the current value store to the submit store and then unsubscribes

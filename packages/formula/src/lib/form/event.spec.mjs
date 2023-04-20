@@ -5,7 +5,7 @@ describe('Formula Event Handlers', () => {
   const storeMock = {
     formValues: map({}),
     validity: map({}),
-    isFormValid: atom(true),
+    formValid: atom(true),
   };
 
   afterEach(() => {

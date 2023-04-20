@@ -37,7 +37,7 @@ function getInitialFormValues(node, allGroups, stores, options) {
   stores.formValues.set({ ...formValues });
   stores.initialValues.set({ ...formValues });
   stores.validity.set({ ...validityValues });
-  stores.isFormValid.set(
+  stores.formValid.set(
     Object.values({ ...validityValues }).every((v) => v.valid)
   );
   stores.enrichment.set({ ...enrichmentValues });
@@ -65,7 +65,7 @@ export function createReset(node, allGroups, stores, options) {
   return () => {
     stores.formValues.set(formValues);
     stores.validity.set(validityValues);
-    stores.isFormValid.set(Object.values(validityValues).every((v) => v.valid));
+    stores.formValid.set(Object.values(validityValues).every((v) => v.valid));
     stores.enrichment.set(enrichmentValues);
     // Also override touched and dirty
     stores.touched.set(

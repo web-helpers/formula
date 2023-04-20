@@ -35,8 +35,15 @@ import {
  */
 
 /**
+ * @typedef {object} FormulaForm
+ * @property {HTMLElement} node
+ * @property {HTMLElement[]} elements
+ * @property {() => void} destroy
+ */
+
+/**
  * Creates the form action
- * @param {import('./form.mjs').FormulaOptions} options
+ * @param {FormulaOptions} options
  * @param {Map<string, import('../shared/stores.mjs').FormulaStores>} globalStore
  * @param {string} groupName
  * @param {Record<string, any>} initialData
@@ -185,7 +192,7 @@ export function createForm(options, globalStore, groupName, initialData) {
       submitHandler = createSubmitHandler(stores, node);
       node.addEventListener('submit', submitHandler);
     }
-    stores.isFormReady.set(true);
+    stores.formReady.set(true);
   }
 
   let currentNode;
@@ -206,20 +213,22 @@ export function createForm(options, globalStore, groupName, initialData) {
       currentNode = node;
       bindElements(node, options);
       return {
+        root: node,
         elements: groupedMap,
         destroy: () => {
+          stores.formReady.set(false);
           cleanupSubscriptions();
           currentNode.id && globalStore && globalStore.delete(currentNode.id);
         },
       };
     },
     updateForm: (updatedOpts) => {
-      stores.isFormReady.set(false);
+      stores.formReady.set(false);
       cleanupSubscriptions();
       bindElements(currentNode, updatedOpts || initialOptions);
     },
     destroyForm: () => {
-      stores.isFormReady.set(false);
+      stores.formReady.set(false);
       cleanupSubscriptions();
       currentNode.id && globalStore && globalStore.delete(currentNode.id);
     },

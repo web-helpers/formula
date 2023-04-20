@@ -9,7 +9,7 @@ import { createForm } from '../form/form.mjs';
  * interact with the form.
  *
  * By subscribing to the formula instance, you can listen to changes in the form and react to them.
- * 
+ *
  * @example ```html
  * <formula-webcomponent data-options='{"defaultValues": [{"firstName": "WebHelpers"}]}'>
  *    <form>
@@ -19,9 +19,9 @@ import { createForm } from '../form/form.mjs';
  *    </form>
  * </formula-webcomponent>
  * ```
- * 
+ *
  * There are several events that can be listened to on the web component:
- * 
+ *
  * ```
  * const wc = document.querySelector('formula-webcomponent');
  * wc.addEventListener('init', (e) => {
@@ -31,62 +31,75 @@ import { createForm } from '../form/form.mjs';
  *  console.log('Form values updated', e.detail);
  * });
  * ```
- * 
- * - init: Fired when the formula instance is initialised, returns the formula instance
- * - form: Fired when the form instance is initialised, returns the form instance
- * - formValues: Fired when the formValues store is updated
- * - submitValues: Fired when the submitValues store is updated
- * - touched: Fired when the touched store is updated
- * - dirty: Fired when the dirty store is updated
- * - validity: Fired when the validity store is updated
- * - formValidity: Fired when the formValidity store is updated
- * - enrichment: Fired when the enrichment store is updated
- * - isFormValid: Fired when the isFormValid store is updated
- * - isFormReady: Fired when the isFormReady store is updated
- * - preChanges: Fired before a change is made to the form stores update, useful for UI changes
- * - postChanges: Fired after a change is made to the form stores update, contains the latest form state
+ *
+ * @fires {Formula} form:init: Fired when the formula instance is initialised, returns the formula instance
+ * @fires {FormulaForm} form:connect: Fired when the form instance is initialised, returns the form instance
+ * @fires {Record<string, any> form:submit: Fired when the form is submitted if `data-handle-submit` is set on the web component, otherwise the form will submit as normal
+ * @fires {Record<string, any> formValues: Fired when the formValues store is updated
+ * @fires {Record<string, any> submitValues: Fired when the submitValues store is updated
+ * @fires {Record<string, boolean> touched: Fired when the touched store is updated
+ * @fires {Record<string, boolean> dirty: Fired when the dirty store is updated
+ * @fires {Record<string, any> validity: Fired when the validity store is updated
+ * @fires {Record<string, any> formValidity: Fired when the formValidity store is updated
+ * @fires {Record<string, any> enrichment: Fired when the enrichment store is updated
+ * @fires {boolean} formValid: Fired when the formValid store is updated
+ * @fires {boolean} formReady: Fired when the formReady store is updated
+ * @fires {function} preChanges: Fired before a change is made to the form stores update, useful for UI changes
+ * @fires {(values) => void} postChanges: Fired after a change is made to the form stores update, contains the latest form state
  */
 
 export class FormulaWebComponent extends HTMLElement {
-  /**
-   * Create the web component root and attach the shadow DOM
-   */
   constructor() {
     super();
   }
 
-  /**
-   * In our connected callback we create an inner HTML template and add a slot to it.
-   * We then add an event listener to the slot to listen for changes in the slot.and 
-   * assign the first child component to the element variable.
-   * Once we have the element variable, we can initialise the formula instance.
-   */
   connectedCallback() {
-    // Fetch the first child component and assign it to the element variable
-    this.elementVariable = this.firstElementChild;
-    this.connectFormula();
+    this.#getComponentOptions();
+    this.#connectForm();
+    setTimeout(() => this.#connectFormula(), 0);
+  }
+
+  disconnectedCallback() {
+    if (this.handleSubmit) {
+      this.formEl.removeEventListener('submit', this.#onHandleSubmit);
+    }
+    this.form.destroy();
   }
 
   /**
-   * Gets the options and initialises the formula instance with the web component,
-   * and sets up CustomEvent handlers
+   * Get the options from the data-* attributes
+   * @private
    */
-  connectFormula() {
-    /**
-     * @type {import('./../form/form.mjs').FormulaOptions | undefined}
-     */
-    const options = this.dataset?.options
+  #getComponentOptions() {
+    this.options = this.dataset?.options
       ? JSON.parse(this.dataset?.options)
       : undefined;
-    this.formula = createForm(options);
 
+    this.rootSelector = this.dataset?.rootSelector || undefined;
+    this.handleSubmit = this.dataset.hasOwnProperty('handleSubmit');
+  }
+
+  /**
+   * Get the passed data-root-selector or first child element and initialise the formula instance
+   */
+  #connectForm() {
+    this.formEl = this.rootSelector
+      ? this.querySelector(this.rootSelector)
+      : this.firstElementChild;
+    if (this.handleSubmit) {
+      this.formEl.addEventListener('submit', this.#onHandleSubmit.bind(this));
+    }
+  }
+
+  #connectFormula() {
+    this.formula = createForm(this.options);
     this.dispatchEvent(
-      new CustomEvent('init', { bubbles: true, detail: this.formula })
-    )
-    ;
-    this.form = this.formula.init(this.elementVariable);
+      new CustomEvent('form:init', { bubbles: true, detail: this.formula })
+    );
+
+    this.form = this.formula.init(this.formEl);
     this.dispatchEvent(
-      new CustomEvent('form', { bubbles: true, detail: this.form })
+      new CustomEvent('form:connect', { bubbles: true, detail: this.form })
     );
 
     Object.entries(this.formula.stores).forEach(([key, store]) =>
@@ -97,6 +110,22 @@ export class FormulaWebComponent extends HTMLElement {
       )
     );
   }
-}
 
+  /**
+   * Handle form submission
+   * @private
+   * @param {Event} e - The submit event
+   * @returns {void}
+   **/
+  #onHandleSubmit(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.dispatchEvent(
+      new CustomEvent('form:submit', {
+        bubbles: true,
+        detail: this.formula.stores.formValues.get(),
+      })
+    );
+  }
+}
 customElements.define('formula-webcomponent', FormulaWebComponent);

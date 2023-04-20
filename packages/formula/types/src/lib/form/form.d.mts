@@ -19,14 +19,20 @@
  * @property {import('../shared/stores.mjs').FormulaStores} stores
  */
 /**
+ * @typedef {object} FormulaForm
+ * @property {HTMLElement} node
+ * @property {HTMLElement[]} elements
+ * @property {() => void} destroy
+ */
+/**
  * Creates the form action
- * @param {import('./form.mjs').FormulaOptions} options
+ * @param {FormulaOptions} options
  * @param {Map<string, import('../shared/stores.mjs').FormulaStores>} globalStore
  * @param {string} groupName
  * @param {Record<string, any>} initialData
  * @returns {Formula}
  */
-export function createForm(options: import('./form.mjs').FormulaOptions, globalStore: Map<string, import('../shared/stores.mjs').FormulaStores>, groupName: string, initialData: Record<string, any>): Formula;
+export function createForm(options: FormulaOptions, globalStore: Map<string, import('../shared/stores.mjs').FormulaStores>, groupName: string, initialData: Record<string, any>): Formula;
 /**
  * Optional settings for Formula - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
  */
@@ -68,4 +74,9 @@ export type Formula = {
     destroyForm: () => void;
     resetForm: () => void;
     stores: import('../shared/stores.mjs').FormulaStores;
+};
+export type FormulaForm = {
+    node: HTMLElement;
+    elements: HTMLElement[];
+    destroy: () => void;
 };

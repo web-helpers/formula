@@ -11,8 +11,8 @@ import { atom, map } from 'nanostores';
  * @property {import('nanostores').MapStore} validity
  * @property {import('nanostores').MapStore} formValidity
  * @property {import('nanostores').MapStore} enrichment
- * @property {import('nanostores').Atom} isFormValid
- * @property {import('nanostores').Atom} isFormReady
+ * @property {import('nanostores').Atom} formValid
+ * @property {import('nanostores').Atom} formReady
  */
 
 /**
@@ -26,8 +26,8 @@ import { atom, map } from 'nanostores';
  * @property {import('nanostores').Atom} validity
  * @property {import('nanostores').Atom} formValidity
  * @property {import('nanostores').Atom} enrichment
- * @property {import('nanostores').Atom} isFormValid
- * @property {import('nanostores').Atom} isFormReady
+ * @property {import('nanostores').Atom} formValid
+ * @property {import('nanostores').Atom} formReady
  */
 
 /**
@@ -130,8 +130,8 @@ export function createFormStores(options, initialData) {
     dirty: map(initialStoreState.initialFieldState),
     validity: map(initialStoreState.initialValidity),
     formValidity: map(initialStoreState.initialFormValidity),
-    isFormValid: atom(false),
-    isFormReady: atom(false),
+    formValid: atom(false),
+    formReady: atom(false),
     enrichment: map(initialStoreState.initialEnrichment),
   };
 }
@@ -173,8 +173,8 @@ export function createGroupStores(options) {
     dirty: atom(initialFieldState),
     validity: atom(initialValidity),
     formValidity: atom(initialFormValidity),
-    isFormValid: atom(false),
-    isFormReady: atom(false),
+    formValid: atom(false),
+    formReady: atom(false),
     enrichment: atom(initialEnrichment),
   };
 }

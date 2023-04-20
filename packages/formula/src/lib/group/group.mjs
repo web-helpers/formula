@@ -79,7 +79,7 @@ export function createGroup(options, beakerStores) {
   }
 
   function groupHasChanged(rows) {
-    groupStores.isFormReady.set(false);
+    groupStores.formReady.set(false);
     const currentVals = groupStores.formValues.get();
     destroyGroup();
     cleanupStores(rows);
@@ -100,7 +100,7 @@ export function createGroup(options, beakerStores) {
       formInstances.set(row, instance);
       setupSubscriptions(form, i);
     }
-    groupStores.isFormReady.set(true);
+    groupStores.formReady.set(true);
   }
 
   function setupGroupContainer(node) {

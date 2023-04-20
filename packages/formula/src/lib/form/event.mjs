@@ -36,7 +36,7 @@ function formValidation(formValidators, stores) {
 
   if (Object.keys(invalidStates).length > 0) {
     stores.formValidity.set(invalidStates);
-    stores.isFormValid.set(false);
+    stores.formValid.set(false);
   }
 }
 
@@ -64,7 +64,7 @@ export function valueUpdate(details, stores, options, hiddenFields, enrich) {
   }
 
   stores.validity.set({ ...stores.validity.get(), [name]: validity });
-  stores.isFormValid.set(
+  stores.formValid.set(
     Object.values(stores.validity.get()).every((v) => v.valid)
   );
   if (options?.formValidators) {

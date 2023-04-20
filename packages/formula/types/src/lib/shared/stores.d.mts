@@ -25,8 +25,8 @@ export type FormulaStores = {
     validity: import('nanostores').MapStore;
     formValidity: import('nanostores').MapStore;
     enrichment: import('nanostores').MapStore;
-    isFormValid: import('nanostores').Atom;
-    isFormReady: import('nanostores').Atom;
+    formValid: import('nanostores').Atom;
+    formReady: import('nanostores').Atom;
 };
 /**
  * A set of stores used by Formula to store the current state
@@ -40,6 +40,6 @@ export type BeakerStores = {
     validity: import('nanostores').Atom;
     formValidity: import('nanostores').Atom;
     enrichment: import('nanostores').Atom;
-    isFormValid: import('nanostores').Atom;
-    isFormReady: import('nanostores').Atom;
+    formValid: import('nanostores').Atom;
+    formReady: import('nanostores').Atom;
 };

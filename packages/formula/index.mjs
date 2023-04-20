@@ -1,17 +1,19 @@
 import { createForm } from './src/lib/form/form.mjs';
 import { createGroup } from './src/lib/group/group.mjs';
 
+export { FormulaWebComponent } from './src/lib/webcomponent/index.mjs';
+
 /**
  * A global map of stores for elements with an `id` property and the `use` directive,
  * if no ID is used the store is not added
- * @type Map<string, import ('./src/lib/shared/stores.mjs').FormulaStores>
+ * @type {Map<string, import('./src/lib/shared/stores.mjs').FormulaStores>}
  */
 export const formulaStores = new Map();
 
 /**
  * A global map of stores for beaker groups with an `id` property and the `use` directive,
  * if no ID is used the store is not added
- * @type Map<string, import ('./src/lib/shared/stores.mjs').BeakerStores>
+ * @type {Map<string, import('./src/lib/shared/stores.mjs').BeakerStores>}
  */
 export const beakerStores = new Map();
 
