@@ -40,17 +40,17 @@
  * @fires {Formula} form:init Fired when the formula instance is initialised, returns the formula instance
  * @fires {FormulaForm} form:connect Fired when the form instance is initialised, returns the form instance
  * @fires {Record<string, any>} form:submit Fired when the form is submitted if `data-handle-submit` is set on the web component, otherwise the form will submit as normal
- * @fires {Record<string, any>} formValues Fired when the formValues store is updated
- * @fires {Record<string, any>} submitValues Fired when the submitValues store is updated
- * @fires {Record<string, boolean>} touched Fired when the touched store is updated
- * @fires {Record<string, boolean>} dirty Fired when the dirty store is updated
- * @fires {Record<string, any>} validity Fired when the validity store is updated
- * @fires {Record<string, any>} formValidity Fired when the formValidity store is updated
- * @fires {Record<string, any>} enrichment Fired when the enrichment store is updated
- * @fires {boolean} formValid Fired when the formValid store is updated
- * @fires {boolean} formReady Fired when the formReady store is updated
- * @fires {function} preChanges Fired before a change is made to the form stores update, useful for UI changes
- * @fires {(values) => void} postChanges Fired after a change is made to the form stores update, contains the latest form state
+ * @fires {Record<string, any>} form:values Fired when the formValues store is updated
+ * @fires {Record<string, any>} submit:values Fired when the submitValues store is updated
+ * @fires {Record<string, boolean>} form:touched Fired when the touched store is updated
+ * @fires {Record<string, boolean>} form:dirty Fired when the dirty store is updated
+ * @fires {Record<string, any>} form:errors Fired when the validity store is updated
+ * @fires {Record<string, any>} form:validity Fired when the formValidity store is updated
+ * @fires {Record<string, any>} form:enrichment Fired when the enrichment store is updated
+ * @fires {boolean} form:is:valid Fired when the formValid store is updated
+ * @fires {boolean} form:is:ready Fired when the formReady store is updated
+ * @fires {function} form:preChanges Fired before a change is made to the form stores update, useful for UI changes
+ * @fires {(values) => void} form:postChanges Fired after a change is made to the form stores update, contains the latest form state
  */
 export class FormulaWebComponent extends HTMLElement {
     /**
@@ -73,6 +73,7 @@ export class FormulaWebComponent extends HTMLElement {
     options: any;
     formEl: Element | null | undefined;
     formula: import("../form/form.mjs").Formula | undefined;
+    eventNames: Map<string, string> | undefined;
     form: {
         elements: HTMLElement[];
         destroy: () => void;

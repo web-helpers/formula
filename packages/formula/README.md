@@ -4,7 +4,9 @@
     <img src="./docs/logo_256.png" alt="The logo for Formula">
 </div>
 
-Formula is a library for creating Reactive Forms for the modern web. Using Formula, you can turn any static HTML5 form into a [fully reactive form](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html) - either using the web component, or getting more control with the library code.
+Formula is a library for creating Reactive Forms for the modern web. Using Formula, you can turn any static HTML5 form into a [fully reactive form](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html) - either using the web component, or getting more control with the library code. 
+
+Formula doesn't take over your forms, or need configuration to work - it's based on HTML standard, using attribute-based validation on input tags, and works with [Constraints Validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation) messages and ARIA.
 
 > ℹ️ It's based on [Svelte Formula](https://www.npmjs.com/package/svelte-formula). This version is fully VanillaJS ESM, with subscribable state provided by [nanostores](https://www.npmjs.com/package/nanostores). See [CHANGELOG](./CHANGELOG.md) for changes to the API.
 
@@ -79,11 +81,11 @@ formulaInstance.formEl.addEventListener('submit', (e) => {
 
 These attributes can be set on the web component to give more control
 
-| Attribute         | Type                  | Default     | Description                                                                                         |
-| ----------------- | --------------------- | ----------- | --------------------------------------------------------------------------------------------------- |
-| `formula-options` | `string \| undefined` | "undefined" | The options to pass to the formula instance                                                         |
-| `handle-submit`   | `boolean`             | true        | If Formula should handle the form submission                                                        |
-| `root-selector`   | `string \| undefined` | "undefined" | The root selector to use to find the form element, if not set, the first child element will be used |
+| Attribute         | Type                  | Default     | Description                                                                                                                                            |
+| ----------------- | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `formula-options` | `string \| undefined` | `undefined` | The options to pass to the formula instance                                                                                                            |
+| `handle-submit`   | `boolean`             | `undefined`     | If Formula should handle the form submission. If set to true you can use async requests with your form, otherwise it will use the forms default action |
+| `root-selector`   | `string \| undefined` | `undefined` | The root selector to use to find the form element, if not set, the first child element will be used - use this if your form is within a container                                                    |
 
 ## Web Component Events
 
@@ -105,3 +107,15 @@ These are events that can be subscribed to on the `formula-form` instance
 | `submit:values`    | `Record<string, any>`     | Fired when the submitValues store is updated                                                                                   |
 | `form:touched`     | `Record<string, boolean>` | Fired when the touched store is updated                                                                                        |
 | `form:errors`      | `Record<string, any>`     | Fired when the validity store is updated                                                                                       |
+
+### Formula Library Options
+
+| Option              | Detail                    | Description                                                                                                                    |
+| ------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+|`defaultValues`|`Record<string, any>`|A key/value of input id values and default values to fill them with|
+|`enrich`|`Record<string, Record<string, Function>>`|A key/value of a input ID enrichement name and which allows you to create functions that react to changes in the store - such as password strength
+|`messages`|`Record<string, Record<string, string>>`|A key/value of ids of fields, each one an object containing [Constraints Validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation) keys
+|`validators`|`Record<string, Record<string, Function>>`|A key/value paid of an input ID and a validator name, the validator returns a function that must return itself `null` or an error message string.
+|`formValidators`|`Record<string, Function>`|A key/value pair of a name and a function that gets all the form values and can return a boolean value - used for cases such as password matching two fields
+|`preChanges`|`() => void`|Function called before any store or value updates are applied
+|`postChanges`|`(values) => void`|Function called after all changes have been made, contains the latest values
