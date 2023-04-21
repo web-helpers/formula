@@ -2,7 +2,7 @@
 const options = { defaultValues: { firstName: 'John', gender: 'male' } };
 ---
 
-<formula-webcomponent formula-options={JSON.stringify(options)} handle-submit={true}>
+<formula-form formula-options={JSON.stringify(options)} handle-submit={true}>
   <form id='test-form' method="POST" action="/user">
     <div class='form-item mb-6'>
       <label
@@ -69,7 +69,7 @@ const options = { defaultValues: { firstName: 'John', gender: 'male' } };
       >Submit</button
     >
   </form>
-</formula-webcomponent>
+</formula-form>
 <div class='output'>
   <h3>Output</h3>
   <pre id='json-output'></pre>
@@ -79,7 +79,7 @@ const options = { defaultValues: { firstName: 'John', gender: 'male' } };
   import '@webhelpers/formula/webcomponent';
   import { FormulaWebComponent } from '@webhelpers/formula/webcomponent';
   const formulaEl = document.querySelector(
-    'formula-webcomponent'
+    'formula-form'
   ) as FormulaWebComponent;
   const jsonOutput = document.getElementById('json-output') as HTMLPreElement;
   const button = document.querySelector('button') as HTMLButtonElement;
@@ -96,17 +96,17 @@ const options = { defaultValues: { firstName: 'John', gender: 'male' } };
     console.log('connect', e.detail);
   });
 
-  formulaEl.addEventListener('preChanges', (e: any) => {
+  formulaEl.addEventListener('form:preChanges', (e: any) => {
     console.log('preChanges', e.detail);
   });
-  formulaEl.addEventListener('postChanges', (e: any) => {
+  formulaEl.addEventListener('form:postChanges', (e: any) => {
     console.log('postChanges', e.detail);
   });
 
-  formulaEl.addEventListener('formValues', (e: any) => {
+  formulaEl.addEventListener('form:values', (e: any) => {
     jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });
-  formulaEl.addEventListener('validity', (e: any) => {
+  formulaEl.addEventListener('form:errors', (e: any) => {
     Object.entries(e.detail).forEach(([key, value]: [string, any]) => {
       const input = document.querySelector(
         `[name="${key}"]`

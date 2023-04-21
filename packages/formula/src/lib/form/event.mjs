@@ -63,9 +63,9 @@ export function valueUpdate(details, stores, options, hiddenFields, enrich) {
     stores.formValues.set(state);
   }
 
-  stores.validity.set({ ...stores.validity.get(), [name]: validity });
-  stores.formValid.set(
-    Object.values(stores.validity.get()).every((v) => v.valid)
+  stores.errors.set({ ...stores.errors.get(), [name]: validity });
+  stores.formIsValid.set(
+    Object.values(stores.errors.get()).every((v) => v.valid)
   );
   if (options?.formValidators) {
     formValidation(options.formValidators, stores);

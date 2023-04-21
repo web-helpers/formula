@@ -4,7 +4,7 @@
     <img src="./docs/logo_256.png" alt="The logo for Formula">
 </div>
 
-Formula is a library for creating Reactive Forms for the modern web.  Using Formula, you can turn any static HTML5 form into a [fully reactive form](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html) - either using the web component, or getting more control with the library code.
+Formula is a library for creating Reactive Forms for the modern web. Using Formula, you can turn any static HTML5 form into a [fully reactive form](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html) - either using the web component, or getting more control with the library code.
 
 > ℹ️ It's based on [Svelte Formula](https://www.npmjs.com/package/svelte-formula). This version is fully VanillaJS ESM, with subscribable state provided by [nanostores](https://www.npmjs.com/package/nanostores). See [CHANGELOG](./CHANGELOG.md) for changes to the API.
 
@@ -22,7 +22,7 @@ Formula was originally developed as a Svelte Action, with migrating to Vanilla J
 
 ### Use as a web component
 
-The web component is the eastest way to get started.  To use it, include `@webhelpers/formula/webcomponent` in your JS code - this will register the web component for use.
+The web component is the eastest way to get started. To use it, include `@webhelpers/formula/webcomponent` in your JS code - this will register the web component for use.
 
 ```html
 <script type="module">
@@ -56,23 +56,23 @@ Now you can use the `formula-form` to wrap any existing form, in this case we al
 
 ### Use as a library
 
-To use as a library, you can pass a set of options to the formula function, and then bind it to a form element.  You can also pass functions in for `pre/postChange` events and for enrichment functions.
+To use as a library, you can pass a set of options to the formula function, and then bind it to a form element. You can also pass functions in for `pre/postChange` events and for enrichment functions.
 
 ```js
-import { formula } from '@webhelpers/formula'
+import { formula } from '@webhelpers/formula';
 
 const formEl = document.querySelector('form');
-const formulaInstance = formula({...options})
+const formulaInstance = formula({ ...options });
 const formInstance = formulaInstance.init(formulaInstance);
 
-formulaInstance.formValues.subscribe(formValues => {
-    console.log('Form Values', formValues);
+formulaInstance.formValues.subscribe((formValues) => {
+  console.log('Form Values', formValues);
 });
 
 formulaInstance.formEl.addEventListener('submit', (e) => {
-    e.preventDefault();
-    // Put your own logic here
-})
+  e.preventDefault();
+  // Put your own logic here
+});
 ```
 
 ## Web Component Attributes
@@ -85,23 +85,23 @@ These attributes can be set on the web component to give more control
 | `handle-submit`   | `boolean`             | true        | If Formula should handle the form submission                                                        |
 | `root-selector`   | `string \| undefined` | "undefined" | The root selector to use to find the form element, if not set, the first child element will be used |
 
-## Events
+## Web Component Events
 
 These are events that can be subscribed to on the `formula-form` instance
 
-| Event          | Detail                    | Description                                                                                                                    |
-| -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `dirty`        | `Record<string, boolean>` | Fired when the dirty store is updated                                                                                          |
-| `enrichment`   | `Record<string, any>`     | Fired when the enrichment store is updated                                                                                     |
-| `form:connect` | `FormulaForm`             | Fired when the form instance is initialised, returns the form instance                                                         |
-| `form:init`    | `Formula`                 | Fired when the formula instance is initialised, returns the formula instance                                                   |
-| `form:submit`  | `Record<string, any>`     | Fired when the form is submitted if `data-handle-submit` is set on the web component, otherwise the form will submit as normal |
-| `formReady`    | `boolean`                 | Fired when the formReady store is updated                                                                                      |
-| `formValid`    | `boolean`                 | Fired when the formValid store is updated                                                                                      |
-| `formValidity` | `Record<string, any>`     | Fired when the formValidity store is updated                                                                                   |
-| `formValues`   | `Record<string, any>`     | Fired when the formValues store is updated                                                                                     |
-| `postChanges`  | `(values) => void`        | Fired after a change is made to the form stores update, contains the latest form state                                         |
-| `preChanges`   | `function`                | Fired before a change is made to the form stores update, useful for UI changes                                                 |
-| `submitValues` | `Record<string, any>`     | Fired when the submitValues store is updated                                                                                   |
-| `touched`      | `Record<string, boolean>` | Fired when the touched store is updated                                                                                        |
-| `validity`     | `Record<string, any>`     | Fired when the validity store is updated                                                                                       |
+| Event              | Detail                    | Description                                                                                                                    |
+| ------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `form:dirty`       | `Record<string, boolean>` | Fired when the dirty store is updated                                                                                          |
+| `form:enrichment`  | `Record<string, any>`     | Fired when the enrichment store is updated                                                                                     |
+| `form:connect`     | `FormulaForm`             | Fired when the form instance is initialised, returns the form instance                                                         |
+| `form:init`        | `Formula`                 | Fired when the formula instance is initialised, returns the formula instance                                                   |
+| `form:submit`      | `Record<string, any>`     | Fired when the form is submitted if `data-handle-submit` is set on the web component, otherwise the form will submit as normal |
+| `form:is:ready`    | `boolean`                 | Fired when the formReady store is updated                                                                                      |
+| `form:is:valid`    | `boolean`                 | Fired when the formValid store is updated                                                                                      |
+| `form:validity`    | `Record<string, any>`     | Fired when the formValidity store is updated                                                                                   |
+| `form:values`      | `Record<string, any>`     | Fired when the formValues store is updated                                                                                     |
+| `form:postChanges` | `(values) => void`        | Fired after a change is made to the form stores update, contains the latest form state                                         |
+| `form:preChanges`  | `function`                | Fired before a change is made to the form stores update, useful for UI changes                                                 |
+| `submit:values`    | `Record<string, any>`     | Fired when the submitValues store is updated                                                                                   |
+| `form:touched`     | `Record<string, boolean>` | Fired when the touched store is updated                                                                                        |
+| `form:errors`      | `Record<string, any>`     | Fired when the validity store is updated                                                                                       |

@@ -68,12 +68,12 @@ export function createForm(options, globalStore, groupName, initialData) {
     
     if (!innerOpt?.preChanges) {
       innerOpt.preChanges = () => {
-        node?.parentElement?.dispatchEvent(new CustomEvent('preChanges', {detail: undefined}));
+        node?.parentElement?.dispatchEvent(new CustomEvent('form:preChanges', {detail: undefined}));
       };
     }
     if (!innerOpt?.postChanges) {
       innerOpt.postChanges = (values) => {
-        node?.parentElement?.dispatchEvent(new CustomEvent('postChanges', { detail: values }));
+        node?.parentElement?.dispatchEvent(new CustomEvent('form:postChanges', { detail: values }));
       };
     }
 
@@ -192,7 +192,7 @@ export function createForm(options, globalStore, groupName, initialData) {
       submitHandler = createSubmitHandler(stores, node);
       node.addEventListener('submit', submitHandler);
     }
-    stores.formReady.set(true);
+    stores.formIsReady.set(true);
   }
 
   let currentNode;

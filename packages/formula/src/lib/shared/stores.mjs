@@ -8,11 +8,11 @@ import { atom, map } from 'nanostores';
  * @property {import('nanostores').MapStore} initialValues
  * @property {import('nanostores').MapStore} touched
  * @property {import('nanostores').MapStore} dirty
- * @property {import('nanostores').MapStore} validity
+ * @property {import('nanostores').MapStore} errors
  * @property {import('nanostores').MapStore} formValidity
  * @property {import('nanostores').MapStore} enrichment
- * @property {import('nanostores').Atom} formValid
- * @property {import('nanostores').Atom} formReady
+ * @property {import('nanostores').Atom} formIsValid
+ * @property {import('nanostores').Atom} formIsReady
  */
 
 /**
@@ -23,11 +23,11 @@ import { atom, map } from 'nanostores';
  * @property {import('nanostores').Atom} initialValues
  * @property {import('nanostores').Atom} touched
  * @property {import('nanostores').Atom} dirty
- * @property {import('nanostores').Atom} validity
+ * @property {import('nanostores').Atom} errors
  * @property {import('nanostores').Atom} formValidity
  * @property {import('nanostores').Atom} enrichment
- * @property {import('nanostores').Atom} formValid
- * @property {import('nanostores').Atom} formReady
+ * @property {import('nanostores').Atom} formIsValid
+ * @property {import('nanostores').Atom} formIsReady
  */
 
 /**
@@ -128,10 +128,10 @@ export function createFormStores(options, initialData) {
     initialValues: map(initialStoreState.initialValues),
     touched: map(initialStoreState.initialFieldState),
     dirty: map(initialStoreState.initialFieldState),
-    validity: map(initialStoreState.initialValidity),
+    errors: map(initialStoreState.initialValidity),
     formValidity: map(initialStoreState.initialFormValidity),
-    formValid: atom(false),
-    formReady: atom(false),
+    formIsValid: atom(false),
+    formIsReady: atom(false),
     enrichment: map(initialStoreState.initialEnrichment),
   };
 }
@@ -171,10 +171,10 @@ export function createGroupStores(options) {
     initialValues: atom(initialValues),
     touched: atom(initialFieldState),
     dirty: atom(initialFieldState),
-    validity: atom(initialValidity),
+    errors: atom(initialValidity),
     formValidity: atom(initialFormValidity),
-    formValid: atom(false),
-    formReady: atom(false),
+    formIsValid: atom(false),
+    formIsReady: atom(false),
     enrichment: atom(initialEnrichment),
   };
 }
