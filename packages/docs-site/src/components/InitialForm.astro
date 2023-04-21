@@ -2,7 +2,7 @@
 const options = { defaultValues: { firstName: 'John' } };
 ---
 
-<formula-webcomponent data-options={JSON.stringify(options)} data-handle-submit>
+<formula-webcomponent formula-options={JSON.stringify(options)} handle-submit={true}>
   <form id='test-form' method="POST" action="/user">
     <div class='form-item mb-6'>
       <label
