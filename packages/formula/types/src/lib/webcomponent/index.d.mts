@@ -8,6 +8,13 @@
  *
  * By subscribing to the formula instance, you can listen to changes in the form and react to them.
  *
+ * @element formula-form
+ *
+ * @attr {boolean} handle-submit If Formula should handle the form submission, you can provide the key only or a boolean value
+ * @attr {string} root-selector The root selector to use to find the form element, if not set, the first child element will be used
+ * @attr {string} formula-options The options to pass to the formula instance, this should be a JSON string and cannot include functions
+ *
+ *
  * @example ```html
  * <formula-webcomponent data-options='{"defaultValues": [{"firstName": "WebHelpers"}]}'>
  *    <form>
@@ -30,27 +37,40 @@
  * });
  * ```
  *
- * @fires {Formula} form:init: Fired when the formula instance is initialised, returns the formula instance
- * @fires {FormulaForm} form:connect: Fired when the form instance is initialised, returns the form instance
- * @fires {Record<string, any> form:submit: Fired when the form is submitted if `data-handle-submit` is set on the web component, otherwise the form will submit as normal
- * @fires {Record<string, any> formValues: Fired when the formValues store is updated
- * @fires {Record<string, any> submitValues: Fired when the submitValues store is updated
- * @fires {Record<string, boolean> touched: Fired when the touched store is updated
- * @fires {Record<string, boolean> dirty: Fired when the dirty store is updated
- * @fires {Record<string, any> validity: Fired when the validity store is updated
- * @fires {Record<string, any> formValidity: Fired when the formValidity store is updated
- * @fires {Record<string, any> enrichment: Fired when the enrichment store is updated
- * @fires {boolean} formValid: Fired when the formValid store is updated
- * @fires {boolean} formReady: Fired when the formReady store is updated
- * @fires {function} preChanges: Fired before a change is made to the form stores update, useful for UI changes
- * @fires {(values) => void} postChanges: Fired after a change is made to the form stores update, contains the latest form state
+ * @fires {Formula} form:init Fired when the formula instance is initialised, returns the formula instance
+ * @fires {FormulaForm} form:connect Fired when the form instance is initialised, returns the form instance
+ * @fires {Record<string, any>} form:submit Fired when the form is submitted if `data-handle-submit` is set on the web component, otherwise the form will submit as normal
+ * @fires {Record<string, any>} formValues Fired when the formValues store is updated
+ * @fires {Record<string, any>} submitValues Fired when the submitValues store is updated
+ * @fires {Record<string, boolean>} touched Fired when the touched store is updated
+ * @fires {Record<string, boolean>} dirty Fired when the dirty store is updated
+ * @fires {Record<string, any>} validity Fired when the validity store is updated
+ * @fires {Record<string, any>} formValidity Fired when the formValidity store is updated
+ * @fires {Record<string, any>} enrichment Fired when the enrichment store is updated
+ * @fires {boolean} formValid Fired when the formValid store is updated
+ * @fires {boolean} formReady Fired when the formReady store is updated
+ * @fires {function} preChanges Fired before a change is made to the form stores update, useful for UI changes
+ * @fires {(values) => void} postChanges Fired after a change is made to the form stores update, contains the latest form state
  */
 export class FormulaWebComponent extends HTMLElement {
+    /**
+     * @type {boolean} If Formula should handle the form submission
+     * @attr {boolean} handle-submit
+     */
+    handleSubmit: boolean;
+    /**
+     * @type {string | undefined} The root selector to use to find the form element
+     * @attr {string | undefined} root-selector
+     */
+    rootSelector: string | undefined;
+    /**
+     * @type {string | undefined} The root selector to use to find the form element
+     * @attr {string} formula-options
+     */
+    formulaOptions: string | undefined;
     connectedCallback(): void;
     disconnectedCallback(): void;
     options: any;
-    rootSelector: string | undefined;
-    handleSubmit: boolean | undefined;
     formEl: Element | null | undefined;
     formula: import("../form/form.mjs").Formula | undefined;
     form: {

@@ -1,45 +1,83 @@
 # @webhelpers/formula
 
-Formula is a Web Component and Library that can be used to make any static HTML 5 form dyanamic by simply wrapping it in
-the Formula function. It's based on [Svelte Formula](https://github.com/tanepiper/svelte-formula) but now using [nanostores](https://github.com/nanostores/nanostores)
-as it's Subscription store.
+<div style="text-align:center;">
+    <img src="./docs/logo_256.png" alt="The logo for Formula">
+</div>
 
-> Formula is the first library in [Web Helpers](https://github.com/web-helpers/) - A set of useful developer-first libraries for the web.
+Formula is a library for creating Reactive Forms for the modern web.  Using Formula, you can turn any static HTML5 form into a [fully reactive form](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html) - either using the web component, or getting more control with the library code.
+
+> ℹ️ It's based on [Svelte Formula](https://www.npmjs.com/package/svelte-formula). This version is fully VanillaJS ESM, with subscribable state provided by [nanostores](https://www.npmjs.com/package/nanostores). See [CHANGELOG](./CHANGELOG.md) for changes to the API.
+
+> 🚨 Formula is the first library in [Web Helpers](https://github.com/web-helpers/) - A set of useful developer-first libraries for the web. It is still in active development - as such the API is still subject to changes.
 
 ## Installing and Usage
 
-To install the library and web component type `npm install @webhelpers/formula` in your project.
+### Installing
+
+```bash
+$ npm install @webhelpers/formula
+```
+
+Formula was originally developed as a Svelte Action, with migrating to Vanilla JS this API is the base one that can be used to create forms - ther is also a useful web component that can be wrapped around any form ([see example](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html))
 
 ### Use as a web component
 
-To use as a web component, import from the package
+The web component is the eastest way to get started.  To use it, include `@webhelpers/formula/webcomponent` in your JS code - this will register the web component for use.
 
 ```html
 <script type="module">
   import '@webhelpers/formula/webcomponent';
 
-  const formulaEl = document.querySelector('formula-webcomponent') as HTMLElement;
-
+  const formulaEl = document.querySelector('formula-form') as HTMLElement;
+    const url = formulaEl.formEl.getAttribute('action');
   // Get the form values via a custom event
   formulaEl.addEventListener('formValues', (e: any) => {
       const { userName } = e.detail
       console.log(`Hello ${userName}`);
   });
+
+  formulaEl.addEventListener('form:submit', async (e) => {
+    const result = await fetch(url, {method: post, body: e.detail});
+    // Rest of code goes here
+  })
 </script>
 ```
 
-Now you can use the `formula-webcomponent` to wrap any existing form:
+Now you can use the `formula-form` to wrap any existing form, in this case we also get it to take over the submit - this way we can now make our form more reactive to updates and errors:
 
 ```html
-<formula-webcomponent>
+<formula-form handle-submit>
   <form id="customer-form" method="POST" action="/customer/manage">
     <label for="userName">User Name</label>
     <input id="userName" name="username" type="text" required />
   </form>
-</formula-webcomponent>
+</formula-form>
 ```
 
-### Attributes
+### Use as a library
+
+To use as a library, you can pass a set of options to the formula function, and then bind it to a form element.  You can also pass functions in for `pre/postChange` events and for enrichment functions.
+
+```js
+import { formula } from '@webhelpers/formula'
+
+const formEl = document.querySelector('form');
+const formulaInstance = formula({...options})
+const formInstance = formulaInstance.init(formulaInstance);
+
+formulaInstance.formValues.subscribe(formValues => {
+    console.log('Form Values', formValues);
+});
+
+formulaInstance.formEl.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Put your own logic here
+})
+```
+
+## Web Component Attributes
+
+These attributes can be set on the web component to give more control
 
 | Attribute         | Type                  | Default     | Description                                                                                         |
 | ----------------- | --------------------- | ----------- | --------------------------------------------------------------------------------------------------- |
@@ -48,6 +86,8 @@ Now you can use the `formula-webcomponent` to wrap any existing form:
 | `root-selector`   | `string \| undefined` | "undefined" | The root selector to use to find the form element, if not set, the first child element will be used |
 
 ## Events
+
+These are events that can be subscribed to on the `formula-form` instance
 
 | Event          | Detail                    | Description                                                                                                                    |
 | -------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |

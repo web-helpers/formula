@@ -36,7 +36,7 @@ function setElementValue(element, value, isMultiValue, elementGroup) {
     });
   } else {
     if (element instanceof HTMLSelectElement) {
-      element.options.forEach((el) => {
+      [...element?.options].forEach((el) => {
         el.selected = value.includes(el.value);
       });
     } else if (element.type === 'checkbox') {
@@ -109,7 +109,12 @@ function getElementValues(element, isMultiValue, elementGroup) {
  */
 export function createFieldExtract(name, elementGroup, options, stores) {
   const validator = createValidationChecker(name, elementGroup, options);
-  const isMultiValue = !elementGroup[0].multiple && elementGroup.length > 1;
+
+  let isMultiValue = false;
+  if (elementGroup[0].type !== 'radio') {
+    isMultiValue = !elementGroup[0].multiple && elementGroup.length > 1;
+  }
+  
 
   /**
    * Function called on every element update, can also be called at initial value
@@ -136,7 +141,6 @@ export function createFieldExtract(name, elementGroup, options, stores) {
           isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
       }
     }
-
     if (isInit || isReset) {
       setElementValue(element, value, isMultiValue, elementGroup);
     }

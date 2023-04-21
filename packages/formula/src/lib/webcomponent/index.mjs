@@ -10,11 +10,11 @@ import { createForm } from '../form/form.mjs';
  *
  * By subscribing to the formula instance, you can listen to changes in the form and react to them.
  *
- * @element formula-webcomponent
- * 
- * @attr {boolean} handle-submit If Formula should handle the form submission
+ * @element formula-form
+ *
+ * @attr {boolean} handle-submit If Formula should handle the form submission, you can provide the key only or a boolean value
  * @attr {string} root-selector The root selector to use to find the form element, if not set, the first child element will be used
- * @attr {string} formula-options The options to pass to the formula instance
+ * @attr {string} formula-options The options to pass to the formula instance, this should be a JSON string and cannot include functions
  *
  *
  * @example ```html
@@ -56,7 +56,6 @@ import { createForm } from '../form/form.mjs';
  */
 
 export class FormulaWebComponent extends HTMLElement {
-
   /**
    * @type {boolean} If Formula should handle the form submission
    * @attr {boolean} handle-submit
@@ -80,6 +79,7 @@ export class FormulaWebComponent extends HTMLElement {
   }
 
   connectedCallback() {
+    /** This ensures that all elements are ready */
     this.#getComponentOptions();
     this.#connectForm();
     window.requestAnimationFrame(() => this.#connectFormula());
@@ -111,7 +111,6 @@ export class FormulaWebComponent extends HTMLElement {
     this.formEl = this.rootSelector
       ? this.querySelector(this.rootSelector)
       : this.firstElementChild;
-
 
     if (this.getAttribute('handle-submit') === 'true') {
       this.formEl.addEventListener('submit', this.#onHandleSubmit.bind(this));
@@ -155,4 +154,4 @@ export class FormulaWebComponent extends HTMLElement {
     );
   }
 }
-customElements.define('formula-webcomponent', FormulaWebComponent);
+customElements.define('formula-form', FormulaWebComponent);

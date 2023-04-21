@@ -1,5 +1,5 @@
 ---
-const options = { defaultValues: { firstName: 'John' } };
+const options = { defaultValues: { firstName: 'John', gender: 'male' } };
 ---
 
 <formula-webcomponent formula-options={JSON.stringify(options)} handle-submit={true}>
@@ -24,6 +24,43 @@ const options = { defaultValues: { firstName: 'John' } };
       >
         <span class='font-medium'>Oops!</span> Please enter your name
       </p>
+    </div>
+
+    <div class="form-item">
+      <fieldset>
+        <legend>Gender:</legend>
+        <label for="male"
+          ><input
+            type="radio"
+            name="gender"
+            value="male"
+            id="male"
+            required
+          />
+          Male</label
+        >
+        <label for="female"
+          ><input
+            type="radio"
+            name="gender"
+            value="female"
+            id="female"
+            required
+          />
+          Female</label
+        >
+        <label for="other"
+          ><input
+            type="radio"
+            name="gender"
+            value="other"
+            id="other"
+            required
+          />
+          Other</label
+        >
+      </fieldset>
+      <span class="error"></span>
     </div>
 
     <button
