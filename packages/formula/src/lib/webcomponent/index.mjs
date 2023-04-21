@@ -79,14 +79,10 @@ export class FormulaWebComponent extends HTMLElement {
     super();
   }
 
-  static get formAssociated() {
-    return true;
-  }
-
   connectedCallback() {
     this.#getComponentOptions();
     this.#connectForm();
-    setTimeout(() => this.#connectFormula(), 0);
+    window.requestAnimationFrame(() => this.#connectFormula());
   }
 
   disconnectedCallback() {
@@ -106,7 +102,6 @@ export class FormulaWebComponent extends HTMLElement {
       : undefined;
 
     this.rootSelector = this.getAttribute('root-selector') ?? undefined;
-    console.log(this.rootSelector);
   }
 
   /**
