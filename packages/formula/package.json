@@ -1,9 +1,14 @@
 {
   "name": "@webhelpers/formula",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zero-configuration Reactive Forms using HTML5 form templates",
   "type": "module",
-  "keywords": ["forms", "html5", "reactive", "nanostores"],
+  "keywords": [
+    "forms",
+    "html5",
+    "reactive",
+    "nanostores"
+  ],
   "license": "MIT",
   "author": {
     "name": "Tane Piper",
@@ -26,12 +31,9 @@
   },
   "main": "./index.mjs",
   "exports": {
-    ".": {
-      "import": "./index.mjs"
-    },
-    "./webcomponent": {
-      "import": "./src/lib/webcomponent/index.mjs"
-    }
+    ".": "./index.mjs",
+    "./webcomponent": "./src/lib/webcomponent/index.mjs",
+    "./package.json": "./package.json"
   },
   "readme": "./README.md",
   "types": "./types/index.d.mts",

@@ -106,3 +106,7 @@ dist
 # moon
 .moon/cache
 .moon/docker
+
+# OSX
+
+.DS_Store

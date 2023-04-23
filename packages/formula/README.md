@@ -1,14 +1,17 @@
 # @webhelpers/formula
 
 <div style="text-align:center;">
-    <img src="./docs/logo_256.png" alt="The logo for Formula">
+    <img src="https://raw.githubusercontent.com/web-helpers/formula/main/packages/formula/docs/logo_256.png" alt="The logo for Formula">
 </div>
 
-Formula is a library for creating Reactive Forms for the modern web. Using Formula, you can turn any static HTML5 form into a [fully reactive form](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html) - either using the web component, or getting more control with the library code. 
+Formula is a library for creating Dynamic, Reactive Forms for the modern web. Take any HTML form, Formula handles all the reactive bindings with your input elements, and makes the form state available via [Custom Events](#web-component-events) or direct access to it's subscribable stores.
 
-Formula doesn't take over your forms, or need configuration to work - it's based on HTML standard, using attribute-based validation on input tags, and works with [Constraints Validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation) messages and ARIA.
 
-> ℹ️ It's based on [Svelte Formula](https://www.npmjs.com/package/svelte-formula). This version is fully VanillaJS ESM, with subscribable state provided by [nanostores](https://www.npmjs.com/package/nanostores). See [CHANGELOG](./CHANGELOG.md) for changes to the API.
+Built using VanillaJS and [nanostores](https://github.com/nanostores/nanostores) it can turn any static HTML5 form into a [fully reactive form](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html) - either using the [web component](#use-as-a-web-component), or getting more control over your own elements with the [library features](#use-as-a-library).
+
+Using Formula you don't need to set up any complex configuration or templates to start - simply wrap any form compoment using the `<formula-form>` component, then use `document.querySelector` (or framework equivilent) to use the elements features.
+
+Templates are based on HTML standard, using attribute-based validation on input tags, and works with [Constraints Validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation) messages and ARIA.
 
 > 🚨 Formula is the first library in [Web Helpers](https://github.com/web-helpers/) - A set of useful developer-first libraries for the web. It is still in active development - as such the API is still subject to changes.
 
@@ -20,7 +23,7 @@ Formula doesn't take over your forms, or need configuration to work - it's based
 $ npm install @webhelpers/formula
 ```
 
-Formula was originally developed as a Svelte Action, with migrating to Vanilla JS this API is the base one that can be used to create forms - ther is also a useful web component that can be wrapped around any form ([see example](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html))
+Formula was originally developed as a Svelte Action, creating this library was first migrating to Vanilla JS. As is you can use this API to create your own component, or work without any components ([see example](https://stackblitz.com/edit/vitejs-vite-skkuff?file=index.html))
 
 ### Use as a web component
 
@@ -31,13 +34,39 @@ The web component is the eastest way to get started. To use it, include `@webhel
   import '@webhelpers/formula/webcomponent';
 
   const formulaEl = document.querySelector('formula-form') as HTMLElement;
-    const url = formulaEl.formEl.getAttribute('action');
-  // Get the form values via a custom event
-  formulaEl.addEventListener('formValues', (e: any) => {
-      const { userName } = e.detail
-      console.log(`Hello ${userName}`);
+  const url = formulaEl.formEl.getAttribute('action');
+
+  // You can subscribe to form value changes and use these to do things
+  // like form enrichment such as password stength
+  formulaEl.addEventListener('form:values', (e) => {
+    // An example of password strength and confirm
+      const { password, password_confirm } = e.detail;
+      const stength = getPasswordStr(password);
+      const passwordsMatch = password === password_confirm;
+      passwordMeter.value = strength;
+      if (!passwordsMatch) {
+        document.querySelector('#password_confirm ~ .error').innerHtml = 'Your password confirm does not match the password'
+      }
   });
 
+  // With this you can listen for errors and use this to update the UI
+  // however it is better to use CSS properties for display - e.g 
+  // input:invalid ~ .error { display: block }
+  formulaEl.addEventListener('form:errors', (e) => {
+    cosnt totalErrors = Object.values(e.detail).reduce((a, b) => a + b.valid ? 0 : 1, 0);
+    document.querySelector('#totalErrors').innerHtml = totalErrors;
+
+    Object.entries(e.detail).forEach(([key, value]) => {
+      const errorEl = document.querySelector(`#${key} ~ .error`);
+      if (errorEl) {
+        errorEl.innerHTML = value.message;
+      }
+    });
+  })
+
+  // You can also capture a form submit by adding the `handle-submit` 
+  // to the `<formula-form>` component and then subscribe to the 
+  // `form:submit` event
   formulaEl.addEventListener('form:submit', async (e) => {
     const result = await fetch(url, {method: post, body: e.detail});
     // Rest of code goes here
@@ -50,8 +79,22 @@ Now you can use the `formula-form` to wrap any existing form, in this case we al
 ```html
 <formula-form handle-submit>
   <form id="customer-form" method="POST" action="/customer/manage">
-    <label for="userName">User Name</label>
-    <input id="userName" name="username" type="text" required />
+    <div>
+      <label for="userName">User Name</label>
+      <input id="userName" name="username" type="text" required max="20" />
+      <span class="error"></span>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required min="8" />
+      <span class="error"></span>
+    </div>
+    <div>
+      <label for="password_match">Password Match</label>
+      <input id="password_match" name="password_match" type="password" required min="8" />
+      <span class="error"></span>
+    </div>
+    <button type="submit">Sign Up</button>
   </form>
 </formula-form>
 ```

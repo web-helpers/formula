@@ -5,10 +5,10 @@
  * @param {import('./src/lib/form/form.mjs').FormulaOptions=} options Optional options that the library supports, none of these options are
  * required to use Formula
  *
- * @returns { import('./src/lib/form/form.mjs').Formula } Formula object containing the current form, function to update or destroy
+ * @returns { import('./src/lib/form/form.mjs').Formula & import('./src/lib/shared/stores.mjs').FormulaStores} Formula object containing the current form, function to update or destroy
  * the form and all the stores available for the form
  */
-export function formula(options?: import('./src/lib/form/form.mjs').FormulaOptions | undefined): import('./src/lib/form/form.mjs').Formula;
+export function formula(options?: import('./src/lib/form/form.mjs').FormulaOptions | undefined): import('./src/lib/form/form.mjs').Formula & import('./src/lib/shared/stores.mjs').FormulaStores;
 /**
  * The beaker function returns an instance of a group of elements and their stores, it also provides methods
  * to set the group value store

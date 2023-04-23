@@ -24,7 +24,7 @@ export const beakerStores = new Map();
  * @param {import('./src/lib/form/form.mjs').FormulaOptions=} options Optional options that the library supports, none of these options are
  * required to use Formula
  *
- * @returns { import('./src/lib/form/form.mjs').Formula } Formula object containing the current form, function to update or destroy
+ * @returns { import('./src/lib/form/form.mjs').Formula & import('./src/lib/shared/stores.mjs').FormulaStores} Formula object containing the current form, function to update or destroy
  * the form and all the stores available for the form
  */
 export function formula(options) {

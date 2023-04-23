@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2023-04-23
+
+### Changed
+
+- Fixed export type of `formula` function to include stores
+- Change all webcomponent calls until after first frame request, fixes issues with some frameworks
+- Updated Readme examples to be more clear
+- Cleaned up exports in `package.json`
+
 ## [0.1.0] - 2023-04-21
 
 ### Added

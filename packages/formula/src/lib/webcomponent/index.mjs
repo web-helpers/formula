@@ -80,9 +80,6 @@ export class FormulaWebComponent extends HTMLElement {
   }
 
   connectedCallback() {
-    /** This ensures that all elements are ready */
-    this.#getComponentOptions();
-    this.#connectForm();
     window.requestAnimationFrame(() => this.#connectFormula());
   }
 
@@ -110,7 +107,7 @@ export class FormulaWebComponent extends HTMLElement {
    */
   #connectForm() {
     this.formEl = this.rootSelector
-      ? this.querySelector(this.rootSelector)
+      ? (document ?? this).querySelector(this.rootSelector)
       : this.firstElementChild;
 
     if (this.getAttribute('handle-submit') === 'true') {
@@ -119,6 +116,10 @@ export class FormulaWebComponent extends HTMLElement {
   }
 
   #connectFormula() {
+    /** This ensures that all elements are ready */
+    this.#getComponentOptions();
+    this.#connectForm();
+
     this.formula = createForm(this.options);
     this.eventNames = eventsWithFormKeys(this.formula.stores);
     this.dispatchEvent(
