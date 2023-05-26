@@ -24,8 +24,8 @@ export function createDirtyHandler(name, elements, stores) {
 
   const setDirtyAndStopListening = () => {
     for (const [el, handler] of elementHandlers) {
-      el.setAttribute('data-formula-dirty', 'true');
-      el.removeEventListener('blur', handler);
+      el.setAttribute("data-formula-dirty", "true");
+      el.removeEventListener("blur", handler);
     }
     elementHandlers.clear();
   };
@@ -52,7 +52,7 @@ export function createDirtyHandler(name, elements, stores) {
 
   for (const el of elements) {
     const handler = createElementHandler(name);
-    el.addEventListener('blur', handler);
+    el.addEventListener("blur", handler);
     elementHandlers.set(el, handler);
   }
 

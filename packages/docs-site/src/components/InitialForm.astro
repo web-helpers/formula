@@ -1,28 +1,28 @@
 ---
-const options = { defaultValues: { firstName: 'John', gender: 'male' } };
+const options = { defaultValues: { firstName: "John", gender: "male" } };
 ---
 
 <formula-form formula-options={JSON.stringify(options)} handle-submit={true}>
-  <form id='test-form' method="POST" action="/user">
-    <div class='form-item mb-6'>
+  <form id="test-form" method="POST" action="/user">
+    <div class="form-item mb-6">
       <label
-        for='firstName'
-        class='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+        for="firstName"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >First Name</label
       >
       <input
-        id='firstName'
-        type='text'
-        name='firstName'
-        class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-        placeholder='Enter your first name'
+        id="firstName"
+        type="text"
+        name="firstName"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Enter your first name"
         required
       />
       <p
-        style='display: none;'
-        class='mt-2 text-sm text-red-600 dark:text-red-500 error-message'
+        style="display: none;"
+        class="mt-2 text-sm text-red-600 dark:text-red-500 error-message"
       >
-        <span class='font-medium'>Oops!</span> Please enter your name
+        <span class="font-medium">Oops!</span> Please enter your name
       </p>
     </div>
 
@@ -30,13 +30,7 @@ const options = { defaultValues: { firstName: 'John', gender: 'male' } };
       <fieldset>
         <legend>Gender:</legend>
         <label for="male"
-          ><input
-            type="radio"
-            name="gender"
-            value="male"
-            id="male"
-            required
-          />
+          ><input type="radio" name="gender" value="male" id="male" required />
           Male</label
         >
         <label for="female"
@@ -64,49 +58,49 @@ const options = { defaultValues: { firstName: 'John', gender: 'male' } };
     </div>
 
     <button
-      type='submit'
-      class='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+      type="submit"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >Submit</button
     >
   </form>
 </formula-form>
-<div class='output'>
+<div class="output">
   <h3>Output</h3>
-  <pre id='json-output'></pre>
+  <pre id="json-output"></pre>
 </div>
 
 <script>
-  import '@webhelpers/formula/webcomponent';
-  import { FormulaWebComponent } from '@webhelpers/formula/webcomponent';
+  import "@webhelpers/formula/webcomponent";
+  import { FormulaWebComponent } from "@webhelpers/formula/webcomponent";
   const formulaEl = document.querySelector(
-    'formula-form'
+    "formula-form"
   ) as FormulaWebComponent;
-  const jsonOutput = document.getElementById('json-output') as HTMLPreElement;
-  const button = document.querySelector('button') as HTMLButtonElement;
+  const jsonOutput = document.getElementById("json-output") as HTMLPreElement;
+  const button = document.querySelector("button") as HTMLButtonElement;
 
-  formulaEl.addEventListener('form:init', (e: any) => {
-    console.log('Form Init', e.detail)
+  formulaEl.addEventListener("form:init", (e: any) => {
+    console.log("Form Init", e.detail);
   });
 
-  formulaEl.addEventListener('form:submit', (e: any) => {
-      const values = e.detail;
-      console.log('submit', values);
-    });
-  formulaEl.addEventListener('form:connect', (e: any) => {
-    console.log('connect', e.detail);
+  formulaEl.addEventListener("form:submit", (e: any) => {
+    const values = e.detail;
+    console.log("submit", values);
+  });
+  formulaEl.addEventListener("form:connect", (e: any) => {
+    console.log("connect", e.detail);
   });
 
-  formulaEl.addEventListener('form:preChanges', (e: any) => {
-    console.log('preChanges', e.detail);
+  formulaEl.addEventListener("form:preChanges", (e: any) => {
+    console.log("preChanges", e.detail);
   });
-  formulaEl.addEventListener('form:postChanges', (e: any) => {
-    console.log('postChanges', e.detail);
+  formulaEl.addEventListener("form:postChanges", (e: any) => {
+    console.log("postChanges", e.detail);
   });
 
-  formulaEl.addEventListener('form:values', (e: any) => {
+  formulaEl.addEventListener("form:values", (e: any) => {
     jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });
-  formulaEl.addEventListener('form:errors', (e: any) => {
+  formulaEl.addEventListener("form:errors", (e: any) => {
     Object.entries(e.detail).forEach(([key, value]: [string, any]) => {
       const input = document.querySelector(
         `[name="${key}"]`
@@ -114,14 +108,14 @@ const options = { defaultValues: { firstName: 'John', gender: 'male' } };
       const errorMessage =
         input &&
         (input.parentElement?.querySelector(
-          '.error-message'
+          ".error-message"
         ) as HTMLParagraphElement);
       if (errorMessage) {
         errorMessage.style.display =
-          value?.invalid && errorMessage ? 'block' : 'none';
+          value?.invalid && errorMessage ? "block" : "none";
       }
     });
-    console.log('validity', e.detail);
+    console.log("validity", e.detail);
     //jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });
 </script>

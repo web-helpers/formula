@@ -31,8 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | `form:connect`     | `FormulaForm`             | Fired when the form instance is initialised, returns the form instance                                                         |
 | `form:init`        | `Formula`                 | Fired when the formula instance is initialised, returns the formula instance                                                   |
 | `form:submit`      | `Record<string, any>`     | Fired when the form is submitted if `data-handle-submit` is set on the web component, otherwise the form will submit as normal |
-| `form:is:ready`    | `boolean`                 | Fired when the formReady store is updated                                                                                      |
-| `form:is:valid`    | `boolean`                 | Fired when the formValid store is updated                                                                                      |
+| `form:ready`       | `boolean`                 | Fired when the formReady store is updated                                                                                      |
+| `form:valid`       | `boolean`                 | Fired when the formValid store is updated                                                                                      |
 | `form:validity`    | `Record<string, any>`     | Fired when the formValidity store is updated                                                                                   |
 | `form:values`      | `Record<string, any>`     | Fired when the formValues store is updated                                                                                     |
 | `form:postChanges` | `(values) => void`        | Fired after a change is made to the form stores update, contains the latest form state                                         |

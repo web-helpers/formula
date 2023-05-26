@@ -1,7 +1,7 @@
-import { map } from 'nanostores';
-import { createTouchHandlers } from './touch.mjs';
+import { map } from "nanostores";
+import { createTouchHandlers } from "./touch.mjs";
 
-describe('Formula Touch Handler', () => {
+describe("Formula Touch Handler", () => {
   const storeMock = {
     touched: map({}),
   };
@@ -11,14 +11,14 @@ describe('Formula Touch Handler', () => {
   let destroyHandler;
 
   beforeEach(() => {
-    element = document.createElement('input');
-    element.type = 'text';
-    element.setAttribute('name', 'testing');
+    element = document.createElement("input");
+    element.type = "text";
+    element.setAttribute("name", "testing");
     elements = [element];
 
     document.body.appendChild(element);
 
-    destroyHandler = createTouchHandlers('testing', elements, storeMock);
+    destroyHandler = createTouchHandlers("testing", elements, storeMock);
   });
 
   afterEach(() => {
@@ -26,17 +26,17 @@ describe('Formula Touch Handler', () => {
     destroyHandler();
   });
 
-  it('should create the handler function', () => {
+  it("should create the handler function", () => {
     expect(destroyHandler).toBeInstanceOf(Function);
   });
 
-  it('should set the default value to false', () => {
+  it("should set the default value to false", () => {
     storeMock.touched.subscribe((v) => {
       expect(v).toStrictEqual({ testing: false });
     })();
   });
 
-  it('should update the store on focus', () => {
+  it("should update the store on focus", () => {
     element.focus();
     storeMock.touched.subscribe((v) => {
       expect(v).toStrictEqual({ testing: true });

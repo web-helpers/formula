@@ -1,7 +1,7 @@
-import { createForm } from './src/lib/form/form.mjs';
-import { createGroup } from './src/lib/group/group.mjs';
+import { createForm } from "./src/lib/form/form.mjs";
+import { createGroup } from "./src/lib/group/group.mjs";
 
-export { FormulaWebComponent } from './src/lib/webcomponent/index.mjs';
+export { FormulaWebComponent } from "./src/lib/webcomponent/index.mjs";
 
 /**
  * A global map of stores for elements with an `id` property and the `use` directive,

@@ -1,5 +1,5 @@
 # https://moonrepo.dev/docs/config/tasks
-$schema: 'https://moonrepo.dev/schemas/tasks.json'
+$schema: "https://moonrepo.dev/schemas/tasks.json"
 
 # Extend and inherit an external configuration file. Must be a valid HTTPS URL or file system path.
 # extends: './shared/tasks.yml'
@@ -15,26 +15,26 @@ $schema: 'https://moonrepo.dev/schemas/tasks.json'
 fileGroups:
   # List of configuration files located within the project root.
   configs:
-    - '*.{js,json}'
+    - "*.{js,json}"
 
   # List of non-test source files.
   sources:
-    - 'src/**/*'
-    - 'types/**/*'
+    - "src/**/*"
+    - "types/**/*"
 
   # List of non-source test files.
   tests:
-    - 'tests/**/*.test.*'
-    - '**/__tests__/**/*'
+    - "tests/**/*.test.*"
+    - "**/__tests__/**/*"
 
   # All static assets within the project.
   # This may include styles, images, videos, etc.
   assets:
-    - 'assets/**/*'
-    - 'images/**/*'
-    - 'static/**/*'
-    - '**/*.{scss,css}'
-    - '**/*.mdx'
+    - "assets/**/*"
+    - "images/**/*"
+    - "static/**/*"
+    - "**/*.{scss,css}"
+    - "**/*.mdx"
 
 # A task is an action that is ran within the context of a project, and wraps
 # around an npm or system command. Tasks that are defined here and inherited by all projects
@@ -46,7 +46,7 @@ tasks:
   # Name of the task.
   noop:
     # The name of the binary/command on your system.
-    command: 'noop'
+    command: "noop"
 
     # List of arguments to pass on the command line when executing the task.
     args: []
@@ -70,4 +70,4 @@ tasks:
 
     # The platform to run the command on, and where to locate it.
     # Accepts "node" or "system". Defaults based on project `language`.
-    platform: 'node'
+    platform: "node"

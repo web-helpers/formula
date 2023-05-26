@@ -53,30 +53,32 @@
  * @fires {(values) => void} form:postChanges Fired after a change is made to the form stores update, contains the latest form state
  */
 export class FormulaWebComponent extends HTMLElement {
-    /**
-     * @type {boolean} If Formula should handle the form submission
-     * @attr {boolean} handle-submit
-     */
-    handleSubmit: boolean;
-    /**
-     * @type {string | undefined} The root selector to use to find the form element
-     * @attr {string | undefined} root-selector
-     */
-    rootSelector: string | undefined;
-    /**
-     * @type {string | undefined} The root selector to use to find the form element
-     * @attr {string} formula-options
-     */
-    formulaOptions: string | undefined;
-    connectedCallback(): void;
-    disconnectedCallback(): void;
-    options: any;
-    formEl: Element | null | undefined;
-    formula: import("../form/form.mjs").Formula | undefined;
-    eventNames: Map<string, string> | undefined;
-    form: {
+  /**
+   * @type {boolean} If Formula should handle the form submission
+   * @attr {boolean} handle-submit
+   */
+  handleSubmit: boolean;
+  /**
+   * @type {string | undefined} The root selector to use to find the form element
+   * @attr {string | undefined} root-selector
+   */
+  rootSelector: string | undefined;
+  /**
+   * @type {string | undefined} The root selector to use to find the form element
+   * @attr {string} formula-options
+   */
+  formulaOptions: string | undefined;
+  connectedCallback(): void;
+  disconnectedCallback(): void;
+  options: any;
+  formEl: Element | null | undefined;
+  formula: import("../form/form.mjs").Formula | undefined;
+  eventNames: Map<string, string> | undefined;
+  form:
+    | {
         elements: HTMLElement[];
         destroy: () => void;
-    } | undefined;
-    #private;
+      }
+    | undefined;
+  #private;
 }

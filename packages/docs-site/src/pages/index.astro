@@ -1,9 +1,9 @@
 ---
-import { Code } from 'astro/components'
-import Layout from '../layouts/Base.astro';
+import { Code } from "astro/components";
+import Layout from "../layouts/Base.astro";
 
 const CODE = `# Install via NPM
-npm install @webhelpers/formula`
+npm install @webhelpers/formula`;
 
 const CODE2 = `<script type="module">
 import "@webhelpers/formula/webcomponent";
@@ -15,31 +15,42 @@ import "@webhelpers/formula/webcomponent";
     <input type="email" name="email" placeholder="Email" required>
     <input type="submit" value="Submit">
 </formula-webcomponent>
-`
+`;
 ---
 
 <Layout title="Manual">
-	<main>
+  <main>
     <div class="max-w-6xl mx-auto dark:text-white md:py-32 md:flex">
       <div class="p-8 md:w-1/2">
         <h1 class="text-6xl font-bold my-4">@WebHelpers</h1>
         <p class="text-2xl my-8">
-          Libraries for the <b class="text-green-600 dark:text-green-400">Modern Web</b> focused on the <b class="text-green-600 dark:text-green-400">Developer Experience</b>
+          Libraries for the <b class="text-green-600 dark:text-green-400"
+            >Modern Web</b
+          > focused on the <b class="text-green-600 dark:text-green-400"
+            >Developer Experience</b
+          >
         </p>
-        <a href="/docs/get-started/introduction" class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded">
+        <a
+          href="/docs/get-started/introduction"
+          class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded"
+        >
           GET STARTED
         </a>
       </div>
-      <div class="w-full p-8 md:w-1/2 [&_pre]:p-4 [&_pre]:rounded-2xl [&_pre]:shadow-xl [&_pre]:border-2 [&_pre]:border-green-500">
-        <Code code={CODE} lang="sh"/>
+      <div
+        class="w-full p-8 md:w-1/2 [&_pre]:p-4 [&_pre]:rounded-2xl [&_pre]:shadow-xl [&_pre]:border-2 [&_pre]:border-green-500"
+      >
+        <Code code={CODE} lang="sh" />
 
-        <Code code={CODE2} lang="js"/>
+        <Code code={CODE2} lang="js" />
       </div>
     </div>
     <div class="bg-green-700 dark:bg-zinc-800">
       <div class="max-w-6xl mx-auto md:py-16 p-8 text-center">
         <h1 class="text-white text-6xl font-bold mb-16">Build Your Project!</h1>
-        <div class="md:flex md:justify-center space-y-8 md:space-y-0 md:gap-x-8 dark:text-white">
+        <div
+          class="md:flex md:justify-center space-y-8 md:space-y-0 md:gap-x-8 dark:text-white"
+        >
           <div>
             <div class="bg-zinc-100 dark:bg-zinc-900 p-8 rounded-2xl shadow-xl">
               <h2 class="text-2xl font-bold">Card 1</h2>
@@ -48,7 +59,10 @@ import "@webhelpers/formula/webcomponent";
                 tincidunt, nisl eget aliquam tincidunt, nisl elit aliquam
                 tortor, eget aliquam nisl elit non nisl.
               </p>
-              <a href="/docs/get-started/introduction" class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded">
+              <a
+                href="/docs/get-started/introduction"
+                class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded"
+              >
                 LEARN
               </a>
             </div>
@@ -61,7 +75,10 @@ import "@webhelpers/formula/webcomponent";
                 tincidunt, nisl eget aliquam tincidunt, nisl elit aliquam
                 tortor, eget aliquam nisl elit non nisl.
               </p>
-              <a href="/docs/guides/migrate-from-z" class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded">
+              <a
+                href="/docs/guides/migrate-from-z"
+                class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded"
+              >
                 MIGRATE
               </a>
             </div>
@@ -74,7 +91,10 @@ import "@webhelpers/formula/webcomponent";
                 tincidunt, nisl eget aliquam tincidunt, nisl elit aliquam
                 tortor, eget aliquam nisl elit non nisl.
               </p>
-              <a href="/docs/get-started/installation" class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded">
+              <a
+                href="/docs/get-started/installation"
+                class="inline-block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 px-4 rounded"
+              >
                 INSTALL
               </a>
             </div>
@@ -82,34 +102,51 @@ import "@webhelpers/formula/webcomponent";
         </div>
       </div>
     </div>
-    <div class="max-w-6xl mx-auto dark:text-white md:py-32 md:flex md:flex-wrap">
+    <div
+      class="max-w-6xl mx-auto dark:text-white md:py-32 md:flex md:flex-wrap"
+    >
       <div class="p-8 md:w-1/2">
         <h2 class="text-4xl font-bold my-4">Point 1</h2>
         <p class="text-lg my-8">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate maxime corporis expedita consequuntur ipsa, eaque a suscipit, voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet illo laboriosam consequatur.
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate
+          maxime corporis expedita consequuntur ipsa, eaque a suscipit,
+          voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet
+          illo laboriosam consequatur.
         </p>
       </div>
       <div class="p-8 md:w-1/2">
         <h2 class="text-4xl font-bold my-4">Point 2</h2>
         <p class="text-lg my-8">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate maxime corporis expedita consequuntur ipsa, eaque a suscipit, voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet illo laboriosam consequatur.
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate
+          maxime corporis expedita consequuntur ipsa, eaque a suscipit,
+          voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet
+          illo laboriosam consequatur.
         </p>
       </div>
       <div class="p-8 md:w-1/2">
         <h2 class="text-4xl font-bold my-4">Point 3</h2>
         <p class="text-lg my-8">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate maxime corporis expedita consequuntur ipsa, eaque a suscipit, voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet illo laboriosam consequatur.
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate
+          maxime corporis expedita consequuntur ipsa, eaque a suscipit,
+          voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet
+          illo laboriosam consequatur.
         </p>
       </div>
       <div class="p-8 md:w-1/2">
         <h2 class="text-4xl font-bold my-4">Point 4</h2>
         <p class="text-lg my-8">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate maxime corporis expedita consequuntur ipsa, eaque a suscipit, voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet illo laboriosam consequatur.
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate
+          maxime corporis expedita consequuntur ipsa, eaque a suscipit,
+          voluptatem voluptas excepturi aperiam magnam, eos quo est ipsam amet
+          illo laboriosam consequatur.
         </p>
       </div>
-      <a href="/docs/get-started/introduction" class="w-fit px-8 my-4 text-center mx-auto block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 rounded">
+      <a
+        href="/docs/get-started/introduction"
+        class="w-fit px-8 my-4 text-center mx-auto block bg-green-700 hover:bg-green-800 text-white text-lg font-bold py-2 rounded"
+      >
         GET STARTED
       </a>
     </div>
-	</main>
+  </main>
 </Layout>

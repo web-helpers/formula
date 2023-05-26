@@ -1,4 +1,4 @@
-import { atom, map } from 'nanostores';
+import { atom, map } from "nanostores";
 
 /**
  * A set of stores used by Formula to store the current state
@@ -11,8 +11,8 @@ import { atom, map } from 'nanostores';
  * @property {import('nanostores').MapStore} errors
  * @property {import('nanostores').MapStore} formValidity
  * @property {import('nanostores').MapStore} enrichment
- * @property {import('nanostores').Atom} formIsValid
- * @property {import('nanostores').Atom} formIsReady
+ * @property {import('nanostores').Atom} formValid
+ * @property {import('nanostores').Atom} formReady
  */
 
 /**
@@ -26,8 +26,8 @@ import { atom, map } from 'nanostores';
  * @property {import('nanostores').Atom} errors
  * @property {import('nanostores').Atom} formValidity
  * @property {import('nanostores').Atom} enrichment
- * @property {import('nanostores').Atom} formIsValid
- * @property {import('nanostores').Atom} formIsReady
+ * @property {import('nanostores').Atom} formValid
+ * @property {import('nanostores').Atom} formReady
  */
 
 /**
@@ -74,14 +74,14 @@ function createFirstState(options, initialData) {
     () => ({
       valid: true,
       invalid: false,
-      message: '',
+      message: "",
       errors: {},
     })
   );
   const initialFormValidity = generateInitialState(
     Object.keys(options?.formValidators || {}),
     initialValues,
-    () => ''
+    () => ""
   );
 
   const initialEnrichment = Object.entries(options?.enrich || {}).reduce(
@@ -130,8 +130,8 @@ export function createFormStores(options, initialData) {
     dirty: map(initialStoreState.initialFieldState),
     errors: map(initialStoreState.initialValidity),
     formValidity: map(initialStoreState.initialFormValidity),
-    formIsValid: atom(false),
-    formIsReady: atom(false),
+    formValid: atom(false),
+    formReady: atom(false),
     enrichment: map(initialStoreState.initialEnrichment),
   };
 }
@@ -159,11 +159,11 @@ export function createGroupStores(options) {
       return [...accumulator, currentState[property]];
     }, []);
 
-  const initialValues = combineStates('initialValues');
-  const initialFieldState = combineStates('initialFieldState');
-  const initialValidity = combineStates('initialValidity');
-  const initialEnrichment = combineStates('initialEnrichment');
-  const initialFormValidity = combineStates('initialFormValidity');
+  const initialValues = combineStates("initialValues");
+  const initialFieldState = combineStates("initialFieldState");
+  const initialValidity = combineStates("initialValidity");
+  const initialEnrichment = combineStates("initialEnrichment");
+  const initialFormValidity = combineStates("initialFormValidity");
 
   return {
     formValues: atom(initialValues),
@@ -173,8 +173,8 @@ export function createGroupStores(options) {
     dirty: atom(initialFieldState),
     errors: atom(initialValidity),
     formValidity: atom(initialFormValidity),
-    formIsValid: atom(false),
-    formIsReady: atom(false),
+    formValid: atom(false),
+    formReady: atom(false),
     enrichment: atom(initialEnrichment),
   };
 }

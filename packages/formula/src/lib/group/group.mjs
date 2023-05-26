@@ -1,5 +1,5 @@
-import { createGroupStores } from '../shared/stores.mjs';
-import { createForm } from '../form/form.mjs';
+import { createGroupStores } from "../shared/stores.mjs";
+import { createForm } from "../form/form.mjs";
 
 /**
  * Optional settings for Beaker - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
@@ -11,18 +11,18 @@ import { createForm } from '../form/form.mjs';
  * @property {Record<string, any>=} defaultValues - Default values are used as initial values for the form fields if there is no value already set on the form
  */
 
-  /**
-   * @typedef {object} Beaker
-   * @property {function} group - Creates a group of forms
-   * @property {function} update - Updates the options for the group
-   * @property {function} destroy - Destroys the group
-   * @property {Map} forms - A map of the forms in the group
-   * @property {Map} stores - A map of the stores in the group
-   * @property {function} init - Initialises the group with the provided data
-   * @property {function} add - Adds a new row to the group
-   * @property {function} set - Sets the row at the provided index
-   * @property {function} delete - Removes the row at the provided index
-   */
+/**
+ * @typedef {object} Beaker
+ * @property {function} group - Creates a group of forms
+ * @property {function} update - Updates the options for the group
+ * @property {function} destroy - Destroys the group
+ * @property {Map} forms - A map of the forms in the group
+ * @property {Map} stores - A map of the stores in the group
+ * @property {function} init - Initialises the group with the provided data
+ * @property {function} add - Adds a new row to the group
+ * @property {function} set - Sets the row at the provided index
+ * @property {function} delete - Removes the row at the provided index
+ */
 
 let groupCounter = 0;
 
@@ -53,7 +53,7 @@ export function createGroup(options, beakerStores) {
 
   function cleanupStores(rows) {
     for (const key of Object.keys(groupStores)) {
-      if (['formValues', 'initialValues', 'submitValues'].includes(key)) return;
+      if (["formValues", "initialValues", "submitValues"].includes(key)) return;
       const state = groupStores[key].get();
       groupStores[key].set(
         Array.isArray(state) ? state.slice(0, rows.length) : state
@@ -66,7 +66,7 @@ export function createGroup(options, beakerStores) {
     const formStores = Object.entries(form.stores);
     for (const [key, store] of formStores) {
       const unsub = store.subscribe((value) => {
-        if (initial && key === 'formValues') return;
+        if (initial && key === "formValues") return;
         const state = groupStores[key].get();
         if (Array.isArray(state)) {
           state.splice(index, 1, value);
@@ -85,7 +85,7 @@ export function createGroup(options, beakerStores) {
     cleanupStores(rows);
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      row.setAttribute('data-beaker-index', `${i}`);
+      row.setAttribute("data-beaker-index", `${i}`);
       const form = createForm(
         {
           ...formulaOptions,
@@ -105,15 +105,14 @@ export function createGroup(options, beakerStores) {
 
   function setupGroupContainer(node) {
     globalObserver = new MutationObserver(() => {
-      const rows = node.querySelectorAll(':scope > *');
+      const rows = node.querySelectorAll(":scope > *");
       groupHasChanged(Array.from(rows));
     });
 
     globalObserver.observe(node, { childList: true });
-    const rows = node.querySelectorAll(':scope > *');
+    const rows = node.querySelectorAll(":scope > *");
     groupHasChanged(Array.from(rows));
   }
-
 
   return {
     group: (node) => {
@@ -125,9 +124,9 @@ export function createGroup(options, beakerStores) {
         node.id = groupName;
       }
 
-      node.setAttribute('data-beaker-group', 'true');
-      if (!node.hasAttribute('aria-role')) {
-        node.setAttribute('aria-role', 'group');
+      node.setAttribute("data-beaker-group", "true");
+      if (!node.hasAttribute("aria-role")) {
+        node.setAttribute("aria-role", "group");
       }
       setupGroupContainer(node);
 

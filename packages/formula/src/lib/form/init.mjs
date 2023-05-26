@@ -1,5 +1,5 @@
-import { createFieldExtract } from './extract.mjs';
-import { createEnrichField } from './enrichment.mjs';
+import { createFieldExtract } from "./extract.mjs";
+import { createEnrichField } from "./enrichment.mjs";
 
 /**
  * Initialise the stores with data from the form, it will also use any default values provided
@@ -37,7 +37,7 @@ function getInitialFormValues(node, allGroups, stores, options) {
   stores.formValues.set({ ...formValues });
   stores.initialValues.set({ ...formValues });
   stores.errors.set({ ...validityValues });
-  stores.formIsValid.set(
+  stores.formValid.set(
     Object.values({ ...validityValues }).every((v) => v.valid)
   );
   stores.enrichment.set({ ...enrichmentValues });
@@ -65,7 +65,7 @@ export function createReset(node, allGroups, stores, options) {
   return () => {
     stores.formValues.set(formValues);
     stores.errors.set(validityValues);
-    stores.formIsValid.set(Object.values(validityValues).every((v) => v.valid));
+    stores.formValid.set(Object.values(validityValues).every((v) => v.valid));
     stores.enrichment.set(enrichmentValues);
     // Also override touched and dirty
     stores.touched.set(

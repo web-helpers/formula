@@ -8,14 +8,14 @@ export function eventsWithFormKeys(stores) {
 
   for (const key in stores) {
     const splitKeyArray = key
-      .replace(/([A-Z])/g, ' $1')
+      .replace(/([A-Z])/g, " $1")
       .trim()
-      .split(' ')
+      .split(" ")
       .map((word) => word.toLowerCase());
     if (splitKeyArray.length === 1) {
-      splitKeyArray.unshift('form');
+      splitKeyArray.unshift("form");
     }
-    keyMap.set(key, splitKeyArray.join(':'));
+    keyMap.set(key, splitKeyArray.join(":"));
   }
 
   return keyMap;

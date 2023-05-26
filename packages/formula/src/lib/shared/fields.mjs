@@ -12,7 +12,7 @@
  * @returns {FormEl[]} Array of form elements
  */
 export function getFormFields(rootEl) {
-  const nodeList = rootEl.querySelectorAll('*[name]:not([data-in-group])'); // as NodeListOf<HTMLElement>;
+  const nodeList = rootEl.querySelectorAll("*[name]:not([data-in-group])"); // as NodeListOf<HTMLElement>;
   return Array.from(nodeList).filter((el) => el.checkValidity); //as FormEl[];
 }
 
@@ -23,6 +23,6 @@ export function getFormFields(rootEl) {
  */
 export function getGroupFields(rootEl) {
   /* @type {NodeListOf<HTMLElement>} */
-  const nodeList = rootEl.querySelectorAll('*[name]'); // as NodeListOf<HTMLElement>;
+  const nodeList = rootEl.querySelectorAll("*[name]"); // as NodeListOf<HTMLElement>;
   return Array.from(nodeList).filter((el) => el.checkValidity); // as FormEl[];
 }

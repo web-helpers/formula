@@ -1,5 +1,5 @@
-import { createForm } from '../form/form.mjs';
-import { eventsWithFormKeys } from './lib.mjs';
+import { createForm } from "../form/form.mjs";
+import { eventsWithFormKeys } from "./lib.mjs";
 
 /**
  * The FormulaWebComponent is a web component that can be used to wrap any existing
@@ -85,7 +85,7 @@ export class FormulaWebComponent extends HTMLElement {
 
   disconnectedCallback() {
     if (this.handleSubmit) {
-      this.formEl.removeEventListener('submit', this.#onHandleSubmit);
+      this.formEl.removeEventListener("submit", this.#onHandleSubmit);
     }
     this.form.destroy();
   }
@@ -95,11 +95,11 @@ export class FormulaWebComponent extends HTMLElement {
    * @private
    */
   #getComponentOptions() {
-    this.options = this.hasAttribute('formula-options')
-      ? JSON.parse(this.getAttribute('formula-options'))
+    this.options = this.hasAttribute("formula-options")
+      ? JSON.parse(this.getAttribute("formula-options"))
       : undefined;
 
-    this.rootSelector = this.getAttribute('root-selector') ?? undefined;
+    this.rootSelector = this.getAttribute("root-selector") ?? undefined;
   }
 
   /**
@@ -110,8 +110,8 @@ export class FormulaWebComponent extends HTMLElement {
       ? (document ?? this).querySelector(this.rootSelector)
       : this.firstElementChild;
 
-    if (this.getAttribute('handle-submit') === 'true') {
-      this.formEl.addEventListener('submit', this.#onHandleSubmit.bind(this));
+    if (this.getAttribute("handle-submit") === "true") {
+      this.formEl.addEventListener("submit", this.#onHandleSubmit.bind(this));
     }
   }
 
@@ -123,18 +123,21 @@ export class FormulaWebComponent extends HTMLElement {
     this.formula = createForm(this.options);
     this.eventNames = eventsWithFormKeys(this.formula.stores);
     this.dispatchEvent(
-      new CustomEvent('form:init', { bubbles: true, detail: this.formula })
+      new CustomEvent("form:init", { bubbles: true, detail: this.formula })
     );
 
     this.form = this.formula.init(this.formEl);
     this.dispatchEvent(
-      new CustomEvent('form:connect', { bubbles: true, detail: this.form })
+      new CustomEvent("form:connect", { bubbles: true, detail: this.form })
     );
 
     Object.entries(this.formula.stores).forEach(([key, store]) =>
       store.subscribe((value) =>
         this.dispatchEvent(
-          new CustomEvent(this.eventNames.get(key), { bubbles: true, detail: value })
+          new CustomEvent(this.eventNames.get(key), {
+            bubbles: true,
+            detail: value,
+          })
         )
       )
     );
@@ -150,11 +153,11 @@ export class FormulaWebComponent extends HTMLElement {
     e.preventDefault();
     e.stopPropagation();
     this.dispatchEvent(
-      new CustomEvent('form:submit', {
+      new CustomEvent("form:submit", {
         bubbles: true,
         detail: this.formula.stores.formValues.get(),
       })
     );
   }
 }
-customElements.define('formula-form', FormulaWebComponent);
+customElements.define("formula-form", FormulaWebComponent);

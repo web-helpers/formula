@@ -8,7 +8,11 @@
  * @param {import('./form.mjs').FormulaOptions=} options - The passed formula options.
  * @returns {Function} - Function called each time an element is updated, which returns the field validity state.
  */
-export function createValidationChecker(inputGroup: string, elementGroup: import('../shared/fields.mjs').FormEl, options?: import('./form.mjs').FormulaOptions | undefined): Function;
+export function createValidationChecker(
+  inputGroup: string,
+  elementGroup: import("../shared/fields.mjs").FormEl,
+  options?: import("./form.mjs").FormulaOptions | undefined
+): Function;
 /**
  * A validation function, it should return null if there is no error, or a string if there is an error
  */

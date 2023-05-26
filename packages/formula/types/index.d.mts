@@ -8,7 +8,10 @@
  * @returns { import('./src/lib/form/form.mjs').Formula & import('./src/lib/shared/stores.mjs').FormulaStores} Formula object containing the current form, function to update or destroy
  * the form and all the stores available for the form
  */
-export function formula(options?: import('./src/lib/form/form.mjs').FormulaOptions | undefined): import('./src/lib/form/form.mjs').Formula & import('./src/lib/shared/stores.mjs').FormulaStores;
+export function formula(
+  options?: import("./src/lib/form/form.mjs").FormulaOptions | undefined
+): import("./src/lib/form/form.mjs").Formula &
+  import("./src/lib/shared/stores.mjs").FormulaStores;
 /**
  * The beaker function returns an instance of a group of elements and their stores, it also provides methods
  * to set the group value store
@@ -17,17 +20,25 @@ export function formula(options?: import('./src/lib/form/form.mjs').FormulaOptio
  *
  * @returns { import ('./src/lib/shared/stores.mjs').BeakerStores } Beaker object containing the form group and it's associated methods
  */
-export function beaker(options?: import('./src/lib/group/group.mjs').BeakerOptions | undefined): import('./src/lib/shared/stores.mjs').BeakerStores;
+export function beaker(
+  options?: import("./src/lib/group/group.mjs").BeakerOptions | undefined
+): import("./src/lib/shared/stores.mjs").BeakerStores;
 export { FormulaWebComponent } from "./src/lib/webcomponent/index.mjs";
 /**
  * A global map of stores for elements with an `id` property and the `use` directive,
  * if no ID is used the store is not added
  * @type {Map<string, import('./src/lib/shared/stores.mjs').FormulaStores>}
  */
-export const formulaStores: Map<string, import('./src/lib/shared/stores.mjs').FormulaStores>;
+export const formulaStores: Map<
+  string,
+  import("./src/lib/shared/stores.mjs").FormulaStores
+>;
 /**
  * A global map of stores for beaker groups with an `id` property and the `use` directive,
  * if no ID is used the store is not added
  * @type {Map<string, import('./src/lib/shared/stores.mjs').BeakerStores>}
  */
-export const beakerStores: Map<string, import('./src/lib/shared/stores.mjs').BeakerStores>;
+export const beakerStores: Map<
+  string,
+  import("./src/lib/shared/stores.mjs").BeakerStores
+>;

@@ -11,7 +11,7 @@ function getRadioGroupParent(el) {
 
   const parent = el.parentElement;
   const isGroupContainer =
-    parent.querySelectorAll(':scope input[type=radio]').length > 1;
+    parent.querySelectorAll(":scope input[type=radio]").length > 1;
   const hasStoppingAttribute =
     parent.dataset?.beakerGroup || parent.dataset?.formulaForm;
 
@@ -28,7 +28,7 @@ function getRadioGroupParent(el) {
  * @param {import('../shared/fields.mjs').FormEl[]} elements - A collection of form elements.
  */
 export function setAriaRole(el, elements) {
-  if (el.hasAttribute('aria-role')) {
+  if (el.hasAttribute("aria-role")) {
     return;
   }
 
@@ -37,28 +37,28 @@ export function setAriaRole(el, elements) {
    * @param {string} role
    * @returns
    */
-  const setRole = (role) => el.setAttribute('aria-role', role);
+  const setRole = (role) => el.setAttribute("aria-role", role);
 
-  if (el.type === 'radio') {
+  if (el.type === "radio") {
     if (elements.length < 2) {
-      el?.parentElement?.setAttribute('aria-role', 'radiogroup');
+      el?.parentElement?.setAttribute("aria-role", "radiogroup");
     } else {
       const radioGroup = getRadioGroupParent(el);
-      if (radioGroup) radioGroup.setAttribute('aria-role', 'radiogroup');
+      if (radioGroup) radioGroup.setAttribute("aria-role", "radiogroup");
     }
-    setRole('radio');
+    setRole("radio");
   } else {
     setRole(
       (function () {
         switch (el.type) {
-          case 'select-one':
-          case 'select-multiple':
-          case 'checkbox':
+          case "select-one":
+          case "select-multiple":
+          case "checkbox":
             return el.type;
-          case 'file':
-            return 'file-upload';
-          case 'textarea':
-            return 'textbox';
+          case "file":
+            return "file-upload";
+          case "textarea":
+            return "textbox";
           default:
             return `input-${el.type}`;
         }
@@ -72,8 +72,8 @@ export function setAriaRole(el, elements) {
  * @param {import('../shared/fields.mjs').FormEl} el - The form element.
  */
 export function setAriaStates(el) {
-  if (el.hasAttribute('required')) {
-    el.setAttribute('aria-required', 'true');
+  if (el.hasAttribute("required")) {
+    el.setAttribute("aria-required", "true");
   }
 }
 
@@ -83,11 +83,11 @@ export function setAriaStates(el) {
  * @param {import('../shared/fields.mjs').FormEl[]} elGroup - A collection of form elements.
  */
 export function setAriaValue(element, elGroup) {
-  if (element.type === 'radio') {
-    elGroup.forEach((el) => el.removeAttribute('aria-checked'));
+  if (element.type === "radio") {
+    elGroup.forEach((el) => el.removeAttribute("aria-checked"));
   }
 
-  element.setAttribute('aria-checked', element?.checked ? 'true' : 'false');
+  element.setAttribute("aria-checked", element?.checked ? "true" : "false");
 }
 
 /**
@@ -96,8 +96,8 @@ export function setAriaValue(element, elGroup) {
  * @param {boolean} isGroup - Whether the container is a group.
  */
 export function setAriaContainer(container, isGroup) {
-  if (!container.hasAttribute('aria-role')) {
-    container.setAttribute('aria-role', isGroup ? 'row' : 'form');
+  if (!container.hasAttribute("aria-role")) {
+    container.setAttribute("aria-role", isGroup ? "row" : "form");
   }
 }
 
@@ -107,7 +107,7 @@ export function setAriaContainer(container, isGroup) {
  */
 export function setAriaButtons(container) {
   const nonAriaButtons = Array.from(
-    container.querySelectorAll('button:not([aria-role])')
+    container.querySelectorAll("button:not([aria-role])")
   );
-  nonAriaButtons.forEach((el) => el.setAttribute('aria-role', 'button'));
+  nonAriaButtons.forEach((el) => el.setAttribute("aria-role", "button"));
 }

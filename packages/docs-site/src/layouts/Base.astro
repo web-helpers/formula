@@ -1,14 +1,14 @@
 ---
-import Navigation from '../components/Navigation.astro';
+import Navigation from "../components/Navigation.astro";
 import {
   SITE_TITLE,
   SITE_DESCRIPTION,
   SITE_DEFAULT_OG_IMAGE,
-} from '../site_config';
+} from "../site_config";
 
 export interface Props {
   /** Title of the page */
-	title?: string;
+  title?: string;
   /** Description of the page */
   description?: string;
   /** OpenGraph thumbnail of the page */
@@ -27,7 +27,7 @@ const {
   description = SITE_DESCRIPTION,
   thumbnail = {
     src: SITE_DEFAULT_OG_IMAGE,
-    alt: SITE_TITLE
+    alt: SITE_TITLE,
   },
   canonical,
 } = Astro.props;
@@ -35,13 +35,13 @@ const {
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+  <head>
     <meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
-    <meta name="description" content={description}>
-		<meta name="generator" content={Astro.generator} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
     {canonical && <link rel="canonical" href={canonical} />}
 
     <meta property="og:title" content={title} />
@@ -50,10 +50,10 @@ const {
     <meta property="og:image" content={thumbnail.src} />
     <meta property="og:url" content={Astro.request.url} />
     <meta name="twitter:card" content="summary_large_image" />
-	</head>
+  </head>
 
   <body class="dark:bg-zinc-900 scroll-smooth dark:[color-scheme:dark]">
-    <Navigation/>
-		<slot/>
-	</body>
+    <Navigation />
+    <slot />
+  </body>
 </html>

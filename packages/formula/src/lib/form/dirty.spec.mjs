@@ -1,7 +1,7 @@
-import { map } from 'nanostores';
-import { createDirtyHandler } from './dirty.mjs';
+import { map } from "nanostores";
+import { createDirtyHandler } from "./dirty.mjs";
 
-describe('Formula Dirty Check', () => {
+describe("Formula Dirty Check", () => {
   const storeMock = {
     dirty: map({}),
     formValues: map({}),
@@ -12,13 +12,13 @@ describe('Formula Dirty Check', () => {
   let destroyHandler;
 
   beforeEach(() => {
-    element = document.createElement('input');
-    element.type = 'text';
-    element.setAttribute('name', 'testing');
+    element = document.createElement("input");
+    element.type = "text";
+    element.setAttribute("name", "testing");
     elements = [element];
 
     document.body.appendChild(element);
-    destroyHandler = createDirtyHandler('testing', elements, storeMock);
+    destroyHandler = createDirtyHandler("testing", elements, storeMock);
   });
 
   afterEach(() => {
@@ -26,17 +26,17 @@ describe('Formula Dirty Check', () => {
     destroyHandler();
   });
 
-  it('should create the handler function', () => {
+  it("should create the handler function", () => {
     expect(destroyHandler).toBeInstanceOf(Function);
   });
 
-  it('should set the default value to false', () => {
+  it("should set the default value to false", () => {
     storeMock.dirty.subscribe((v) => {
       expect(v).toStrictEqual({ testing: false });
     })();
   });
 
-  it('should not update if there is no change in value', () => {
+  it("should not update if there is no change in value", () => {
     element.focus();
     element.blur();
     storeMock.dirty.subscribe((v) => {
@@ -44,11 +44,11 @@ describe('Formula Dirty Check', () => {
     })();
   });
 
-  it('should update if there is a change in value', () => {
+  it("should update if there is a change in value", () => {
     element.focus();
 
     // Mock writing to the store
-    storeMock.formValues.set({ testing: 'testing' });
+    storeMock.formValues.set({ testing: "testing" });
 
     element.blur();
 
