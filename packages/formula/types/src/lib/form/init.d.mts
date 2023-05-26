@@ -7,7 +7,7 @@
  */
 export function createReset(
   node: HTMLElement,
-  allGroups: [string, import("../shared/fields.mjs").FormEl[]][],
-  stores: import("../shared/stores.mjs").FormulaStores,
-  options: import("./form.mjs").FormulaOptions
+  allGroups: [string, import('../shared/fields.mjs').FormEl[]][],
+  stores: import('../shared/stores.mjs').FormulaStores,
+  options: import('./form.mjs').FormulaOptions
 ): () => void;

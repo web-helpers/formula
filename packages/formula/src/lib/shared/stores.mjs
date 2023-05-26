@@ -1,4 +1,4 @@
-import { atom, map } from "nanostores";
+import { atom, map } from 'nanostores';
 
 /**
  * A set of stores used by Formula to store the current state
@@ -63,44 +63,27 @@ function createFirstState(options, initialData) {
   const initialValues = { ...options?.defaultValues, ...initialData };
   const initialKeys = Object.keys(initialValues);
 
-  const initialFieldState = generateInitialState(
-    initialKeys,
-    initialValues,
-    () => false
-  );
-  const initialValidity = generateInitialState(
-    initialKeys,
-    initialValues,
-    () => ({
-      valid: true,
-      invalid: false,
-      message: "",
-      errors: {},
-    })
-  );
-  const initialFormValidity = generateInitialState(
-    Object.keys(options?.formValidators || {}),
-    initialValues,
-    () => ""
-  );
+  const initialFieldState = generateInitialState(initialKeys, initialValues, () => false);
+  const initialValidity = generateInitialState(initialKeys, initialValues, () => ({
+    valid: true,
+    invalid: false,
+    message: '',
+    errors: {},
+  }));
+  const initialFormValidity = generateInitialState(Object.keys(options?.formValidators || {}), initialValues, () => '');
 
-  const initialEnrichment = Object.entries(options?.enrich || {}).reduce(
-    (value, [key, fns]) => {
-      return {
-        ...value,
-        [key]: Object.entries(fns).reduce(
-          (v, [k, fn]) => ({
-            ...v,
-            [k]: options?.defaultValues?.[key]
-              ? fn(options?.defaultValues?.[key])
-              : undefined,
-          }),
-          {}
-        ),
-      };
-    },
-    {}
-  );
+  const initialEnrichment = Object.entries(options?.enrich || {}).reduce((value, [key, fns]) => {
+    return {
+      ...value,
+      [key]: Object.entries(fns).reduce(
+        (v, [k, fn]) => ({
+          ...v,
+          [k]: options?.defaultValues?.[key] ? fn(options?.defaultValues?.[key]) : undefined,
+        }),
+        {}
+      ),
+    };
+  }, {});
 
   return {
     initialValues,
@@ -145,9 +128,7 @@ export function createGroupStores(options) {
   const defaultValues = options?.defaultValues || [];
   const { defaultValues: _, ...restOptions } = options;
 
-  const eachState = defaultValues.map((defaultValue) =>
-    createFirstState({ ...restOptions, defaultValues: defaultValue })
-  );
+  const eachState = defaultValues.map((defaultValue) => createFirstState({ ...restOptions, defaultValues: defaultValue }));
 
   /**
    *
@@ -159,11 +140,11 @@ export function createGroupStores(options) {
       return [...accumulator, currentState[property]];
     }, []);
 
-  const initialValues = combineStates("initialValues");
-  const initialFieldState = combineStates("initialFieldState");
-  const initialValidity = combineStates("initialValidity");
-  const initialEnrichment = combineStates("initialEnrichment");
-  const initialFormValidity = combineStates("initialFormValidity");
+  const initialValues = combineStates('initialValues');
+  const initialFieldState = combineStates('initialFieldState');
+  const initialValidity = combineStates('initialValidity');
+  const initialEnrichment = combineStates('initialEnrichment');
+  const initialFormValidity = combineStates('initialFormValidity');
 
   return {
     formValues: atom(initialValues),

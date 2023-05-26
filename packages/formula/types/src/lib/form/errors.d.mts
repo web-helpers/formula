@@ -10,8 +10,8 @@
  */
 export function createValidationChecker(
   inputGroup: string,
-  elementGroup: import("../shared/fields.mjs").FormEl,
-  options?: import("./form.mjs").FormulaOptions | undefined
+  elementGroup: import('../shared/fields.mjs').FormEl,
+  options?: import('./form.mjs').FormulaOptions | undefined
 ): Function;
 /**
  * A validation function, it should return null if there is no error, or a string if there is an error

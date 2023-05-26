@@ -24,7 +24,7 @@
 function extractErrors(el, custom) {
   const output = {};
   for (const key in el.validity) {
-    if (key !== "valid" && el.validity[key]) {
+    if (key !== 'valid' && el.validity[key]) {
       output[key] = el.validity[key];
     }
   }
@@ -79,8 +79,8 @@ export function createValidationChecker(inputGroup, elementGroup, options) {
        * @param {HTMLElement[]} groupEl
        */
       (groupEl) => {
-        groupEl.setCustomValidity("");
-        groupEl.removeAttribute("data-formula-invalid");
+        groupEl.setCustomValidity('');
+        groupEl.removeAttribute('data-formula-invalid');
       }
     );
 
@@ -88,7 +88,7 @@ export function createValidationChecker(inputGroup, elementGroup, options) {
     if (!options) {
       const valid = el.checkValidity();
       if (!valid) {
-        el.setAttribute("data-formula-invalid", "true");
+        el.setAttribute('data-formula-invalid', 'true');
       }
       return {
         valid,
@@ -105,10 +105,7 @@ export function createValidationChecker(inputGroup, elementGroup, options) {
     };
 
     // Check for any custom validations
-    const [messages, customErrors] = getCustomValidations(
-      elValue,
-      options?.validators?.[inputGroup]
-    );
+    const [messages, customErrors] = getCustomValidations(elValue, options?.validators?.[inputGroup]);
 
     const errors = extractErrors(el, customErrors);
     const errorKeys = Object.keys(errors);
@@ -125,7 +122,7 @@ export function createValidationChecker(inputGroup, elementGroup, options) {
     // Recheck validity and show any messages
     const valid = el.checkValidity();
     if (!valid) {
-      el.setAttribute("data-formula-invalid", "true");
+      el.setAttribute('data-formula-invalid', 'true');
     }
 
     return {

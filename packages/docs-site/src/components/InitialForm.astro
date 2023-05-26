@@ -1,15 +1,11 @@
 ---
-const options = { defaultValues: { firstName: "John", gender: "male" } };
+const options = { defaultValues: { firstName: 'John', gender: 'male' } };
 ---
 
 <formula-form formula-options={JSON.stringify(options)} handle-submit={true}>
   <form id="test-form" method="POST" action="/user">
     <div class="form-item mb-6">
-      <label
-        for="firstName"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >First Name</label
-      >
+      <label for="firstName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
       <input
         id="firstName"
         type="text"
@@ -18,10 +14,7 @@ const options = { defaultValues: { firstName: "John", gender: "male" } };
         placeholder="Enter your first name"
         required
       />
-      <p
-        style="display: none;"
-        class="mt-2 text-sm text-red-600 dark:text-red-500 error-message"
-      >
+      <p style="display: none;" class="mt-2 text-sm text-red-600 dark:text-red-500 error-message">
         <span class="font-medium">Oops!</span> Please enter your name
       </p>
     </div>
@@ -34,23 +27,11 @@ const options = { defaultValues: { firstName: "John", gender: "male" } };
           Male</label
         >
         <label for="female"
-          ><input
-            type="radio"
-            name="gender"
-            value="female"
-            id="female"
-            required
-          />
+          ><input type="radio" name="gender" value="female" id="female" required />
           Female</label
         >
         <label for="other"
-          ><input
-            type="radio"
-            name="gender"
-            value="other"
-            id="other"
-            required
-          />
+          ><input type="radio" name="gender" value="other" id="other" required />
           Other</label
         >
       </fieldset>
@@ -70,52 +51,43 @@ const options = { defaultValues: { firstName: "John", gender: "male" } };
 </div>
 
 <script>
-  import "@webhelpers/formula/webcomponent";
-  import { FormulaWebComponent } from "@webhelpers/formula/webcomponent";
-  const formulaEl = document.querySelector(
-    "formula-form"
-  ) as FormulaWebComponent;
-  const jsonOutput = document.getElementById("json-output") as HTMLPreElement;
-  const button = document.querySelector("button") as HTMLButtonElement;
+  import '@webhelpers/formula/webcomponent';
+  import { FormulaWebComponent } from '@webhelpers/formula/webcomponent';
+  const formulaEl = document.querySelector('formula-form') as FormulaWebComponent;
+  const jsonOutput = document.getElementById('json-output') as HTMLPreElement;
+  const button = document.querySelector('button') as HTMLButtonElement;
 
-  formulaEl.addEventListener("form:init", (e: any) => {
-    console.log("Form Init", e.detail);
+  formulaEl.addEventListener('form:init', (e: any) => {
+    console.log('Form Init', e.detail);
   });
 
-  formulaEl.addEventListener("form:submit", (e: any) => {
+  formulaEl.addEventListener('form:submit', (e: any) => {
     const values = e.detail;
-    console.log("submit", values);
+    console.log('submit', values);
   });
-  formulaEl.addEventListener("form:connect", (e: any) => {
-    console.log("connect", e.detail);
-  });
-
-  formulaEl.addEventListener("form:preChanges", (e: any) => {
-    console.log("preChanges", e.detail);
-  });
-  formulaEl.addEventListener("form:postChanges", (e: any) => {
-    console.log("postChanges", e.detail);
+  formulaEl.addEventListener('form:connect', (e: any) => {
+    console.log('connect', e.detail);
   });
 
-  formulaEl.addEventListener("form:values", (e: any) => {
+  formulaEl.addEventListener('form:preChanges', (e: any) => {
+    console.log('preChanges', e.detail);
+  });
+  formulaEl.addEventListener('form:postChanges', (e: any) => {
+    console.log('postChanges', e.detail);
+  });
+
+  formulaEl.addEventListener('form:values', (e: any) => {
     jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });
-  formulaEl.addEventListener("form:errors", (e: any) => {
+  formulaEl.addEventListener('form:errors', (e: any) => {
     Object.entries(e.detail).forEach(([key, value]: [string, any]) => {
-      const input = document.querySelector(
-        `[name="${key}"]`
-      ) as HTMLInputElement;
-      const errorMessage =
-        input &&
-        (input.parentElement?.querySelector(
-          ".error-message"
-        ) as HTMLParagraphElement);
+      const input = document.querySelector(`[name="${key}"]`) as HTMLInputElement;
+      const errorMessage = input && (input.parentElement?.querySelector('.error-message') as HTMLParagraphElement);
       if (errorMessage) {
-        errorMessage.style.display =
-          value?.invalid && errorMessage ? "block" : "none";
+        errorMessage.style.display = value?.invalid && errorMessage ? 'block' : 'none';
       }
     });
-    console.log("validity", e.detail);
+    console.log('validity', e.detail);
     //jsonOutput.innerHTML = JSON.stringify(e.detail, null, 2);
   });
 </script>

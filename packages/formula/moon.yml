@@ -1,23 +1,23 @@
 # https://moonrepo.dev/docs/config/tasks
-$schema: "https://moonrepo.dev/schemas/project.json"
+$schema: 'https://moonrepo.dev/schemas/project.json'
 
-type: "library"
-language: "javascript"
+type: 'library'
+language: 'javascript'
 
 project:
-  name: "formula"
-  description: "Formula library"
-  channel: ""
-  owner: "tanepiper"
-  maintainers: ["tanepiper"]
+  name: 'formula'
+  description: 'Formula library'
+  channel: ''
+  owner: 'tanepiper'
+  maintainers: ['tanepiper']
 
 tasks:
   build:
     local: true
-    command: "npm run build"
+    command: 'npm run build'
     inputs:
-      - "src/**/*"
-      - "package.json"
-      - "tsconfig.json"
+      - 'src/**/*'
+      - 'package.json'
+      - 'tsconfig.json'
     outputs:
-      - "types"
+      - 'types'

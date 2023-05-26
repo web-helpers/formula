@@ -8,8 +8,8 @@
  */
 export function valueUpdate(
   details: FormulaField,
-  stores: import("../shared/stores.mjs").FormulaStores,
-  options: import("./form.mjs").FormulaOptions,
+  stores: import('../shared/stores.mjs').FormulaStores,
+  options: import('./form.mjs').FormulaOptions,
   hiddenFields: Map<string, HTMLInputElement[]>,
   enrich: (value: unknown | unknown[]) => Record<string, unknown>
 ): void;
@@ -28,10 +28,10 @@ export function valueUpdate(
 export function createHandler(
   name: string,
   eventName: string,
-  element: import("../shared/fields.mjs").FormEl,
-  groupElements: import("../shared/fields.mjs").FormEl[],
-  stores: import("../shared/stores.mjs").FormulaStores,
-  options: import("./form.mjs").FormulaOptions,
+  element: import('../shared/fields.mjs').FormEl,
+  groupElements: import('../shared/fields.mjs').FormEl[],
+  stores: import('../shared/stores.mjs').FormulaStores,
+  options: import('./form.mjs').FormulaOptions,
   hiddenGroups: HTMLInputElement[]
 ): () => void;
 /**
@@ -40,10 +40,7 @@ export function createHandler(
  * @param {import('../shared/stores.mjs').FormulaStores} stores
  * @param {HTMLFormElement} form
  */
-export function createSubmitHandler(
-  stores: import("../shared/stores.mjs").FormulaStores,
-  form: HTMLFormElement
-): () => void;
+export function createSubmitHandler(stores: import('../shared/stores.mjs').FormulaStores, form: HTMLFormElement): () => void;
 export type FormulaError = {
   /**
    * - If the field is valid
@@ -56,7 +53,7 @@ export type FormulaError = {
   /**
    * The message returned from the HTML element
    */
-  "message-": string;
+  'message-': string;
   /**
    * - The errors from the {@link https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation|Contraint Validation API}
    */

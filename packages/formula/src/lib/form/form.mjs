@@ -1,16 +1,11 @@
-import { getFormFields, getGroupFields } from "../shared/fields.mjs";
-import { createHandler, createSubmitHandler } from "./event.mjs";
-import { createReset } from "./init.mjs";
-import { createTouchHandlers } from "./touch.mjs";
-import { createDirtyHandler } from "./dirty.mjs";
+import { getFormFields, getGroupFields } from '../shared/fields.mjs';
+import { createHandler, createSubmitHandler } from './event.mjs';
+import { createReset } from './init.mjs';
+import { createTouchHandlers } from './touch.mjs';
+import { createDirtyHandler } from './dirty.mjs';
 
-import { createFormStores } from "../shared/stores.mjs";
-import {
-  setAriaButtons,
-  setAriaContainer,
-  setAriaRole,
-  setAriaStates,
-} from "./aria.mjs";
+import { createFormStores } from '../shared/stores.mjs';
+import { setAriaButtons, setAriaContainer, setAriaRole, setAriaStates } from './aria.mjs';
 
 /**
  * Optional settings for Formula - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
@@ -56,7 +51,7 @@ export function createForm(options, globalStore, groupName, initialData) {
   const dirtyHandlers = new Set();
 
   const stores = createFormStores(options, initialData);
-  const isGroup = typeof groupName !== "undefined";
+  const isGroup = typeof groupName !== 'undefined';
   const initialOptions = options;
   let submitHandler = undefined;
   let unsub = () => {};
@@ -67,29 +62,25 @@ export function createForm(options, globalStore, groupName, initialData) {
   function bindElements(node, innerOpt = {}) {
     if (!innerOpt?.preChanges) {
       innerOpt.preChanges = () => {
-        node?.parentElement?.dispatchEvent(
-          new CustomEvent("form:preChanges", { detail: undefined })
-        );
+        node?.parentElement?.dispatchEvent(new CustomEvent('form:preChanges', { detail: undefined }));
       };
     }
     if (!innerOpt?.postChanges) {
       innerOpt.postChanges = (values) => {
-        node?.parentElement?.dispatchEvent(
-          new CustomEvent("form:postChanges", { detail: values })
-        );
+        node?.parentElement?.dispatchEvent(new CustomEvent('form:postChanges', { detail: values }));
       };
     }
 
     const formElements = isGroup ? getGroupFields(node) : getFormFields(node);
 
-    node.setAttribute(`data-formula-${isGroup ? "row" : "form"}`, "true");
+    node.setAttribute(`data-formula-${isGroup ? 'row' : 'form'}`, 'true');
     setAriaContainer(node, isGroup);
     setAriaButtons(node);
 
     groupedMap = [
       ...formElements.reduce((entryMap, e) => {
         const formulaName = e.dataset.formulaName;
-        const name = formulaName || e.getAttribute("name");
+        const name = formulaName || e.getAttribute('name');
         return entryMap.set(name, [...(entryMap.get(name) || []), e]);
       }, new Map()),
     ];
@@ -97,7 +88,7 @@ export function createForm(options, globalStore, groupName, initialData) {
     innerReset = createReset(node, groupedMap, stores, innerOpt);
 
     groupedMap.forEach(([name, elements]) => {
-      if (elements[0].type === "hidden") {
+      if (elements[0].type === 'hidden') {
         hiddenGroups.set(name, elements);
         return;
       }
@@ -107,83 +98,25 @@ export function createForm(options, globalStore, groupName, initialData) {
 
       elements.forEach((el) => {
         if (isGroup) {
-          el.setAttribute("data-in-group", groupName);
+          el.setAttribute('data-in-group', groupName);
         }
         setAriaRole(el, elements);
         setAriaStates(el);
 
         const customBindings = el.dataset.formulaBind;
         if (customBindings) {
-          customBindings
-            .split("|")
-            .forEach((event) =>
-              eventHandlers.set(
-                el,
-                createHandler(
-                  name,
-                  event,
-                  el,
-                  elements,
-                  stores,
-                  innerOpt,
-                  hiddenGroups
-                )
-              )
-            );
+          customBindings.split('|').forEach((event) => eventHandlers.set(el, createHandler(name, event, el, elements, stores, innerOpt, hiddenGroups)));
         } else if (el instanceof HTMLSelectElement) {
-          eventHandlers.set(
-            el,
-            createHandler(
-              name,
-              "change",
-              el,
-              elements,
-              stores,
-              innerOpt,
-              hiddenGroups
-            )
-          );
+          eventHandlers.set(el, createHandler(name, 'change', el, elements, stores, innerOpt, hiddenGroups));
         } else {
-          const changeEventTypes = [
-            "radio",
-            "checkbox",
-            "file",
-            "range",
-            "color",
-            "date",
-            "time",
-            "week",
-            "number",
-          ];
+          const changeEventTypes = ['radio', 'checkbox', 'file', 'range', 'color', 'date', 'time', 'week', 'number'];
 
           if (changeEventTypes.includes(el.type)) {
-            eventHandlers.set(
-              el,
-              createHandler(
-                name,
-                "change",
-                el,
-                elements,
-                stores,
-                innerOpt,
-                hiddenGroups
-              )
-            );
+            eventHandlers.set(el, createHandler(name, 'change', el, elements, stores, innerOpt, hiddenGroups));
           }
 
-          if (el.type !== "hidden") {
-            eventHandlers.set(
-              el,
-              createHandler(
-                name,
-                "keyup",
-                el,
-                elements,
-                stores,
-                innerOpt,
-                hiddenGroups
-              )
-            );
+          if (el.type !== 'hidden') {
+            eventHandlers.set(el, createHandler(name, 'keyup', el, elements, stores, innerOpt, hiddenGroups));
           }
         }
       });
@@ -193,7 +126,7 @@ export function createForm(options, globalStore, groupName, initialData) {
 
     if (node instanceof HTMLFormElement) {
       submitHandler = createSubmitHandler(stores, node);
-      node.addEventListener("submit", submitHandler);
+      node.addEventListener('submit', submitHandler);
     }
     stores.formReady.set(true);
   }
@@ -203,12 +136,12 @@ export function createForm(options, globalStore, groupName, initialData) {
   function cleanupSubscriptions() {
     unsub && unsub();
     [...eventHandlers].forEach(([el, fn]) => {
-      el.setCustomValidity("");
+      el.setCustomValidity('');
       fn();
     });
     [...touchHandlers, ...dirtyHandlers].forEach((fn) => fn());
     [eventHandlers, touchHandlers, dirtyHandlers].forEach((h) => h.clear());
-    if (submitHandler) currentNode.removeEventListener("submit", submitHandler);
+    if (submitHandler) currentNode.removeEventListener('submit', submitHandler);
   }
 
   return {

@@ -13,8 +13,8 @@ export function createTouchHandlers(name, elements, stores) {
 
   const destroy = () => {
     for (const [el, handler] of elementHandlers) {
-      el.setAttribute("data-formula-touched", "true");
-      el.removeEventListener("focus", handler);
+      el.setAttribute('data-formula-touched', 'true');
+      el.removeEventListener('focus', handler);
     }
     elementHandlers.clear();
   };
@@ -30,7 +30,7 @@ export function createTouchHandlers(name, elements, stores) {
 
   for (const el of elements) {
     const handler = createElementHandler();
-    el.addEventListener("focus", handler);
+    el.addEventListener('focus', handler);
     elementHandlers.set(el, handler);
   }
 

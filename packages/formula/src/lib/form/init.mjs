@@ -1,5 +1,5 @@
-import { createFieldExtract } from "./extract.mjs";
-import { createEnrichField } from "./enrichment.mjs";
+import { createFieldExtract } from './extract.mjs';
+import { createEnrichField } from './enrichment.mjs';
 
 /**
  * Initialise the stores with data from the form, it will also use any default values provided
@@ -37,9 +37,7 @@ function getInitialFormValues(node, allGroups, stores, options) {
   stores.formValues.set({ ...formValues });
   stores.initialValues.set({ ...formValues });
   stores.errors.set({ ...validityValues });
-  stores.formValid.set(
-    Object.values({ ...validityValues }).every((v) => v.valid)
-  );
+  stores.formValid.set(Object.values({ ...validityValues }).every((v) => v.valid));
   stores.enrichment.set({ ...enrichmentValues });
 
   return [formValues, validityValues, enrichmentValues];
@@ -53,12 +51,7 @@ function getInitialFormValues(node, allGroups, stores, options) {
  * @param {import('./form.mjs').FormulaOptions} options
  */
 export function createReset(node, allGroups, stores, options) {
-  const [formValues, validityValues, enrichmentValues] = getInitialFormValues(
-    node,
-    allGroups,
-    stores,
-    options
-  );
+  const [formValues, validityValues, enrichmentValues] = getInitialFormValues(node, allGroups, stores, options);
   /**
    * Resets the form to the initial values
    */
@@ -68,18 +61,8 @@ export function createReset(node, allGroups, stores, options) {
     stores.formValid.set(Object.values(validityValues).every((v) => v.valid));
     stores.enrichment.set(enrichmentValues);
     // Also override touched and dirty
-    stores.touched.set(
-      Object.keys(formValues).reduce(
-        (val, key) => ({ ...val, [key]: false }),
-        {}
-      )
-    );
-    stores.dirty.set(
-      Object.keys(formValues).reduce(
-        (val, key) => ({ ...val, [key]: false }),
-        {}
-      )
-    );
+    stores.touched.set(Object.keys(formValues).reduce((val, key) => ({ ...val, [key]: false }), {}));
+    stores.dirty.set(Object.keys(formValues).reduce((val, key) => ({ ...val, [key]: false }), {}));
 
     // Update the elements
     for (const [key, elements] of allGroups) {

@@ -1,5 +1,5 @@
-import { createValidationChecker } from "./errors.mjs";
-import { setAriaValue } from "./aria.mjs";
+import { createValidationChecker } from './errors.mjs';
+import { setAriaValue } from './aria.mjs';
 
 /**
  * Get selected option values from a multi-select element
@@ -28,7 +28,7 @@ function getMultiSelectOptionValues(collection) {
 function setElementValue(element, value, isMultiValue, elementGroup) {
   if (isMultiValue) {
     elementGroup.forEach((el, i) => {
-      if (el.type === "checkbox") {
+      if (el.type === 'checkbox') {
         el.checked = value.includes(el.value);
       } else {
         el.value = value[i];
@@ -39,11 +39,11 @@ function setElementValue(element, value, isMultiValue, elementGroup) {
       [...element?.options].forEach((el) => {
         el.selected = value.includes(el.value);
       });
-    } else if (element.type === "checkbox") {
+    } else if (element.type === 'checkbox') {
       element.checked = value;
-    } else if (element.type === "radio") {
+    } else if (element.type === 'radio') {
       elementGroup.forEach((el) => (el.checked = value === el.value));
-    } else if (element.type === "file") {
+    } else if (element.type === 'file') {
       element.files = value instanceof FileList ? value : null;
     } else {
       element.value = value;
@@ -62,38 +62,30 @@ function getElementValues(element, isMultiValue, elementGroup) {
   let elValue;
 
   if (element instanceof HTMLSelectElement) {
-    elValue = element.multiple
-      ? getMultiSelectOptionValues(element.options)
-      : element.value || null;
+    elValue = element.multiple ? getMultiSelectOptionValues(element.options) : element.value || null;
   } else {
     switch (element.type) {
-      case "number":
-      case "range":
+      case 'number':
+      case 'range':
         elValue = isMultiValue
-          ? elementGroup
-              .map((v) => parseFloat(v.value))
-              .filter((v) => !isNaN(v))
+          ? elementGroup.map((v) => parseFloat(v.value)).filter((v) => !isNaN(v))
           : (() => {
               const val = parseFloat(element.value);
               return !isNaN(val) ? val : null;
             })();
         break;
-      case "checkbox":
-        elValue = isMultiValue
-          ? elementGroup.filter((e) => e.checked).map((e) => e.value)
-          : element.checked;
+      case 'checkbox':
+        elValue = isMultiValue ? elementGroup.filter((e) => e.checked).map((e) => e.value) : element.checked;
         break;
-      case "radio":
+      case 'radio':
         const foundElement = elementGroup.find((el) => el.checked);
         elValue = foundElement ? foundElement.value : null;
         break;
-      case "file":
+      case 'file':
         elValue = element.files;
         break;
       default:
-        elValue = isMultiValue
-          ? elementGroup.map((v) => v.value)
-          : element.value || null;
+        elValue = isMultiValue ? elementGroup.map((v) => v.value) : element.value || null;
     }
   }
 
@@ -111,7 +103,7 @@ export function createFieldExtract(name, elementGroup, options, stores) {
   const validator = createValidationChecker(name, elementGroup, options);
 
   let isMultiValue = false;
-  if (elementGroup[0].type !== "radio") {
+  if (elementGroup[0].type !== 'radio') {
     isMultiValue = !elementGroup[0].multiple && elementGroup.length > 1;
   }
 
@@ -122,22 +114,19 @@ export function createFieldExtract(name, elementGroup, options, stores) {
   const fn = (instanceOpts, element, isInit, isReset) => {
     let value;
     if (isInit && instanceOpts?.defaultValues?.[name]) {
-      value = isMultiValue
-        ? instanceOpts?.defaultValues?.[name] || []
-        : instanceOpts?.defaultValues?.[name] || "";
+      value = isMultiValue ? instanceOpts?.defaultValues?.[name] || [] : instanceOpts?.defaultValues?.[name] || '';
     } else {
-      value = stores.formValues.get(name)?.[name] ?? (isMultiValue ? [] : "");
+      value = stores.formValues.get(name)?.[name] ?? (isMultiValue ? [] : '');
     }
 
     if (!isReset) {
       const elValue = getElementValues(element, isMultiValue, elementGroup);
       // Handle empty value fields that return null
       if (elValue === null && !isInit && value.length > 0) {
-        value = "";
+        value = '';
       }
       if (elValue !== null) {
-        value =
-          isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
+        value = isInit && isMultiValue && elValue?.length === 0 ? value : elValue;
       }
     }
     if (isInit || isReset) {

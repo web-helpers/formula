@@ -7,7 +7,7 @@
  */
 export function createFieldExtract(
   name: string,
-  elementGroup: import("../shared/fields.mjs").FormEl[],
-  options: import("./form.mjs").FormulaOptions,
-  stores: import("../shared/stores.mjs").FormulaStores
+  elementGroup: import('../shared/fields.mjs').FormEl[],
+  options: import('./form.mjs').FormulaOptions,
+  stores: import('../shared/stores.mjs').FormulaStores
 ): (element?: any, isInit?: any, isReset?: any) => any;

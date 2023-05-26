@@ -1,15 +1,12 @@
 ---
-import Base from "../../layouts/Base.astro";
-import { getCollection } from "astro:content";
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 
-const blog = await getCollection("blog");
+const blog = await getCollection('blog');
 ---
 
 <Base title="Blog">
-  <main
-    class="mt-8 px-8 md:px-0 mx-auto prose prose-zinc dark:prose-invert"
-    data-pagefind-ignore
-  >
+  <main class="mt-8 px-8 md:px-0 mx-auto prose prose-zinc dark:prose-invert" data-pagefind-ignore>
     {
       blog
         .sort((a, b) => b.data.published.getTime() - a.data.published.getTime())
@@ -21,7 +18,7 @@ const blog = await getCollection("blog");
                   <h2>{p.data.title}</h2>
                   <p class="dark:text-zinc-400 font-bold">
                     {p.data.published.toLocaleDateString(undefined, {
-                      dateStyle: "medium",
+                      dateStyle: 'medium',
                     })}
                   </p>
                   <p class="dark:text-zinc-400">{p.data.description}</p>

@@ -1,10 +1,10 @@
-import { createEnrichField } from "./enrichment.mjs";
+import { createEnrichField } from './enrichment.mjs';
 
-describe("Formula Enrichment", () => {
+describe('Formula Enrichment', () => {
   let enrich;
 
   beforeEach(() => {
-    enrich = createEnrichField("testing", {
+    enrich = createEnrichField('testing', {
       enrich: {
         testing: {
           getLength: (value) => value.length,
@@ -13,8 +13,8 @@ describe("Formula Enrichment", () => {
     });
   });
 
-  it("should update the enrich store", () => {
-    const result = enrich("hello");
+  it('should update the enrich store', () => {
+    const result = enrich('hello');
     expect(result).toStrictEqual({ getLength: 5 });
   });
 });

@@ -1,5 +1,5 @@
-import { createFieldExtract } from "./extract.mjs";
-import { createEnrichField } from "./enrichment.mjs";
+import { createFieldExtract } from './extract.mjs';
+import { createEnrichField } from './enrichment.mjs';
 
 /**
  * @typedef { object } FormulaError
@@ -55,25 +55,19 @@ export function valueUpdate(details, stores, options, hiddenFields, enrich) {
   if (hiddenFields.size) {
     const state = stores.formValues.get();
 
-    hiddenFields.forEach(
-      (group, name) =>
-        (state[name] =
-          group.length > 1 ? group.map((e) => e.value) : group[0].value)
-    );
+    hiddenFields.forEach((group, name) => (state[name] = group.length > 1 ? group.map((e) => e.value) : group[0].value));
     stores.formValues.set(state);
   }
 
   stores.errors.set({ ...stores.errors.get(), [name]: validity });
-  stores.formValid.set(
-    Object.values(stores.errors.get()).every((v) => v.valid)
-  );
+  stores.formValid.set(Object.values(stores.errors.get()).every((v) => v.valid));
   if (options?.formValidators) {
     formValidation(options.formValidators, stores);
   }
   if (enrich) {
     stores.enrichment.set({ [name]: enrich(value) });
   }
-  if (typeof options?.postChanges === "function") {
+  if (typeof options?.postChanges === 'function') {
     options.postChanges(stores.formValues.get());
   }
 }
@@ -86,13 +80,7 @@ export function valueUpdate(details, stores, options, hiddenFields, enrich) {
  * @param {Map<string, HTMLInputElement[]>} hiddenFields
  * @param { (value: unknown | unknown[]) => Record<string, unknown>} enrich
  */
-function createHandlerForData(
-  extractor,
-  stores,
-  options,
-  hiddenFields,
-  enrich
-) {
+function createHandlerForData(extractor, stores, options, hiddenFields, enrich) {
   return (event) => {
     const el = event?.currentTarget ?? event?.target;
     const extracted = extractor(el);
@@ -112,27 +100,13 @@ function createHandlerForData(
  * @param {HTMLInputElement[]} hiddenGroups
  * @returns {() => void)} Function to remove the event listener
  */
-export function createHandler(
-  name,
-  eventName,
-  element,
-  groupElements,
-  stores,
-  options,
-  hiddenGroups
-) {
+export function createHandler(name, eventName, element, groupElements, stores, options, hiddenGroups) {
   const extract = createFieldExtract(name, groupElements, options, stores);
   let enrich;
   if (options?.enrich?.[name]) enrich = createEnrichField(name, options);
-  const handler = createHandlerForData(
-    extract,
-    stores,
-    options,
-    hiddenGroups,
-    enrich
-  );
+  const handler = createHandlerForData(extract, stores, options, hiddenGroups, enrich);
   element.addEventListener(eventName, (event) => {
-    if (typeof options?.preChanges === "function") options.preChanges();
+    if (typeof options?.preChanges === 'function') options.preChanges();
     handler(event);
   });
   return () => element.removeEventListener(eventName, handler);

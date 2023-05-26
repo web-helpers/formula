@@ -3,8 +3,7 @@
  * @param {unknown[]} array1
  * @param {unknown[]} array2
  */
-const matchingArrays = (array1, array2) =>
-  array1.length === array2.length && array1.every((e) => array2.includes(e));
+const matchingArrays = (array1, array2) => array1.length === array2.length && array1.every((e) => array2.includes(e));
 
 /**
  * Creates a handler to set the dirty state for a group of elements. Once an
@@ -24,8 +23,8 @@ export function createDirtyHandler(name, elements, stores) {
 
   const setDirtyAndStopListening = () => {
     for (const [el, handler] of elementHandlers) {
-      el.setAttribute("data-formula-dirty", "true");
-      el.removeEventListener("blur", handler);
+      el.setAttribute('data-formula-dirty', 'true');
+      el.removeEventListener('blur', handler);
     }
     elementHandlers.clear();
   };
@@ -39,9 +38,7 @@ export function createDirtyHandler(name, elements, stores) {
       const startValue = initialValues.get(groupName);
       const currentValues = stores.formValues.get();
 
-      const isDirty = Array.isArray(currentValues[groupName])
-        ? !matchingArrays(currentValues[groupName], startValue)
-        : currentValues[groupName] !== startValue;
+      const isDirty = Array.isArray(currentValues[groupName]) ? !matchingArrays(currentValues[groupName], startValue) : currentValues[groupName] !== startValue;
 
       if (isDirty) {
         stores.dirty.set({ ...stores.dirty.get(), [groupName]: true });
@@ -52,7 +49,7 @@ export function createDirtyHandler(name, elements, stores) {
 
   for (const el of elements) {
     const handler = createElementHandler(name);
-    el.addEventListener("blur", handler);
+    el.addEventListener('blur', handler);
     elementHandlers.set(el, handler);
   }
 

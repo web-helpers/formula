@@ -15,10 +15,7 @@
  * @param {string} name - The name of the enrichment group
  * @param {import('./form.mjs').FormulaOptions} options - The options object
  */
-export function createEnrichField(
-  name: string,
-  options: import("./form.mjs").FormulaOptions
-): (value: any) => [string, EnrichFn];
+export function createEnrichField(name: string, options: import('./form.mjs').FormulaOptions): (value: any) => [string, EnrichFn];
 /**
  * Enrich function is used with field data to generate an enrichment
  */

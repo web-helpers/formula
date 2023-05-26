@@ -1,5 +1,5 @@
-import { createGroupStores } from "../shared/stores.mjs";
-import { createForm } from "../form/form.mjs";
+import { createGroupStores } from '../shared/stores.mjs';
+import { createForm } from '../form/form.mjs';
 
 /**
  * Optional settings for Beaker - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
@@ -53,11 +53,9 @@ export function createGroup(options, beakerStores) {
 
   function cleanupStores(rows) {
     for (const key of Object.keys(groupStores)) {
-      if (["formValues", "initialValues", "submitValues"].includes(key)) return;
+      if (['formValues', 'initialValues', 'submitValues'].includes(key)) return;
       const state = groupStores[key].get();
-      groupStores[key].set(
-        Array.isArray(state) ? state.slice(0, rows.length) : state
-      );
+      groupStores[key].set(Array.isArray(state) ? state.slice(0, rows.length) : state);
     }
   }
 
@@ -66,7 +64,7 @@ export function createGroup(options, beakerStores) {
     const formStores = Object.entries(form.stores);
     for (const [key, store] of formStores) {
       const unsub = store.subscribe((value) => {
-        if (initial && key === "formValues") return;
+        if (initial && key === 'formValues') return;
         const state = groupStores[key].get();
         if (Array.isArray(state)) {
           state.splice(index, 1, value);
@@ -85,7 +83,7 @@ export function createGroup(options, beakerStores) {
     cleanupStores(rows);
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      row.setAttribute("data-beaker-index", `${i}`);
+      row.setAttribute('data-beaker-index', `${i}`);
       const form = createForm(
         {
           ...formulaOptions,
@@ -105,12 +103,12 @@ export function createGroup(options, beakerStores) {
 
   function setupGroupContainer(node) {
     globalObserver = new MutationObserver(() => {
-      const rows = node.querySelectorAll(":scope > *");
+      const rows = node.querySelectorAll(':scope > *');
       groupHasChanged(Array.from(rows));
     });
 
     globalObserver.observe(node, { childList: true });
-    const rows = node.querySelectorAll(":scope > *");
+    const rows = node.querySelectorAll(':scope > *');
     groupHasChanged(Array.from(rows));
   }
 
@@ -124,9 +122,9 @@ export function createGroup(options, beakerStores) {
         node.id = groupName;
       }
 
-      node.setAttribute("data-beaker-group", "true");
-      if (!node.hasAttribute("aria-role")) {
-        node.setAttribute("aria-role", "group");
+      node.setAttribute('data-beaker-group', 'true');
+      if (!node.hasAttribute('aria-role')) {
+        node.setAttribute('aria-role', 'group');
       }
       setupGroupContainer(node);
 
@@ -153,8 +151,7 @@ export function createGroup(options, beakerStores) {
     forms: formulaInstances,
     stores: groupStores,
     init: (items) => groupStores.formValues.set(items),
-    add: (item) =>
-      groupStores.formValues.set([...groupStores.formValues.get(), item]),
+    add: (item) => groupStores.formValues.set([...groupStores.formValues.get(), item]),
     set: (index, item) => {
       const newState = groupStores.formValues.get();
       newState.splice(index, 1, item);

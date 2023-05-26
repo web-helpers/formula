@@ -72,7 +72,7 @@ export class FormulaWebComponent extends HTMLElement {
   disconnectedCallback(): void;
   options: any;
   formEl: Element | null | undefined;
-  formula: import("../form/form.mjs").Formula | undefined;
+  formula: import('../form/form.mjs').Formula | undefined;
   eventNames: Map<string, string> | undefined;
   form:
     | {

@@ -10,8 +10,4 @@
  *
  * @returns {() => void} - Function that when called will remove all blur event listeners from the elements, if not removed by user action.
  */
-export function createDirtyHandler(
-  name: string,
-  elements: import("../shared/fields.mjs").FormEl,
-  stores: import("../shared/stores.mjs").FormulaStores
-): () => void;
+export function createDirtyHandler(name: string, elements: import('../shared/fields.mjs').FormEl, stores: import('../shared/stores.mjs').FormulaStores): () => void;

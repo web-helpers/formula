@@ -4,10 +4,7 @@
  * @param {Map<string, import('../shared/stores.mjs').BeakerStores>} beakerStores
  * @returns {Beaker}
  */
-export function createGroup(
-  options: BeakerOptions,
-  beakerStores: Map<string, import("../shared/stores.mjs").BeakerStores>
-): Beaker;
+export function createGroup(options: BeakerOptions, beakerStores: Map<string, import('../shared/stores.mjs').BeakerStores>): Beaker;
 /**
  * Optional settings for Beaker - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
  */
@@ -19,11 +16,11 @@ export type BeakerOptions = {
   /**
    * - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
    */
-  validators?: import("../form/errors.mjs").ValidationRules | undefined;
+  validators?: import('../form/errors.mjs').ValidationRules | undefined;
   /**
    * - An object containing enrichers for the provided fields, each field enricher returns a value that is added to the `enriched` field.
    */
-  enrich?: import("../form/enrichment.mjs").EnrichFields | undefined;
+  enrich?: import('../form/enrichment.mjs').EnrichFields | undefined;
   /**
    * - Default values are used as initial values for the form fields if there is no value already set on the form
    */

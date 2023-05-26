@@ -1,39 +1,39 @@
 # https://moonrepo.dev/docs/config/tasks
-$schema: "https://moonrepo.dev/schemas/project.json"
+$schema: 'https://moonrepo.dev/schemas/project.json'
 
-type: "application"
-language: "javascript"
+type: 'application'
+language: 'javascript'
 
 project:
-  name: "docs-site"
-  description: "Docs site for Formula"
-  channel: ""
-  owner: "tanepiper"
-  maintainers: ["tanepiper"]
+  name: 'docs-site'
+  description: 'Docs site for Formula'
+  channel: ''
+  owner: 'tanepiper'
+  maintainers: ['tanepiper']
 
 tasks:
   dev:
     options:
       runInCI: false
-    command: "npm run dev"
+    command: 'npm run dev'
     inputs:
-      - "public/**/*"
-      - "src/**/*"
+      - 'public/**/*'
+      - 'src/**/*'
   build:
     options:
       runInCI: false
-    command: "npm run build"
+    command: 'npm run build'
     inputs:
-      - "public/**/*"
-      - "src/**/*"
-      - "astro.config.mjs"
+      - 'public/**/*'
+      - 'src/**/*'
+      - 'astro.config.mjs'
     outputs:
-      - "dist"
+      - 'dist'
   preview:
     options:
       runInCI: false
-    command: "npm run preview"
+    command: 'npm run preview'
     inputs:
-      - "public/**/*"
-      - "src/**/*"
-      - "dist"
+      - 'public/**/*'
+      - 'src/**/*'
+      - 'dist'

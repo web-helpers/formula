@@ -90,13 +90,7 @@ Now you can use the `formula-form` to wrap any existing form, in this case we al
     </div>
     <div>
       <label for="password_match">Password Match</label>
-      <input
-        id="password_match"
-        name="password_match"
-        type="password"
-        required
-        min="8"
-      />
+      <input id="password_match" name="password_match" type="password" required min="8" />
       <span class="error"></span>
     </div>
     <button type="submit">Sign Up</button>
@@ -109,17 +103,17 @@ Now you can use the `formula-form` to wrap any existing form, in this case we al
 To use as a library, you can pass a set of options to the formula function, and then bind it to a form element. You can also pass functions in for `pre/postChange` events and for enrichment functions.
 
 ```js
-import { formula } from "@webhelpers/formula";
+import { formula } from '@webhelpers/formula';
 
-const formEl = document.querySelector("form");
+const formEl = document.querySelector('form');
 const formulaInstance = formula({ ...options });
 const formInstance = formulaInstance.init(formulaInstance);
 
 formulaInstance.formValues.subscribe((formValues) => {
-  console.log("Form Values", formValues);
+  console.log('Form Values', formValues);
 });
 
-formulaInstance.formEl.addEventListener("submit", (e) => {
+formulaInstance.formEl.addEventListener('submit', (e) => {
   e.preventDefault();
   // Put your own logic here
 });
