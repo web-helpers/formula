@@ -75,6 +75,12 @@ export class FormulaWebComponent extends HTMLElement {
    */
   formulaOptions = undefined;
 
+  /**
+   * @type {Array<() => void>} Store subscriptions for cleanup
+   * @private
+   */
+  #subscriptions = [];
+
   constructor() {
     super();
   }
@@ -87,6 +93,8 @@ export class FormulaWebComponent extends HTMLElement {
     if (this.handleSubmit) {
       this.formEl.removeEventListener('submit', this.#onHandleSubmit);
     }
+    this.#subscriptions.forEach((unsub) => unsub());
+    this.#subscriptions = [];
     this.form.destroy();
   }
 
@@ -123,16 +131,17 @@ export class FormulaWebComponent extends HTMLElement {
     this.form = this.formula.init(this.formEl);
     this.dispatchEvent(new CustomEvent('form:connect', { bubbles: true, detail: this.form }));
 
-    Object.entries(this.formula.stores).forEach(([key, store]) =>
-      store.subscribe((value) =>
+    Object.entries(this.formula.stores).forEach(([key, store]) => {
+      const unsub = store.subscribe((value) =>
         this.dispatchEvent(
           new CustomEvent(this.eventNames.get(key), {
             bubbles: true,
             detail: value,
           })
         )
-      )
-    );
+      );
+      this.#subscriptions.push(unsub);
+    });
   }
 
   /**
