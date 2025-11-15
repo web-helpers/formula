@@ -17,29 +17,29 @@ export function createGroupStores(options?: import('../group/group.mjs').BeakerO
  * A set of stores used by Formula to store the current state
  */
 export type FormulaStores = {
-  formValues: import('nanostores').MapStore;
-  submitValues: import('nanostores').MapStore;
-  initialValues: import('nanostores').MapStore;
-  touched: import('nanostores').MapStore;
-  dirty: import('nanostores').MapStore;
-  errors: import('nanostores').MapStore;
-  formValidity: import('nanostores').MapStore;
-  enrichment: import('nanostores').MapStore;
-  formValid: import('nanostores').Atom;
-  formReady: import('nanostores').Atom;
+    formValues: import('nanostores').MapStore;
+    submitValues: import('nanostores').MapStore;
+    initialValues: import('nanostores').MapStore;
+    touched: import('nanostores').MapStore;
+    dirty: import('nanostores').MapStore;
+    errors: import('nanostores').MapStore;
+    formValidity: import('nanostores').MapStore;
+    enrichment: import('nanostores').MapStore;
+    formValid: import('nanostores').Atom;
+    formReady: import('nanostores').Atom;
 };
 /**
  * A set of stores used by Formula to store the current state
  */
 export type BeakerStores = {
-  formValues: import('nanostores').Atom;
-  submitValues: import('nanostores').Atom;
-  initialValues: import('nanostores').Atom;
-  touched: import('nanostores').Atom;
-  dirty: import('nanostores').Atom;
-  errors: import('nanostores').Atom;
-  formValidity: import('nanostores').Atom;
-  enrichment: import('nanostores').Atom;
-  formValid: import('nanostores').Atom;
-  formReady: import('nanostores').Atom;
+    formValues: import('nanostores').Atom;
+    submitValues: import('nanostores').Atom;
+    initialValues: import('nanostores').Atom;
+    touched: import('nanostores').Atom;
+    dirty: import('nanostores').Atom;
+    errors: import('nanostores').Atom;
+    formValidity: import('nanostores').Atom;
+    enrichment: import('nanostores').Atom;
+    formValid: import('nanostores').Atom;
+    formReady: import('nanostores').Atom;
 };
