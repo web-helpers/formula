@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { atom, map } from 'nanostores';
 import { createHandler } from './event';
 
@@ -292,6 +293,112 @@ describe('Formula Event Handlers', () => {
       }, 0);
       secondHandler();
       document.body.removeChild(el2);
+    });
+  });
+
+  describe('Bug Fix: Enrichment Store Merging', () => {
+    let el;
+    let destroyHandler;
+
+    beforeEach(() => {
+      storeMock.enrichment = map({});
+      el = document.createElement('input');
+      el.type = 'text';
+      el.setAttribute('name', 'field1');
+      document.body.appendChild(el);
+    });
+
+    afterEach(() => {
+      if (el.parentNode) document.body.removeChild(el);
+      if (destroyHandler) destroyHandler();
+      delete storeMock.enrichment;
+    });
+
+    it('should merge enrichment values instead of overwriting', (done) => {
+      const options = {
+        enrich: {
+          field1: {
+            getLength: (value) => value.length,
+          },
+          field2: {
+            getUpper: (value) => value.toUpperCase(),
+          },
+        },
+      };
+
+      // Simulate field2 already having enrichment
+      storeMock.enrichment.set({
+        field2: { getUpper: 'EXISTING' },
+      });
+
+      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMock, options, new Map());
+
+      el.value = 'test';
+      el.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
+
+      setTimeout(() => {
+        storeMock.enrichment.subscribe((value) => {
+          // Should have both field1 and field2 enrichments
+          expect(value).toHaveProperty('field1');
+          expect(value).toHaveProperty('field2');
+          expect(value.field1).toStrictEqual({ getLength: 4 });
+          expect(value.field2).toStrictEqual({ getUpper: 'EXISTING' });
+          done();
+        })();
+      }, 0);
+    });
+  });
+
+  describe('Bug Fix: Hidden Fields State Mutation', () => {
+    let el;
+    let destroyHandler;
+
+    beforeEach(() => {
+      el = document.createElement('input');
+      el.type = 'text';
+      el.setAttribute('name', 'visible');
+      document.body.appendChild(el);
+    });
+
+    afterEach(() => {
+      if (el.parentNode) document.body.removeChild(el);
+      if (destroyHandler) destroyHandler();
+    });
+
+    it('should not mutate formValues state when updating hidden fields', (done) => {
+      const hidden1 = document.createElement('input');
+      hidden1.type = 'hidden';
+      hidden1.setAttribute('name', 'hidden1');
+      hidden1.value = 'hiddenValue';
+
+      const hiddenFields = new Map();
+      hiddenFields.set('hidden1', [hidden1]);
+
+      document.body.appendChild(hidden1);
+
+      // Set initial form values
+      storeMock.formValues.set({ visible: 'initial', other: 'data' });
+      const originalState = storeMock.formValues.get();
+
+      destroyHandler = createHandler('visible', 'keyup', el, [el], storeMock, {}, hiddenFields);
+
+      el.value = 'changed';
+      el.dispatchEvent(new KeyboardEvent('keyup', { key: 'c' }));
+
+      setTimeout(() => {
+        storeMock.formValues.subscribe((value) => {
+          // Should have all fields
+          expect(value).toHaveProperty('visible', 'changed');
+          expect(value).toHaveProperty('hidden1', 'hiddenValue');
+          expect(value).toHaveProperty('other', 'data');
+          
+          // Original state should not have been mutated
+          expect(originalState).not.toHaveProperty('hidden1');
+          
+          done();
+        })();
+        document.body.removeChild(hidden1);
+      }, 0);
     });
   });
 });

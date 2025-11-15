@@ -107,6 +107,9 @@ dist
 .moon/cache
 .moon/docker
 
+# Vitest
+__screenshots__/
+
 # OSX
 
 .DS_Store
