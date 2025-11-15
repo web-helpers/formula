@@ -53,7 +53,7 @@ export function valueUpdate(details, stores, options, hiddenFields, enrich) {
 
   stores.formValues.set({ ...stores.formValues.get(), [name]: value });
   if (hiddenFields.size) {
-    const state = stores.formValues.get();
+    const state = { ...stores.formValues.get() };
 
     hiddenFields.forEach((group, name) => (state[name] = group.length > 1 ? group.map((e) => e.value) : group[0].value));
     stores.formValues.set(state);
@@ -65,7 +65,7 @@ export function valueUpdate(details, stores, options, hiddenFields, enrich) {
     formValidation(options.formValidators, stores);
   }
   if (enrich) {
-    stores.enrichment.set({ [name]: enrich(value) });
+    stores.enrichment.set({ ...stores.enrichment.get(), [name]: enrich(value) });
   }
   if (typeof options?.postChanges === 'function') {
     options.postChanges(stores.formValues.get());

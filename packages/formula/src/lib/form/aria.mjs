@@ -83,9 +83,10 @@ export function setAriaStates(el) {
 export function setAriaValue(element, elGroup) {
   if (element.type === 'radio') {
     elGroup.forEach((el) => el.removeAttribute('aria-checked'));
+    element.setAttribute('aria-checked', element.checked ? 'true' : 'false');
+  } else if (element.type === 'checkbox') {
+    element.setAttribute('aria-checked', element.checked ? 'true' : 'false');
   }
-
-  element.setAttribute('aria-checked', element?.checked ? 'true' : 'false');
 }
 
 /**

@@ -20,6 +20,7 @@ const matchingArrays = (array1, array2) => array1.length === array2.length && ar
 export function createDirtyHandler(name, elements, stores) {
   const elementHandlers = new Map();
   const initialValues = new Map();
+  let subscriptionUnsub;
 
   const setDirtyAndStopListening = () => {
     for (const [el, handler] of elementHandlers) {
@@ -27,11 +28,15 @@ export function createDirtyHandler(name, elements, stores) {
       el.removeEventListener('blur', handler);
     }
     elementHandlers.clear();
+    if (subscriptionUnsub) {
+      subscriptionUnsub();
+      subscriptionUnsub = undefined;
+    }
   };
 
   // Set initial dirty state and initial value
   stores.dirty.set({ ...stores.dirty.get(), [name]: false });
-  stores.formValues.subscribe((v) => initialValues.set(name, v[name]))();
+  subscriptionUnsub = stores.formValues.subscribe((v) => initialValues.set(name, v[name]));
 
   function createElementHandler(groupName) {
     return () => {

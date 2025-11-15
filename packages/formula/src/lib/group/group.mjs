@@ -6,7 +6,6 @@ import { createForm } from '../form/form.mjs';
  * @typedef {object} BeakerOptions
  * @property {Record<string, Record<string, string>=} messages - Provide customised messages to the application, these messages replace the default browser messages for the provided error types and are useful for internationalisation or custom domain messages
  * @property {import('../form/errors.mjs').ValidationRules=} validators - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
- * @property {import('../form/errors.mjs').ValidationRules=} validators - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
  * @property {import('../form/enrichment.mjs').EnrichFields=} enrich - An object containing enrichers for the provided fields, each field enricher returns a value that is added to the `enriched` field.
  * @property {Record<string, any>=} defaultValues - Default values are used as initial values for the form fields if there is no value already set on the form
  */
@@ -53,27 +52,33 @@ export function createGroup(options, beakerStores) {
 
   function cleanupStores(rows) {
     for (const key of Object.keys(groupStores)) {
-      if (['formValues', 'initialValues', 'submitValues'].includes(key)) return;
+      if (['formValues', 'initialValues', 'submitValues'].includes(key)) continue;
       const state = groupStores[key].get();
       groupStores[key].set(Array.isArray(state) ? state.slice(0, rows.length) : state);
     }
   }
 
   function setupSubscriptions(form, index) {
-    let initial = true;
     const formStores = Object.entries(form.stores);
     for (const [key, store] of formStores) {
+      let initial = true;
       const unsub = store.subscribe((value) => {
-        if (initial && key === 'formValues') return;
+        if (initial && key === 'formValues') {
+          initial = false;
+          return;
+        }
+        initial = false;
         const state = groupStores[key].get();
         if (Array.isArray(state)) {
-          state.splice(index, 1, value);
+          const newState = [...state];
+          newState.splice(index, 1, value);
+          groupStores[key].set(newState);
+        } else {
+          groupStores[key].set(state);
         }
-        groupStores[key].set(state);
       });
       subscriptions.add(unsub);
     }
-    initial = false;
   }
 
   function groupHasChanged(rows) {
@@ -93,7 +98,7 @@ export function createGroup(options, beakerStores) {
         groupName,
         currentVals[i]
       );
-      const instance = form.form(row);
+      const instance = form.init(row);
       formulaInstances.set(row, form);
       formInstances.set(row, instance);
       setupSubscriptions(form, i);
@@ -153,7 +158,7 @@ export function createGroup(options, beakerStores) {
     init: (items) => groupStores.formValues.set(items),
     add: (item) => groupStores.formValues.set([...groupStores.formValues.get(), item]),
     set: (index, item) => {
-      const newState = groupStores.formValues.get();
+      const newState = [...groupStores.formValues.get()];
       newState.splice(index, 1, item);
       groupStores.formValues.set(newState);
     },
@@ -166,9 +171,10 @@ export function createGroup(options, beakerStores) {
       Object.keys(groupStores).forEach((key) => {
         const state = groupStores[key].get();
         if (Array.isArray(state)) {
-          state.splice(index, 1);
+          const newState = [...state];
+          newState.splice(index, 1);
+          groupStores[key].set(newState);
         }
-        groupStores[key].set(state);
       }),
     clear: () => groupStores.formValues.set([]),
     ...groupStores,

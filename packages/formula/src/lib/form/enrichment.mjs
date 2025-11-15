@@ -19,5 +19,8 @@
  * @param {import('./form.mjs').FormulaOptions} options - The options object
  */
 export function createEnrichField(name, options) {
-  return (value) => Object.entries(options?.enrich[name] ?? {}).reduce((a, [key, fn]) => (a[key] = fn(value)) && a, {});
+  return (value) => Object.entries(options?.enrich[name] ?? {}).reduce((a, [key, fn]) => {
+    a[key] = fn(value);
+    return a;
+  }, {});
 }

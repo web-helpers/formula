@@ -116,7 +116,7 @@ export function createFieldExtract(name, elementGroup, options, stores) {
     if (isInit && instanceOpts?.defaultValues?.[name]) {
       value = isMultiValue ? instanceOpts?.defaultValues?.[name] || [] : instanceOpts?.defaultValues?.[name] || '';
     } else {
-      value = stores.formValues.get(name)?.[name] ?? (isMultiValue ? [] : '');
+      value = stores.formValues.get()[name] ?? (isMultiValue ? [] : '');
     }
 
     if (!isReset) {
