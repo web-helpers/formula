@@ -5,6 +5,76 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Comprehensive test suite with Vitest and Playwright browser provider
+  - 76 test cases covering all form functionality and bug fixes
+  - Real browser DOM testing with Playwright headless Chromium
+  - Tests for memory leaks, state mutations, race conditions, and edge cases
+  - New test files: `extract.spec.mjs`, `group.spec.mjs`
+  - Enhanced test files: `dirty.spec.mjs`, `enrichment.spec.mjs`, `event.spec.mjs`
+- Vite build system with Rollup bundler
+  - Module bundling with tree-shaking and optimization
+  - Source maps for debugging
+  - Preserved module structure for better code splitting
+  - Watch mode for development (`npm run dev`)
+  - Build produces ~20KB total (~8KB gzipped)
+
+### Changed
+
+- **BREAKING**: Updated package exports to point to `dist/` folder instead of source files
+  - Main export: `./index.mjs` → `./dist/index.mjs`
+  - Webcomponent export: `./src/lib/webcomponent/index.mjs` → `./dist/src/lib/webcomponent/index.mjs`
+- Updated all dependencies to latest versions:
+  - TypeScript: 5.0.4 → 5.9.3
+  - @playwright/test: 1.32.3 → 1.56.1
+  - nanostores: >=0.8.0 → >=1.0.1
+  - eslint: ~8.36.0 → ~9.39.1
+  - prettier: ~2.8.7 → ~3.6.2
+- Updated Node.js requirement: 18.15.0 → >=20.19.5
+- Updated npm requirement: (none) → >=10.8.2
+- Build process now uses Vite instead of plain TypeScript compiler
+- Test infrastructure migrated from Jest to Vitest with Playwright
+
+### Fixed
+
+#### Critical Bugs
+
+- **Memory Leaks**
+  - Fixed subscription leak in dirty handler that was never unsubscribed ([#3](packages/formula/src/lib/form/dirty.mjs))
+  - Fixed store subscriptions in `FormulaWebComponent` not cleaned up on disconnect ([#4](packages/formula/src/lib/webcomponent/index.mjs))
+  - Fixed dirty tracking bug where subscription continuously updated initial values, preventing dirty state detection ([#6](packages/formula/src/lib/form/dirty.mjs))
+
+- **State Mutation Bugs**
+  - Fixed enrichment store being overwritten instead of merged, losing other field enrichments ([#5](packages/formula/src/lib/form/event.mjs))
+  - Fixed hidden fields state being mutated directly before setting ([#11](packages/formula/src/lib/form/event.mjs))
+  - Fixed array state mutations in `group.mjs` breaking reactivity:
+    - `setupSubscriptions` method now uses immutable updates ([#8](packages/formula/src/lib/group/group.mjs))
+    - `set()` method now uses immutable updates ([#9](packages/formula/src/lib/group/group.mjs))
+    - `delete()` method now uses immutable updates ([#10](packages/formula/src/lib/group/group.mjs))
+
+- **Logic Bugs**
+  - Fixed incorrect method call `form.form()` → `form.init()` in group.mjs ([#12](packages/formula/src/lib/group/group.mjs))
+  - Fixed reduce callback in enrichment.mjs not returning accumulator ([#13](packages/formula/src/lib/form/enrichment.mjs))
+  - Fixed race condition in group subscription setup with shared `initial` flag ([#14](packages/formula/src/lib/group/group.mjs))
+  - Fixed early return in `cleanupStores` preventing cleanup of touched/dirty/error stores ([#15](packages/formula/src/lib/group/group.mjs))
+  - Fixed `aria-checked` being set on all elements instead of only checkboxes/radios ([#16](packages/formula/src/lib/form/aria.mjs))
+  - Fixed incorrect store access pattern `stores.formValues.get(name)?.[name]` in extract.mjs ([#7](packages/formula/src/lib/form/extract.mjs))
+
+#### TypeScript Issues
+
+- Removed duplicate `@property validators` typedef in `form.mjs` ([#1](packages/formula/src/lib/form/form.mjs))
+- Removed duplicate `@property validators` typedef in `group.mjs` ([#2](packages/formula/src/lib/group/group.mjs))
+
+### Test Improvements
+
+- Fixed async race conditions in event.spec.mjs by using synchronous assertions
+- Corrected extract.spec.mjs test expectations to match actual DOM extraction behavior
+- Simplified group.spec.mjs race condition test for more reliable validation
+- All tests now run in real Chromium browser environment
+
 ## [0.2.0] - 2023-05-26
 
 ### Fixed
