@@ -52,7 +52,7 @@
  * @fires {function} form:preChanges Fired before a change is made to the form stores update, useful for UI changes
  * @fires {(values) => void} form:postChanges Fired after a change is made to the form stores update, contains the latest form state
  */
-export class FormulaWebComponent extends HTMLElement {
+export class FormulaWebComponent {
     /**
      * @type {boolean} If Formula should handle the form submission
      * @attr {boolean} handle-submit
@@ -71,7 +71,7 @@ export class FormulaWebComponent extends HTMLElement {
     connectedCallback(): void;
     disconnectedCallback(): void;
     options: any;
-    formEl: Element | null | undefined;
+    formEl: any;
     formula: import("../form/form.mjs").Formula | undefined;
     eventNames: Map<string, string> | undefined;
     form: {

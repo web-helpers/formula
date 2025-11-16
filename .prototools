@@ -1,0 +1,8 @@
+jq = "1.8.1"
+moon = "1.41.5"
+node = "24.10.0"
+npm = "11.6.0"
+
+[plugins]
+jq = "https://raw.githubusercontent.com/appthrust/proto-toml-plugins/main/jq/plugin.toml"
+moon = "https://raw.githubusercontent.com/moonrepo/moon/master/proto-plugin.toml"
