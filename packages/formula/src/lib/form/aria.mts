@@ -52,7 +52,7 @@ export function setAriaRole(el: FormElement, elements: FormElement[]): void {
           default:
             return `input-${el.type}`;
         }
-      })()
+      })(),
     );
   }
 }
@@ -72,9 +72,9 @@ export function setAriaStates(el: FormElement): void {
 export function setAriaValue(element: FormElement, elGroup: FormElement[]): void {
   if (element.type === 'radio') {
     elGroup.forEach((el) => el.removeAttribute('aria-checked'));
-    element.setAttribute('aria-checked', element.checked ? 'true' : 'false');
+    element.setAttribute('aria-checked', (element as HTMLInputElement).checked ? 'true' : 'false');
   } else if (element.type === 'checkbox') {
-    element.setAttribute('aria-checked', element.checked ? 'true' : 'false');
+    element.setAttribute('aria-checked', (element as HTMLInputElement).checked ? 'true' : 'false');
   }
 }
 

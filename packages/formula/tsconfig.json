@@ -3,6 +3,7 @@
   "include": ["src/**/*", "index.mjs"],
   "exclude": ["node_modules", "test-app", "tests", "src/**/*.spec.mjs"],
   "compilerOptions": {
+    "target": "esnext",
     "baseUrl": ".",
     "checkJs": false,
     "allowJs": true,

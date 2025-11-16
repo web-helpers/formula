@@ -42,7 +42,7 @@ function setElementValue(
     const valueArray = Array.isArray(value) ? value : [];
     elementGroup.forEach((el, i) => {
       if (el.type === 'checkbox') {
-        el.checked = valueArray.includes(el.value);
+        (el as HTMLInputElement).checked = valueArray.includes(el.value);
       } else {
         el.value = String(valueArray[i] ?? '');
       }
@@ -54,11 +54,11 @@ function setElementValue(
         el.selected = valueArray.includes(el.value);
       });
     } else if (element.type === 'checkbox') {
-      element.checked = Boolean(value);
+      (element as HTMLInputElement).checked = Boolean(value);
     } else if (element.type === 'radio') {
-      elementGroup.forEach((el) => (el.checked = value === el.value));
+      elementGroup.forEach((el) => ((el as HTMLInputElement).checked = value === el.value));
     } else if (element.type === 'file') {
-      element.files = value instanceof FileList ? value : null;
+      (element as HTMLInputElement).files = value instanceof FileList ? value : null;
     } else {
       element.value = String(value ?? '');
     }
@@ -89,14 +89,14 @@ function getElementValues(
             })();
         break;
       case 'checkbox':
-        elValue = isMultiValue ? elementGroup.filter((e) => e.checked).map((e) => e.value) : element.checked;
+        elValue = isMultiValue ? elementGroup.filter((e) => (e as HTMLInputElement).checked).map((e) => e.value) : (element as HTMLInputElement).checked;
         break;
       case 'radio':
-        const foundElement = elementGroup.find((el) => el.checked);
+        const foundElement = elementGroup.find((el) => (el as HTMLInputElement).checked);
         elValue = foundElement ? foundElement.value : null;
         break;
       case 'file':
-        elValue = element.files;
+        elValue = (element as HTMLInputElement).files;
         break;
       default:
         elValue = isMultiValue ? elementGroup.map((v) => v.value) : element.value || null;
@@ -120,7 +120,7 @@ export function createFieldExtract(
 
   let isMultiValue = false;
   if (elementGroup[0].type !== 'radio') {
-    isMultiValue = !elementGroup[0].multiple && elementGroup.length > 1;
+    isMultiValue = !(elementGroup[0] as HTMLSelectElement).multiple && elementGroup.length > 1;
   }
 
   /**

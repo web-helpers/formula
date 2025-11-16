@@ -60,7 +60,7 @@ export function valueUpdate(
   }
 
   stores.errors.set({ ...stores.errors.get(), [name]: validity });
-  stores.formValid.set(Object.values(stores.errors.get()).every((v) => v.valid));
+  stores.formValid.set(Object.values(stores.errors.get()).every((v: FieldValidity) => v.valid));
   
   if (options?.formValidators) {
     formValidation(options.formValidators, stores);
@@ -79,7 +79,7 @@ export function valueUpdate(
  * Creates an event handler for the passed element with its data handler
  */
 function createHandlerForData(
-  extractor: (el: FormElement) => FieldExtractResult,
+  extractor: (el: FormElement, isInit: boolean, isReset: boolean) => FieldExtractResult,
   stores: FormulaStores,
   options: EventOptions | undefined,
   hiddenFields: Map<string, FormElement[]>,
@@ -87,7 +87,7 @@ function createHandlerForData(
 ): (event: Event) => void {
   return (event: Event) => {
     const el = (event?.currentTarget ?? event?.target) as FormElement;
-    const extracted = extractor(el);
+    const extracted = extractor(el, false, false);
     if (typeof options?.preChanges === 'function') {
       options.preChanges(extracted);
     }

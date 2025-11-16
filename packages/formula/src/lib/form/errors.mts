@@ -9,11 +9,11 @@ interface ValidationCheckOptions {
 /**
  * Extracts validity errors from the element and merges with custom errors.
  */
-function extractErrors(el: FormElement, custom?: Record<string, boolean>): Record<string, boolean> {
-  const output: Record<string, boolean> = {};
+function extractErrors(el: FormElement, custom?: Record<string, string>): Record<string, string> {
+  const output: Record<string, string> = {};
   for (const key in el.validity) {
     if (key !== 'valid' && el.validity[key as keyof ValidityState]) {
-      output[key] = true;
+      output[key] = el.validationMessage || key;
     }
   }
   return { ...output, ...custom };
@@ -22,23 +22,17 @@ function extractErrors(el: FormElement, custom?: Record<string, boolean>): Recor
 /**
  * Gets the result of any custom validations available on the fields.
  */
-function getCustomValidations(
-  value: unknown,
-  values: Record<string, unknown>,
-  validations: Record<string, ValidatorFn> = {}
-): [Record<string, string>, Record<string, boolean>] {
-  const messages: Record<string, string> = {};
-  const errors: Record<string, boolean> = {};
+function getCustomValidations(value: unknown, values: Record<string, unknown>, validations: Record<string, ValidatorFn> = {}): Record<string, string> {
+  const errors: Record<string, string> = {};
 
   Object.entries(validations).forEach(([key, validation]) => {
     const message = validation(value, values);
     if (message !== null) {
-      messages[key] = message;
-      errors[key] = true;
+      errors[key] = message;
     }
   });
 
-  return [messages, errors];
+  return errors;
 }
 
 /**
@@ -48,7 +42,7 @@ export function createValidationChecker(
   inputGroup: string,
   elementGroup: FormElement[],
   values: Record<string, unknown>,
-  options?: ValidationCheckOptions
+  options?: ValidationCheckOptions,
 ): (el: FormElement, elValue: unknown) => FieldValidity {
   return (el: FormElement, elValue: unknown): FieldValidity => {
     // Reset the validity
@@ -78,26 +72,20 @@ export function createValidationChecker(
     };
 
     // Check for any custom validations
-    const [messages, customErrors] = getCustomValidations(
-      elValue,
-      values,
-      options?.validators?.[inputGroup]
-    );
+    const customErrors = getCustomValidations(elValue, values, options?.validators?.[inputGroup]);
 
     const errors = extractErrors(el, customErrors);
     const errorKeys = Object.keys(errors);
 
     if (el.checkValidity()) {
       if (errorKeys.length > 0) {
-        el.setCustomValidity(messages[errorKeys[0]]);
+        el.setCustomValidity(errors[errorKeys[0]]);
       }
     } else {
       if (customMessages[errorKeys[0]]) {
         el.setCustomValidity(customMessages[errorKeys[0]]);
       }
     }
-
-    // Recheck validity and show any messages
     const valid = el.checkValidity();
     if (!valid) {
       el.setAttribute('data-formula-invalid', 'true');
