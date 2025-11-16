@@ -42,23 +42,22 @@ export default defineConfig({
         items: [
           { text: 'Home', link: '/docs/index' },
           {
-            text: 'API Docs',
+            text: 'API Reference',
             items: [
-              { text: 'Stores', link: '/docs/api/stores' },
-              { text: 'Formula', link: '/docs/api/formula-function' },
+              { text: 'formula() Function', link: '/docs/api/formula-function' },
               { text: 'Web Component', link: '/docs/api/web-component' },
+              { text: 'Stores Overview', link: '/docs/api/stores' },
             ],
           },
           {
-            text: 'Stores',
+            text: 'Store Details',
             items: [
-              { text: 'dirty', link: '/docs/api/store-dirty' },
-              { text: 'errors', link: '/docs/api/store-errors' },
-              { text: 'formReady', link: '/docs/api/store-formReady' },
-              { text: 'formValid', link: '/docs/api/store-formValid' },
               { text: 'formValues', link: '/docs/api/store-formValues' },
-              { text: 'formValid', link: '/docs/api/store-formValid' },
+              { text: 'errors', link: '/docs/api/store-errors' },
               { text: 'touched', link: '/docs/api/store-touched' },
+              { text: 'dirty', link: '/docs/api/store-dirty' },
+              { text: 'formValid', link: '/docs/api/store-formValid' },
+              { text: 'formReady', link: '/docs/api/store-formReady' },
             ],
           },
           {
@@ -67,7 +66,7 @@ export default defineConfig({
               { text: 'Basic Form', link: '/docs/basic-form' },
               { text: 'Custom Validation', link: '/docs/custom-validation' },
               { text: 'Dynamic Fields', link: '/docs/dynamic-fields' },
-              { text: 'Web Component', link: '/docs/web-component' },
+              { text: 'Web Component Usage', link: '/docs/web-component' },
             ],
           },
         ],

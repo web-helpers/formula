@@ -44,17 +44,17 @@ features:
 
 ## Quick Start
 
-Get up and running in seconds with npm or directly in the browser with esm.sh:
+Getting started with Formula takes just minutes. Install it via npm or use it directly from a CDN - no build step required.
 
-### NPM Installation
+### Installation
 
 ```bash
 npm install @webhelpers/formula
 ```
 
-### Web Component Usage
+### Your First Reactive Form
 
-The fastest way to get started - just import and use:
+The simplest way to get started is with the web component. Just wrap your existing HTML form and import Formula:
 
 ```html
 <!DOCTYPE html>
@@ -76,14 +76,14 @@ The fastest way to get started - just import and use:
 
       const form = document.querySelector('formula-form');
 
-      // Listen to real-time form values
+      // Listen to real-time form values as users type
       form.addEventListener('form:values', (e) => {
         console.log('Form data:', e.detail);
       });
 
-      // Handle form submission
+      // Handle form submission with your API
       form.addEventListener('form:submit', async (e) => {
-        const response = await fetch('/api/submit', {
+        await fetch('/api/submit', {
           method: 'POST',
           body: JSON.stringify(e.detail),
         });
@@ -93,93 +93,37 @@ The fastest way to get started - just import and use:
 </html>
 ```
 
-### CDN Usage (No Build Step)
-
-```html
-<script type="module">
-  import { formula } from 'https://esm.sh/@webhelpers/formula@latest';
-
-  const formEl = document.querySelector('form');
-  const { stores, init } = formula();
-  init(formEl);
-
-  stores.formValues.subscribe((values) => {
-    console.log('Form values:', values);
-  });
-</script>
-```
+That's it! Your form now has reactive state management, automatic validation, and real-time updates. No build tools needed if you use a CDN like `esm.sh`.
 
 ## Why Formula?
 
-### 🎯 **Works with Your HTML**
+Most form libraries force you to rewrite your HTML or learn complex APIs. Formula takes a different approach: it works with the HTML you already have. Just wrap your form with `<formula-form>` and you instantly get reactive state management, automatic validation, and real-time updates.
 
-No need to rewrite your forms or learn a new template syntax. Formula enhances your existing HTML forms with reactivity.
+Formula is built on web standards - it uses native HTML5 Constraint Validation and ARIA for accessibility. This means your forms work great with screen readers and other assistive technologies without extra effort. The library itself is tiny (under 20KB gzipped) and framework-agnostic, so you can use it with React, Vue, Svelte, or vanilla JavaScript.
 
-### ⚡ **Instant State Management**
-
-Get reactive stores for form values, errors, touched fields, dirty state, and validation - all automatically synced with your form.
-
-### 🔌 **Framework Agnostic**
-
-Use Formula with React, Vue, Svelte, Angular, or vanilla JavaScript. It's just a web component or library import.
-
-### 🪶 **Tiny Bundle Size**
-
-Built with performance in mind. The entire library is lightweight and tree-shakeable.
-
-### ♿ **Accessibility First**
-
-Leverages native HTML5 validation and ARIA attributes for a fully accessible form experience out of the box.
-
-### 🧪 **Test Coverage**
-
-163 tests and good coverage > 90% coverage on complex DOM interactions.
+Behind the scenes, Formula uses nanostores for reactive state management. As users interact with your form, these stores automatically update with current values, validation errors, touched fields, and dirty state. You can subscribe to these stores to build dynamic UIs that respond instantly to user input.
 
 ## Core Concepts
 
-### Reactive Stores
+### Reactive State Management
 
-Formula provides several reactive stores that automatically update as users interact with your form:
+When you initialize Formula on a form, it creates several reactive stores that automatically track your form's state. These stores update in real-time as users interact with your form:
 
-- **`formValues`** - Current values of all form fields
-- **`errors`** - Validation errors for each field
-- **`touched`** - Which fields have been interacted with
-- **`dirty`** - Which fields have been modified
-- **`formValid`** - Overall form validation state
-- **`formReady`** - Whether the form is ready for submission
+The **formValues** store contains the current value of every field in your form. Subscribe to it to display data elsewhere in your UI, enable/disable buttons, or trigger other actions as users type.
 
-### Event-Driven
+The **errors** store tracks validation errors for each field, combining both HTML5 Constraint Validation and any custom rules you define.
 
-Subscribe to custom events for fine-grained control:
+The **touched** and **dirty** stores help you build better UX by tracking which fields users have interacted with and which have been modified from their initial values. This lets you show validation errors only after users have actually edited a field.
 
-- `form:values` - Fires when any field value changes
-- `form:errors` - Fires when validation state changes
-- `form:submit` - Fires on form submission (with `handle-submit`)
-- `form:valid` - Fires when form validity changes
-- `form:touched` - Fires when a field is touched
-- `form:dirty` - Fires when a field becomes dirty
+The **formValid** and **formReady** stores provide boolean flags for the entire form's state, making it easy to enable submit buttons or show completion indicators.
+
+### Event-Driven Architecture
+
+When using the web component, Formula emits custom events that you can listen to. The `form:values` event fires whenever any field changes. The `form:submit` event fires on submission when you use the `handle-submit` attribute. You can also listen for `form:errors`, `form:touched`, `form:dirty`, and other events to respond to specific state changes.
 
 ### Form Enrichment
 
-Enhance your forms with computed values, password strength meters, async validation, and more using enrichment functions.
-
-```js
-import { formula } from '@webhelpers/formula';
-
-const formEl = document.querySelector('form');
-const { init, enrich, stores } = formula();
-
-enrich((values) => ({
-  passwordStrength: computePasswordStrength(values.password),
-}));
-
-// how to get password strength
-stores.formValues.subscribe((values) => {
-  console.log('Password Strength:', values.passwordStrength);
-});
-
-init(formEl);
-```
+Sometimes you need to derive additional data from your form values. Formula's enrichment feature lets you add computed fields without storing them in your actual form. For example, you might calculate a password strength score, combine first and last names into a full name, or compute shipping costs based on selected options. Just provide an enrichment function and Formula will keep these computed values up to date in a separate store.
 
 ## Support
 
