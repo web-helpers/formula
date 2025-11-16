@@ -18,7 +18,7 @@ describe('Formula Field Validation', () => {
 
     document.body.appendChild(element);
 
-    validationChecker = createValidationChecker('testing', elGroup, {
+    validationChecker = createValidationChecker('testing', elGroup, {}, {
       messages: {
         testing: {
           patternMismatch: 'You have not matched the pattern',

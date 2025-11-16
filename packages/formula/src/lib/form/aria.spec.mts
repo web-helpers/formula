@@ -1,4 +1,5 @@
 import { setAriaRole, setAriaStates } from './aria.mjs';
+import { describe, it, expect, afterEach } from 'vitest';
 
 describe('Formula ARIA', () => {
   describe('Set Role', () => {

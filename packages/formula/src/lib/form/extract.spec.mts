@@ -30,7 +30,7 @@ describe('Formula Extract', () => {
 
   describe('Store Access Pattern', () => {
     it('should correctly access store values using formValues.get()', () => {
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.name).toBe('testing');
@@ -40,7 +40,7 @@ describe('Formula Extract', () => {
     it('should handle missing store values and use element value', () => {
       storeMock.formValues.set({});
       element.value = 'element-value';
-      const extract = createFieldExtract('newField', elements, {}, storeMock);
+      const extract = createFieldExtract('newField', elements, storeMock);
       const result = extract(element, false, false);
       
       // Should use element's current value when not in store
@@ -57,7 +57,7 @@ describe('Formula Extract', () => {
       document.body.appendChild(el2);
 
       storeMock.formValues.set({});
-      const extract = createFieldExtract('newField', elements, {}, storeMock);
+      const extract = createFieldExtract('newField', elements, storeMock);
       const result = extract(element, false, false);
       
       // Should use element values
@@ -79,7 +79,7 @@ describe('Formula Extract', () => {
 
     it('should extract single checkbox value as boolean', () => {
       element.checked = true;
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.value).toBe(true);
@@ -95,7 +95,7 @@ describe('Formula Extract', () => {
       document.body.appendChild(el2);
 
       element.checked = true;
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.value).toEqual(['option1', 'option2']);
@@ -129,14 +129,14 @@ describe('Formula Extract', () => {
 
     it('should extract selected radio value', () => {
       elements[1].checked = true;
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(elements[1], false, false);
       
       expect(result.value).toBe('option2');
     });
 
     it('should return empty string when no radio is selected and store has value', () => {
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       // When no radio is checked and store has a value, returns empty string
@@ -156,7 +156,7 @@ describe('Formula Extract', () => {
 
     it('should parse number values', () => {
       element.value = '42';
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.value).toBe(42);
@@ -164,7 +164,7 @@ describe('Formula Extract', () => {
 
     it('should return empty string for invalid number when store has value', () => {
       element.value = '';
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       // When number is invalid and store has a value, returns empty string
@@ -180,7 +180,7 @@ describe('Formula Extract', () => {
       document.body.appendChild(el2);
 
       element.value = '5';
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.value).toEqual([5, 10]);
@@ -196,7 +196,7 @@ describe('Formula Extract', () => {
           testing: 'default value'
         }
       };
-      const extract = createFieldExtract('testing', elements, options, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock, options);
       const result = extract(element, true, false);
       
       expect(result.value).toBe('default value');
@@ -209,7 +209,7 @@ describe('Formula Extract', () => {
           testing: 'default value'
         }
       };
-      const extract = createFieldExtract('testing', elements, options, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock, options);
       const result = extract(element, true, false);
       
       // Element value takes precedence over default when element has value
@@ -230,7 +230,7 @@ describe('Formula Extract', () => {
           testing: ['value1', 'value2']
         }
       };
-      const extract = createFieldExtract('testing', elements, options, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock, options);
       const result = extract(element, true, false);
       
       // Element values take precedence, even when empty
@@ -250,7 +250,7 @@ describe('Formula Extract', () => {
     });
 
     it('should extract FileList value', () => {
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.value).toBeInstanceOf(FileList);
@@ -279,7 +279,7 @@ describe('Formula Extract', () => {
 
     it('should extract single select value', () => {
       element.value = 'B';
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.value).toBe('B');
@@ -290,7 +290,7 @@ describe('Formula Extract', () => {
       element.options[0].selected = true;
       element.options[1].selected = true;
       
-      const extract = createFieldExtract('testing', elements, {}, storeMock);
+      const extract = createFieldExtract('testing', elements, storeMock);
       const result = extract(element, false, false);
       
       expect(result.value).toEqual(['A', 'B']);

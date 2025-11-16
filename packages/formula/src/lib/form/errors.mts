@@ -77,15 +77,18 @@ export function createValidationChecker(
     const errors = extractErrors(el, customErrors);
     const errorKeys = Object.keys(errors);
 
-    if (el.checkValidity()) {
-      if (errorKeys.length > 0) {
-        el.setCustomValidity(errors[errorKeys[0]]);
-      }
-    } else {
-      if (customMessages[errorKeys[0]]) {
-        el.setCustomValidity(customMessages[errorKeys[0]]);
+    // If there are errors, check if we have a custom message for the first error
+    if (errorKeys.length > 0) {
+      const firstErrorKey = errorKeys[0];
+      // Check if there's a custom message for this error type
+      if (customMessages[firstErrorKey]) {
+        el.setCustomValidity(customMessages[firstErrorKey]);
+      } else if (customErrors[firstErrorKey]) {
+        // Use the custom validator's message
+        el.setCustomValidity(customErrors[firstErrorKey]);
       }
     }
+    
     const valid = el.checkValidity();
     if (!valid) {
       el.setAttribute('data-formula-invalid', 'true');

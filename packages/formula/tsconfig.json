@@ -4,6 +4,8 @@
   "exclude": ["node_modules", "test-app", "tests", "src/**/*.spec.mjs", "src/**/*.spec.mts"],
   "compilerOptions": {
     "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "lib": ["ESNext", "DOM"],
     "baseUrl": ".",
     "checkJs": false,
