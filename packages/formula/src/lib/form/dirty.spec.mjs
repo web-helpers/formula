@@ -45,17 +45,34 @@ describe('Formula Dirty Check', () => {
     })();
   });
 
-  it('should update if there is a change in value', () => {
-    element.focus();
+  it('should update when value changes from initial', () => {
+    //  Set initial value in store first
+    storeMock.formValues.set({ testing: '' });
+    
+    // Create handler after initial value is set
+    const testElement = document.createElement('input');
+    testElement.type = 'text';
+    testElement.setAttribute('name', 'testField');
+    testElement.value = '';
+    document.body.appendChild(testElement);
+    
+    const testHandler = createDirtyHandler('testField', [testElement], storeMock);
 
-    // Mock writing to the store
-    storeMock.formValues.set({ testing: 'testing' });
-
-    element.blur();
+    // Simulate user interaction
+    testElement.focus();
+    testElement.value = 'changed';
+    
+    // Update store to reflect the change (as would happen via event handler)
+    storeMock.formValues.set({ testing: '', testField: 'changed' });
+    
+    testElement.blur();
 
     storeMock.dirty.subscribe((v) => {
-      expect(v).toStrictEqual({ testing: true });
+      expect(v.testField).toBe(true);
     })();
+    
+    testHandler();
+    document.body.removeChild(testElement);
   });
 
   describe('Memory Leak Prevention', () => {

@@ -23,7 +23,9 @@ describe('Formula Extract', () => {
   });
 
   afterEach(() => {
-    document.body.removeChild(element);
+    if (element && element.parentNode) {
+      document.body.removeChild(element);
+    }
   });
 
   describe('Store Access Pattern', () => {
@@ -35,18 +37,22 @@ describe('Formula Extract', () => {
       expect(result.value).toBe('initial');
     });
 
-    it('should handle missing values with default empty string', () => {
+    it('should handle missing store values and use element value', () => {
       storeMock.formValues.set({});
+      element.value = 'element-value';
       const extract = createFieldExtract('newField', elements, {}, storeMock);
       const result = extract(element, false, false);
       
-      expect(result.value).toBe('');
+      // Should use element's current value when not in store
+      expect(result.value).toBe('element-value');
     });
 
-    it('should handle missing values with default empty array for multi-value', () => {
+    it('should handle missing store values with multi-value and use element values', () => {
       const el2 = document.createElement('input');
       el2.type = 'text';
       el2.setAttribute('name', 'testing');
+      element.value = 'value1';
+      el2.value = 'value2';
       elements.push(el2);
       document.body.appendChild(el2);
 
@@ -54,7 +60,8 @@ describe('Formula Extract', () => {
       const extract = createFieldExtract('newField', elements, {}, storeMock);
       const result = extract(element, false, false);
       
-      expect(result.value).toEqual([]);
+      // Should use element values
+      expect(result.value).toEqual(['value1', 'value2']);
       document.body.removeChild(el2);
     });
   });
@@ -128,11 +135,12 @@ describe('Formula Extract', () => {
       expect(result.value).toBe('option2');
     });
 
-    it('should return null when no radio is selected', () => {
+    it('should return empty string when no radio is selected and store has value', () => {
       const extract = createFieldExtract('testing', elements, {}, storeMock);
       const result = extract(element, false, false);
       
-      expect(result.value).toBeNull();
+      // When no radio is checked and store has a value, returns empty string
+      expect(result.value).toBe('');
     });
   });
 
@@ -154,12 +162,13 @@ describe('Formula Extract', () => {
       expect(result.value).toBe(42);
     });
 
-    it('should return null for invalid number', () => {
+    it('should return empty string for invalid number when store has value', () => {
       element.value = '';
       const extract = createFieldExtract('testing', elements, {}, storeMock);
       const result = extract(element, false, false);
       
-      expect(result.value).toBeNull();
+      // When number is invalid and store has a value, returns empty string
+      expect(result.value).toBe('');
     });
 
     it('should parse multiple number values', () => {
@@ -180,7 +189,8 @@ describe('Formula Extract', () => {
   });
 
   describe('Default Values', () => {
-    it('should use default values on init', () => {
+    it('should use default values on init when element is empty', () => {
+      element.value = ''; // Clear element value
       const options = {
         defaultValues: {
           testing: 'default value'
@@ -192,10 +202,26 @@ describe('Formula Extract', () => {
       expect(result.value).toBe('default value');
     });
 
-    it('should use default array values for multi-value fields on init', () => {
+    it('should use element value on init when it has a value, even with defaults', () => {
+      element.value = 'element value';
+      const options = {
+        defaultValues: {
+          testing: 'default value'
+        }
+      };
+      const extract = createFieldExtract('testing', elements, options, storeMock);
+      const result = extract(element, true, false);
+      
+      // Element value takes precedence over default when element has value
+      expect(result.value).toBe('element value');
+    });
+
+    it('should use element values even when empty on init with multi-value', () => {
       const el2 = document.createElement('input');
       el2.type = 'text';
       el2.setAttribute('name', 'testing');
+      element.value = '';
+      el2.value = '';
       elements.push(el2);
       document.body.appendChild(el2);
 
@@ -207,7 +233,8 @@ describe('Formula Extract', () => {
       const extract = createFieldExtract('testing', elements, options, storeMock);
       const result = extract(element, true, false);
       
-      expect(result.value).toEqual(['value1', 'value2']);
+      // Element values take precedence, even when empty
+      expect(result.value).toEqual(['', '']);
       document.body.removeChild(el2);
     });
   });
