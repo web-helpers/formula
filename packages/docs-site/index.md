@@ -2,9 +2,9 @@
 layout: home
 
 hero:
-  name: "Formula"
-  text: "Dynamic, Reactive Forms for the Modern Web"
-  tagline: Turn any HTML form into a fully reactive, state-driven experience with zero configuration
+  name: "🧪 Formula"
+  text: "Progressively-enhanced, Dynamic, Reactive Forms for the Modern Web"
+  tagline: Turn any static HTML form into a fully reactive, state-driven experience with zero configuration
   image:
     src: https://raw.githubusercontent.com/web-helpers/formula/main/packages/formula/docs/logo_256.png
     alt: Formula Logo
@@ -98,8 +98,6 @@ The fastest way to get started - just import and use:
 
 ### CDN Usage (No Build Step)
 
-Perfect for prototyping or simple projects:
-
 ```html
 <script type="module">
   import { formula } from 'https://esm.sh/@webhelpers/formula@latest';
@@ -132,7 +130,7 @@ Built with performance in mind. The entire library is lightweight and tree-shake
 Leverages native HTML5 validation and ARIA attributes for a fully accessible form experience out of the box.
 
 ### 🧪 **Test Coverage**
-163 tests and good coverage > 90% coverage.
+163 tests and good coverage > 90% coverage on complex DOM interactions.
 
 ## Core Concepts
 
@@ -168,10 +166,14 @@ import { formula } from '@webhelpers/formula';
 const formEl = document.querySelector('form');
 const { init, enrich, stores } = formula();
 
-
 enrich((values) => ({
   passwordStrength: computePasswordStrength(values.password)
 }));
+
+// how to get password strength
+stores.formValues.subscribe((values) => {
+  console.log('Password Strength:', values.passwordStrength);
+});
 
 init(formEl);
 ```
