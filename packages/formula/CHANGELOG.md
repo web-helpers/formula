@@ -10,23 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Comprehensive test suite with Vitest and Playwright browser provider
-  - **1,900+ test cases** covering all form functionality and bug fixes (increased from 76)
+  - **163 test cases across 14 test files** covering all form functionality and bug fixes
   - Real browser DOM testing with Playwright headless Chromium
   - Tests for memory leaks, state mutations, race conditions, and edge cases
-  - New test files: `extract.spec.mjs`, `group.spec.mjs`, `form.spec.mjs`, `init.spec.mjs`, `index.spec.mjs` (webcomponent), `lib.spec.mjs` (webcomponent)
-  - Enhanced test files: `dirty.spec.mjs`, `enrichment.spec.mjs`, `event.spec.mjs`, `errors.spec.mjs`, `touch.spec.mjs`, `fields.spec.mjs`
+  - New test files: `extract.spec.mjs` (16 tests), `group.spec.mjs` (12 tests), `form.spec.mjs` (35 tests), `init.spec.mjs` (14 tests), `index.spec.mjs` (20 tests - webcomponent), `lib.spec.mjs` (5 tests - webcomponent)
+  - Enhanced test files: `dirty.spec.mjs` (6 tests), `enrichment.spec.mjs` (4 tests), `event.spec.mjs` (26 tests), `errors.spec.mjs` (6 tests), `touch.spec.mjs` (3 tests), `fields.spec.mjs` (2 tests), `stores.spec.mjs` (6 tests), `aria.spec.mjs` (8 tests)
 - Vite build system with Rollup bundler
   - Module bundling with tree-shaking and optimization
   - Source maps for debugging
   - Preserved module structure for better code splitting
   - Watch mode for development (`npm run dev`)
   - Build produces ~20KB total (~8KB gzipped)
-- **New comprehensive test coverage:**
-  - `form.spec.mjs`: 672 tests for form initialization, reset functionality, state management, and lifecycle
-  - `init.spec.mjs`: 368 tests for initialization and reset scenarios
-  - `index.spec.mjs`: 420 tests for `FormulaWebComponent` initialization, event dispatching, and form submission
-  - `lib.spec.mjs`: 73 tests for event mapping and store key to event name conversion
-  - `event.spec.mjs`: Enhanced with 330+ additional tests for event handling edge cases
 
 ### Changed
 
@@ -84,12 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Corrected extract.spec.mjs test expectations to match actual DOM extraction behavior
 - Simplified group.spec.mjs race condition test for more reliable validation
 - All tests now run in real Chromium browser environment
-- **Massive test expansion:** Added 1,800+ new tests covering:
-  - Form initialization with various field types and configurations
-  - Reset functionality for values, errors, touched, and dirty states
-  - Web component lifecycle, event dispatching, and submission handling
-  - Event mapping and store-to-event name conversion
-  - Comprehensive event handler edge cases and scenarios
+- Expanded test coverage from initial 76 tests to 163 tests across 14 test files
+- Added comprehensive tests for form initialization, reset functionality, and web component behavior
 
 ## [0.2.0] - 2023-05-26
 
