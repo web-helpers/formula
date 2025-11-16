@@ -8,8 +8,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        index: resolve(__dirname, 'index.mjs'),
-        webcomponent: resolve(__dirname, 'src/lib/webcomponent/index.mjs'),
+        index: resolve(__dirname, 'index.mts'),
+        webcomponent: resolve(__dirname, 'src/lib/webcomponent/index.mts'),
       },
       formats: ['es'],
       fileName: (format, entryName) => {
