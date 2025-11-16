@@ -1,4 +1,5 @@
-import { createValidationChecker } from './errors';
+import { createValidationChecker } from './errors.mjs';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('Formula Field Validation', () => {
   let validationChecker;

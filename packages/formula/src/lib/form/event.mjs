@@ -84,6 +84,9 @@ function createHandlerForData(extractor, stores, options, hiddenFields, enrich) 
   return (event) => {
     const el = event?.currentTarget ?? event?.target;
     const extracted = extractor(el);
+    if (typeof options?.preChanges === 'function') {
+      options.preChanges(extracted);
+    }
     valueUpdate(extracted, stores, options, hiddenFields, enrich);
   };
 }
@@ -105,10 +108,7 @@ export function createHandler(name, eventName, element, groupElements, stores, o
   let enrich;
   if (options?.enrich?.[name]) enrich = createEnrichField(name, options);
   const handler = createHandlerForData(extract, stores, options, hiddenGroups, enrich);
-  element.addEventListener(eventName, (event) => {
-    if (typeof options?.preChanges === 'function') options.preChanges();
-    handler(event);
-  });
+  element.addEventListener(eventName, handler);
   return () => element.removeEventListener(eventName, handler);
 }
 

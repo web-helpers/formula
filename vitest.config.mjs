@@ -4,6 +4,8 @@ import { playwright } from '@vitest/browser-playwright';
 export default defineConfig({
   test: {
     globals: true,
+    testTimeout: 10000, // 10 second timeout per test
+    hookTimeout: 10000, // 10 second timeout for hooks
     // Use browser mode with Playwright for DOM testing
     browser: {
       enabled: true,

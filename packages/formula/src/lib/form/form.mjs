@@ -104,18 +104,27 @@ export function createForm(options, globalStore, groupName, initialData) {
 
         const customBindings = el.dataset.formulaBind;
         if (customBindings) {
-          customBindings.split('|').forEach((event) => eventHandlers.set(el, createHandler(name, event, el, elements, stores, innerOpt, hiddenGroups)));
+          const cleanups = [];
+          customBindings.split('|').forEach((event) => {
+            cleanups.push(createHandler(name, event, el, elements, stores, innerOpt, hiddenGroups));
+          });
+          eventHandlers.set(el, cleanups);
         } else if (el instanceof HTMLSelectElement) {
-          eventHandlers.set(el, createHandler(name, 'change', el, elements, stores, innerOpt, hiddenGroups));
+          eventHandlers.set(el, [createHandler(name, 'change', el, elements, stores, innerOpt, hiddenGroups)]);
         } else {
           const changeEventTypes = ['radio', 'checkbox', 'file', 'range', 'color', 'date', 'time', 'week', 'number'];
+          const cleanups = [];
 
           if (changeEventTypes.includes(el.type)) {
-            eventHandlers.set(el, createHandler(name, 'change', el, elements, stores, innerOpt, hiddenGroups));
+            cleanups.push(createHandler(name, 'change', el, elements, stores, innerOpt, hiddenGroups));
           }
 
           if (el.type !== 'hidden') {
-            eventHandlers.set(el, createHandler(name, 'keyup', el, elements, stores, innerOpt, hiddenGroups));
+            cleanups.push(createHandler(name, 'keyup', el, elements, stores, innerOpt, hiddenGroups));
+          }
+          
+          if (cleanups.length > 0) {
+            eventHandlers.set(el, cleanups);
           }
         }
       });
@@ -134,9 +143,9 @@ export function createForm(options, globalStore, groupName, initialData) {
 
   function cleanupSubscriptions() {
     unsub && unsub();
-    [...eventHandlers].forEach(([el, fn]) => {
+    [...eventHandlers].forEach(([el, fns]) => {
       el.setCustomValidity('');
-      fn();
+      fns.forEach(fn => fn());
     });
     [...touchHandlers, ...dirtyHandlers].forEach((fn) => fn());
     [eventHandlers, touchHandlers, dirtyHandlers].forEach((h) => h.clear());

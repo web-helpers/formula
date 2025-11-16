@@ -90,12 +90,14 @@ export class FormulaWebComponent extends HTMLElement {
   }
 
   disconnectedCallback() {
-    if (this.handleSubmit) {
+    if (this.handleSubmit && this.formEl) {
       this.formEl.removeEventListener('submit', this.#onHandleSubmit);
     }
     this.#subscriptions.forEach((unsub) => unsub());
     this.#subscriptions = [];
-    this.form.destroy();
+    if (this.form) {
+      this.form.destroy();
+    }
   }
 
   /**

@@ -1,5 +1,6 @@
 import { map } from 'nanostores';
 import { createTouchHandlers } from './touch.mjs';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('Formula Touch Handler', () => {
   const storeMock = {

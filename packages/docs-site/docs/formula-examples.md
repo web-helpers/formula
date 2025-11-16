@@ -149,7 +149,7 @@ onMounted(() => {
 }
 
 .form-container {
-  background-color: #f5f5f5;
+  background-color: #1e293b;
   padding: 1.5rem;
   border-radius: 8px;
 }
@@ -163,20 +163,23 @@ onMounted(() => {
   margin-bottom: 0.25rem;
   font-weight: 600;
   font-size: 0.875rem;
+  color: #e2e8f0;
 }
 
 .form-group input {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid #475569;
   border-radius: 4px;
   font-size: 0.875rem;
+  background-color: #0f172a;
+  color: #e2e8f0;
 }
 
 .form-group input:focus {
   outline: none;
   border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .form-group input:invalid {
@@ -242,7 +245,7 @@ onMounted(() => {
 }
 
 .error-message {
-  color: #dc2626;
+  color: #fca5a5;
   font-size: 0.75rem;
   margin-top: 0.25rem;
   display: block;
