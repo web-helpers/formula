@@ -50,28 +50,24 @@ describe('Formula Event Handlers', () => {
       expect(destroyHandler).toBeInstanceOf(Function);
     });
 
-    it('should update the value when there is a change event', (done) => {
+    it('should update the value when there is a change event', () => {
       opts[1].selected = true;
       el.dispatchEvent(new Event('change'));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: 'B' });
-          done();
-        })();
-      }, 0);
+      
+      // Check immediately - the handler should update synchronously
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: 'B' });
     });
 
-    it('should update the value when its a multiple change event', (done) => {
+    it('should update the value when its a multiple change event', () => {
       el.setAttribute('multiple', 'multiple');
       opts[0].selected = true;
       opts[1].selected = true;
       el.dispatchEvent(new Event('change'));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: ['A', 'B'] });
-          done();
-        })();
-      }, 0);
+      
+      // Check immediately - the handler should update synchronously
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: ['A', 'B'] });
     });
   });
 
@@ -94,20 +90,17 @@ describe('Formula Event Handlers', () => {
       destroyHandler();
     });
 
-    it('should create a handler for a single checkbox', (done) => {
+    it('should create a handler for a single checkbox', () => {
       destroyHandler = createHandler('testing', 'change', el, [el], storeMock, {}, new Map());
 
       el.click();
       el.dispatchEvent(new Event('change'));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: true });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: true });
     });
 
-    it('should create a handler for a multiple checkbox', (done) => {
+    it('should create a handler for a multiple checkbox', () => {
       const el2 = document.createElement('input');
       el2.id = 'test2';
       el2.type = 'checkbox';
@@ -120,12 +113,10 @@ describe('Formula Event Handlers', () => {
 
       el.click();
       el.dispatchEvent(new Event('change'));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: ['test1'] });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: ['test1'] });
+      
       document.body.removeChild(el2);
     });
   });
@@ -161,28 +152,22 @@ describe('Formula Event Handlers', () => {
       destroyHandlers.forEach((fn) => fn());
     });
 
-    it('should set the value when selecting a radio', (done) => {
+    it('should set the value when selecting a radio', () => {
       elements[0].click();
       elements[0].dispatchEvent(new Event('change'));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: 'A' });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: 'A' });
     });
 
-    it('should set the value when changing a radio', (done) => {
+    it('should set the value when changing a radio', () => {
       elements[0].click();
       elements[0].dispatchEvent(new Event('change'));
       elements[1].click();
       elements[1].dispatchEvent(new Event('change'));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: 'B' });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: 'B' });
     });
   });
 
@@ -203,20 +188,17 @@ describe('Formula Event Handlers', () => {
       destroyHandler();
     });
 
-    it('should create a handler for a single text boxes', (done) => {
+    it('should create a handler for a single text boxes', () => {
       destroyHandler = createHandler('testing', 'keyup', el, [el], storeMock, {}, new Map());
 
       el.value = 'A';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'A' }));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: 'A' });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: 'A' });
     });
 
-    it('should create a handler for a multiple text boxes', (done) => {
+    it('should create a handler for a multiple text boxes', () => {
       const el2 = document.createElement('input');
       el2.id = 'test2';
       el2.type = 'text';
@@ -230,12 +212,10 @@ describe('Formula Event Handlers', () => {
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'A' }));
       el2.value = 'B';
       el2.dispatchEvent(new KeyboardEvent('keyup', { key: 'B' }));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: ['A', 'B'] });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: ['A', 'B'] });
+      
       secondHandler();
       document.body.removeChild(el2);
     });
@@ -258,20 +238,17 @@ describe('Formula Event Handlers', () => {
       destroyHandler();
     });
 
-    it('should create a handler for a single number boxes', (done) => {
+    it('should create a handler for a single number boxes', () => {
       destroyHandler = createHandler('testing', 'keyup', el, [el], storeMock, {}, new Map());
 
       el.value = '5';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: '5' }));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: 5 });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: 5 });
     });
 
-    it('should create a handler for a multiple number boxes', (done) => {
+    it('should create a handler for a multiple number boxes', () => {
       const el2 = document.createElement('input');
       el2.id = 'test2';
       el2.type = 'number';
@@ -285,12 +262,10 @@ describe('Formula Event Handlers', () => {
       el.dispatchEvent(new KeyboardEvent('keyup', { key: '1' }));
       el2.value = '2';
       el2.dispatchEvent(new KeyboardEvent('keyup', { key: '2' }));
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          expect(value).toStrictEqual({ testing: [1, 2] });
-          done();
-        })();
-      }, 0);
+      
+      const value = storeMock.formValues.get();
+      expect(value).toStrictEqual({ testing: [1, 2] });
+      
       secondHandler();
       document.body.removeChild(el2);
     });
@@ -336,16 +311,12 @@ describe('Formula Event Handlers', () => {
       el.value = 'test';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
 
-      setTimeout(() => {
-        storeMock.enrichment.subscribe((value) => {
-          // Should have both field1 and field2 enrichments
-          expect(value).toHaveProperty('field1');
-          expect(value).toHaveProperty('field2');
-          expect(value.field1).toStrictEqual({ getLength: 4 });
-          expect(value.field2).toStrictEqual({ getUpper: 'EXISTING' });
-          done();
-        })();
-      }, 0);
+      const value = storeMock.enrichment.get();
+      // Should have both field1 and field2 enrichments
+      expect(value).toHaveProperty('field1');
+      expect(value).toHaveProperty('field2');
+      expect(value.field1).toStrictEqual({ getLength: 4 });
+      expect(value.field2).toStrictEqual({ getUpper: 'EXISTING' });
     });
   });
 
@@ -365,7 +336,7 @@ describe('Formula Event Handlers', () => {
       if (destroyHandler) destroyHandler();
     });
 
-    it('should not mutate formValues state when updating hidden fields', (done) => {
+    it('should not mutate formValues state when updating hidden fields', () => {
       const hidden1 = document.createElement('input');
       hidden1.type = 'hidden';
       hidden1.setAttribute('name', 'hidden1');
@@ -385,20 +356,16 @@ describe('Formula Event Handlers', () => {
       el.value = 'changed';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'c' }));
 
-      setTimeout(() => {
-        storeMock.formValues.subscribe((value) => {
-          // Should have all fields
-          expect(value).toHaveProperty('visible', 'changed');
-          expect(value).toHaveProperty('hidden1', 'hiddenValue');
-          expect(value).toHaveProperty('other', 'data');
-          
-          // Original state should not have been mutated
-          expect(originalState).not.toHaveProperty('hidden1');
-          
-          done();
-        })();
-        document.body.removeChild(hidden1);
-      }, 0);
+      const value = storeMock.formValues.get();
+      // Should have all fields
+      expect(value).toHaveProperty('visible', 'changed');
+      expect(value).toHaveProperty('hidden1', 'hiddenValue');
+      expect(value).toHaveProperty('other', 'data');
+      
+      // Original state should not have been mutated
+      expect(originalState).not.toHaveProperty('hidden1');
+      
+      document.body.removeChild(hidden1);
     });
   });
 });

@@ -36,7 +36,10 @@ export function createDirtyHandler(name, elements, stores) {
 
   // Set initial dirty state and initial value
   stores.dirty.set({ ...stores.dirty.get(), [name]: false });
-  subscriptionUnsub = stores.formValues.subscribe((v) => initialValues.set(name, v[name]));
+  // Capture initial value once and unsubscribe immediately
+  const unsubInitial = stores.formValues.subscribe((v) => initialValues.set(name, v[name]));
+  unsubInitial();
+  subscriptionUnsub = null; // No ongoing subscription needed for initial values
 
   function createElementHandler(groupName) {
     return () => {
