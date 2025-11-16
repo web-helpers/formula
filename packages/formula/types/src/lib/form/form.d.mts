@@ -31,7 +31,7 @@
  * @param {Record<string, any>} initialData
  * @returns {Formula}
  */
-export function createForm(options: FormulaOptions, globalStore: Map<string, import('../shared/stores.mjs').FormulaStores>, groupName: string, initialData: Record<string, any>): Formula;
+export function createForm(options: FormulaOptions, globalStore: Map<string, import("../shared/stores.mjs").FormulaStores>, groupName: string, initialData: Record<string, any>): Formula;
 /**
  * Optional settings for Formula - by providing these options the state of the form can be set up as an initial state, along with custom validation and enrichment rules.
  */
@@ -43,11 +43,11 @@ export type FormulaOptions = {
     /**
      * - An object containing validation rules for the provided fields, each field validation returns a string if invalid, or `null` if the validation passes. Each validation key is also added to the `validity` field errors object.
      */
-    validators?: import('./errors.mjs').ValidationRules | undefined;
+    validators?: import("./errors.mjs").ValidationRules | undefined;
     /**
      * - An object containing enrichers for the provided fields, each field enricher returns a value that is added to the `enriched` field.
      */
-    enrich?: import('./enrichment.mjs').EnrichFields | undefined;
+    enrich?: import("./enrichment.mjs").EnrichFields | undefined;
     /**
      * - Default values are used as initial values for the form fields if there is no value already set on the form
      */
@@ -72,7 +72,7 @@ export type Formula = {
     updateForm: (updatedOpts?: any) => void;
     destroyForm: () => void;
     resetForm: () => void;
-    stores: import('../shared/stores.mjs').FormulaStores;
+    stores: import("../shared/stores.mjs").FormulaStores;
 };
 export type FormulaForm = {
     node: HTMLElement;
