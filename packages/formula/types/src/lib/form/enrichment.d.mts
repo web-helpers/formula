@@ -1,6 +1,6 @@
 import type { EnrichFields } from '../shared/types.mjs';
 interface EnrichmentOptions {
-    enrich?: EnrichFields;
+  enrich?: EnrichFields;
 }
 /**
  * Creates an enrichment object for the named group

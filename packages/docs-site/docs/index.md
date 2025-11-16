@@ -57,44 +57,28 @@ Formula uses [nanostores](https://github.com/nanostores/nanostores) to provide r
 
 When using the web component, Formula emits custom events you can listen to:
 
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `form:values` | `Record<string, any>` | Fires when any field value changes |
-| `form:errors` | `Record<string, any>` | Fires when validation state changes |
-| `form:touched` | `Record<string, boolean>` | Fires when a field is touched |
-| `form:dirty` | `Record<string, boolean>` | Fires when a field becomes dirty |
-| `form:valid` | `boolean` | Fires when overall form validity changes |
-| `form:ready` | `boolean` | Fires when form ready state changes |
-| `form:submit` | `Record<string, any>` | Fires on form submission (with `handle-submit`) |
-| `form:init` | `Formula` | Fires when the formula instance is initialized |
-| `form:connect` | `FormulaForm` | Fires when the form instance is initialized |
+| Event          | Payload                   | Description                                     |
+| -------------- | ------------------------- | ----------------------------------------------- |
+| `form:values`  | `Record<string, any>`     | Fires when any field value changes              |
+| `form:errors`  | `Record<string, any>`     | Fires when validation state changes             |
+| `form:touched` | `Record<string, boolean>` | Fires when a field is touched                   |
+| `form:dirty`   | `Record<string, boolean>` | Fires when a field becomes dirty                |
+| `form:valid`   | `boolean`                 | Fires when overall form validity changes        |
+| `form:ready`   | `boolean`                 | Fires when form ready state changes             |
+| `form:submit`  | `Record<string, any>`     | Fires on form submission (with `handle-submit`) |
+| `form:init`    | `Formula`                 | Fires when the formula instance is initialized  |
+| `form:connect` | `FormulaForm`             | Fires when the form instance is initialized     |
 
 ### HTML5 Validation
 
 Formula leverages native HTML5 [Constraint Validation](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation) attributes:
 
 ```html
-<input 
-  name="email" 
-  type="email" 
-  required 
-  pattern="[^@]+@[^@]+\.[^@]+" 
-/>
+<input name="email" type="email" required pattern="[^@]+@[^@]+\.[^@]+" />
 
-<input 
-  name="age" 
-  type="number" 
-  min="18" 
-  max="120" 
-/>
+<input name="age" type="number" min="18" max="120" />
 
-<input 
-  name="username" 
-  type="text" 
-  minlength="3" 
-  maxlength="20" 
-  required 
-/>
+<input name="username" type="text" minlength="3" maxlength="20" required />
 ```
 
 All native validation attributes work automatically with Formula.
@@ -108,22 +92,22 @@ The easiest way to use Formula - just wrap your form:
 ```html
 <script type="module">
   import '@webhelpers/formula/webcomponent';
-  
+
   const form = document.querySelector('formula-form');
-  
+
   // Subscribe to value changes
   form.addEventListener('form:values', (e) => {
     console.log('Current values:', e.detail);
   });
-  
+
   // Handle submission
   form.addEventListener('form:submit', async (e) => {
     const response = await fetch('/api/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(e.detail)
+      body: JSON.stringify(e.detail),
     });
-    
+
     if (response.ok) {
       console.log('Form submitted successfully!');
     }
@@ -152,7 +136,7 @@ const formulaInstance = formula({
   },
   postChanges: (values) => {
     console.log('After change:', values);
-  }
+  },
 });
 
 const formInstance = formulaInstance.init(formEl);
@@ -176,11 +160,11 @@ formulaInstance.stores.formValid.subscribe((isValid) => {
 
 Configure the `<formula-form>` component with these attributes:
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `handle-submit` | boolean | `false` | If present, Formula will handle form submission and emit `form:submit` event |
-| `root-selector` | string | `undefined` | CSS selector to find the form element (if not a direct child) |
-| `formula-options` | string | `undefined` | JSON string of options to pass to the formula instance |
+| Attribute         | Type    | Default     | Description                                                                  |
+| ----------------- | ------- | ----------- | ---------------------------------------------------------------------------- |
+| `handle-submit`   | boolean | `false`     | If present, Formula will handle form submission and emit `form:submit` event |
+| `root-selector`   | string  | `undefined` | CSS selector to find the form element (if not a direct child)                |
+| `formula-options` | string  | `undefined` | JSON string of options to pass to the formula instance                       |
 
 ### Examples
 
@@ -215,9 +199,9 @@ const formulaInstance = formula({
     return {
       passwordStrength: calculateStrength(values.password),
       passwordsMatch: values.password === values.password_confirm,
-      fullName: `${values.firstName} ${values.lastName}`
+      fullName: `${values.firstName} ${values.lastName}`,
     };
-  }
+  },
 });
 
 formulaInstance.stores.enrichment.subscribe((enriched) => {
@@ -238,7 +222,7 @@ const formulaInstance = formula({
     if (values.password && values.password.length < 8) {
       // Update UI or set custom errors
     }
-  }
+  },
 });
 ```
 
@@ -248,7 +232,7 @@ Use CSS to style forms based on their state:
 
 ```css
 /* Style invalid fields that have been touched */
-input:invalid[aria-invalid="true"] {
+input:invalid[aria-invalid='true'] {
   border-color: red;
 }
 
@@ -258,7 +242,7 @@ input:valid {
 }
 
 /* Show error messages only for touched invalid fields */
-input:invalid[aria-invalid="true"] ~ .error-message {
+input:invalid[aria-invalid='true'] ~ .error-message {
   display: block;
 }
 
@@ -274,6 +258,7 @@ input:invalid[aria-invalid="true"] ~ .error-message {
 ### Basic Form
 
 See a [complete working example](./basic-form.md) with:
+
 - Live form values display
 - Error handling
 - Dirty/touched state indicators
@@ -310,7 +295,7 @@ const resetBtn = document.querySelector('#reset-btn');
 resetBtn.addEventListener('click', () => {
   // Reset the form element
   formEl.reset();
-  
+
   // Formula will automatically update all stores
 });
 ```
@@ -326,21 +311,21 @@ import '@webhelpers/formula/webcomponent';
 function MyForm() {
   const formRef = useRef(null);
   const [formValues, setFormValues] = useState({});
-  
+
   useEffect(() => {
     const form = formRef.current;
-    
+
     const handleValues = (e) => {
       setFormValues(e.detail);
     };
-    
+
     form.addEventListener('form:values', handleValues);
-    
+
     return () => {
       form.removeEventListener('form:values', handleValues);
     };
   }, []);
-  
+
   return (
     <formula-form ref={formRef} handle-submit>
       <form>
@@ -356,12 +341,7 @@ function MyForm() {
 
 ```vue
 <template>
-  <formula-form 
-    ref="formulaForm" 
-    handle-submit
-    @form:values="handleValues"
-    @form:submit="handleSubmit"
-  >
+  <formula-form ref="formulaForm" handle-submit @form:values="handleValues" @form:submit="handleSubmit">
     <form>
       <input name="email" type="email" required />
       <button type="submit">Submit</button>
@@ -392,10 +372,10 @@ const handleSubmit = async (e) => {
 <script>
   import { onMount } from 'svelte';
   import '@webhelpers/formula/webcomponent';
-  
+
   let formValues = {};
   let formulaForm;
-  
+
   onMount(() => {
     formulaForm.addEventListener('form:values', (e) => {
       formValues = e.detail;
@@ -413,73 +393,11 @@ const handleSubmit = async (e) => {
 
 ## API Reference
 
-### `formula(options?)`
+For a detailed look at the Formula API, please see the following pages:
 
-Creates a new Formula instance.
-
-**Options:**
-- `preChanges?: (values: Record<string, any>) => void` - Called before stores update
-- `postChanges?: (values: Record<string, any>) => void` - Called after stores update
-- `enrichment?: (values: Record<string, any>) => Record<string, any>` - Function to compute derived values
-
-**Returns:** Formula instance with:
-- `stores` - Object containing all reactive stores
-- `init(formElement: HTMLFormElement)` - Initialize with a form element
-- `destroy()` - Clean up event listeners and subscriptions
-
-### Stores API
-
-All stores follow the [nanostores](https://github.com/nanostores/nanostores) API:
-
-```javascript
-// Subscribe to changes
-const unsubscribe = store.subscribe((value) => {
-  console.log('New value:', value);
-});
-
-// Get current value
-const currentValue = store.get();
-
-// Clean up
-unsubscribe();
-```
-
-## Browser Support
-
-Formula works in all modern browsers that support:
-- ES Modules
-- Custom Elements (Web Components)
-- Constraint Validation API
-
-This includes:
-- Chrome/Edge 64+
-- Firefox 63+
-- Safari 12+
-
-## Performance
-
-Formula is designed to be lightweight and performant:
-
-- **Bundle Size**: ~5KB minified + gzipped (including nanostores)
-- **No Virtual DOM**: Direct DOM manipulation for maximum speed
-- **Lazy Validation**: Only validates fields that have been interacted with
-- **Efficient Updates**: Only updates stores when values actually change
-
-## Troubleshooting
-
-### Forms not becoming reactive
-
-Make sure you've imported the web component:
-```javascript
-import '@webhelpers/formula/webcomponent';
-```
-
-### Events not firing
-
-Check that you've added the `handle-submit` attribute if you want to intercept form submission:
-```html
-<formula-form handle-submit>
-```
+- **[`formula(options)`](./api/formula-function.md)**: The core function for creating a Formula instance.
+- **[Reactive Stores](./api/stores.md)**: A deep dive into the individual stores (`formValues`, `errors`, `dirty`, etc.).
+- **[`<formula-form>` Web Component](./api/web-component.md)**: Full documentation for the web component, including attributes and events.
 
 ### TypeScript Support
 

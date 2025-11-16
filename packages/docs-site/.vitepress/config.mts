@@ -8,25 +8,32 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
   title: 'Formula',
   description: 'A form state library for static HTML forms',
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: (tag: string) => tag === 'formula-form',
+      },
+    },
+  },
   vite: {
     resolve: {
       alias: {
+        '@webhelpers/formula/webcomponent': resolve(__dirname, '../../formula/dist/webcomponent.mjs'),
         '@webhelpers/formula': resolve(__dirname, '../../formula/dist/index.mjs'),
       },
     },
     optimizeDeps: {
-      include: ['@webhelpers/formula'],
+      include: ['@webhelpers/formula', '@webhelpers/formula/webcomponent'],
     },
     ssr: {
-      noExternal: ['@webhelpers/formula'],
+      noExternal: ['@webhelpers/formula', '@webhelpers/formula/webcomponent'],
     },
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Formula Examples', link: '/docs/formula-examples' },
-      { text: 'VitePress Examples', link: '/docs/markdown-examples' },
+      { text: 'Documentation', link: '/docs/index' },
     ],
 
     sidebar: [
@@ -34,7 +41,35 @@ export default defineConfig({
         text: 'Documentation',
         items: [
           { text: 'Home', link: '/docs/index' },
-          { text: 'Basic Form', link: '/docs/basic-form' },
+          {
+            text: 'API Docs',
+            items: [
+              { text: 'Stores', link: '/docs/api/stores' },
+              { text: 'Formula', link: '/docs/api/formula-function' },
+              { text: 'Web Component', link: '/docs/api/web-component' },
+            ],
+          },
+          {
+            text: 'Stores',
+            items: [
+              { text: 'dirty', link: '/docs/api/store-dirty' },
+              { text: 'errors', link: '/docs/api/store-errors' },
+              { text: 'formReady', link: '/docs/api/store-formReady' },
+              { text: 'formValid', link: '/docs/api/store-formValid' },
+              { text: 'formValues', link: '/docs/api/store-formValues' },
+              { text: 'formValid', link: '/docs/api/store-formValid' },
+              { text: 'touched', link: '/docs/api/store-touched' },
+            ],
+          },
+          {
+            text: 'Examples',
+            items: [
+              { text: 'Basic Form', link: '/docs/basic-form' },
+              { text: 'Custom Validation', link: '/docs/custom-validation' },
+              { text: 'Dynamic Fields', link: '/docs/dynamic-fields' },
+              { text: 'Web Component', link: '/docs/web-component' },
+            ],
+          },
         ],
       },
     ],

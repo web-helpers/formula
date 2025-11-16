@@ -4,11 +4,7 @@ import type { FormulaStores } from '../shared/types.mjs';
 /**
  * Creates the handler for a group of elements for the touch event
  */
-export function createTouchHandlers(
-  name: string,
-  elements: FormElement[],
-  stores: FormulaStores
-): () => void {
+export function createTouchHandlers(name: string, elements: FormElement[], stores: FormulaStores): () => void {
   const elementHandlers = new Map<FormElement, () => void>();
 
   const destroy = () => {

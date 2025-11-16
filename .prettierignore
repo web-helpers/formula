@@ -1,2 +1,4 @@
 .moon
 node_modules
+**/.vitepress/cache
+dist/

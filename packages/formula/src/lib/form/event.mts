@@ -45,12 +45,12 @@ export function valueUpdate(
   stores: FormulaStores,
   options: EventOptions | undefined,
   hiddenFields: Map<string, FormElement[]>,
-  enrich?: (value: unknown) => Record<string, unknown>
+  enrich?: (value: unknown) => Record<string, unknown>,
 ): void {
   const { name, value, ...validity } = details;
 
   stores.formValues.set({ ...stores.formValues.get(), [name]: value });
-  
+
   if (hiddenFields.size) {
     const state = { ...stores.formValues.get() };
     hiddenFields.forEach((group, name) => {
@@ -61,15 +61,15 @@ export function valueUpdate(
 
   stores.errors.set({ ...stores.errors.get(), [name]: validity });
   stores.formValid.set(Object.values(stores.errors.get()).every((v: FieldValidity) => v.valid));
-  
+
   if (options?.formValidators) {
     formValidation(options.formValidators, stores);
   }
-  
+
   if (enrich) {
     stores.enrichment.set({ ...stores.enrichment.get(), [name]: enrich(value) });
   }
-  
+
   if (typeof options?.postChanges === 'function') {
     options.postChanges(stores.formValues.get());
   }
@@ -83,7 +83,7 @@ function createHandlerForData(
   stores: FormulaStores,
   options: EventOptions | undefined,
   hiddenFields: Map<string, FormElement[]>,
-  enrich?: (value: unknown) => Record<string, unknown>
+  enrich?: (value: unknown) => Record<string, unknown>,
 ): (event: Event) => void {
   return (event: Event) => {
     const el = (event?.currentTarget ?? event?.target) as FormElement;
@@ -105,7 +105,7 @@ export function createHandler(
   groupElements: FormElement[],
   stores: FormulaStores,
   options: EventOptions | undefined,
-  hiddenGroups: Map<string, FormElement[]>
+  hiddenGroups: Map<string, FormElement[]>,
 ): () => void {
   const extract = createFieldExtract(name, groupElements, stores, options);
   let enrich: ((value: unknown) => Record<string, unknown>) | undefined;

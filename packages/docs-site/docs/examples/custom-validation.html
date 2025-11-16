@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formula Custom Validation Example</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        max-width: 1400px;
+        width: 100%;
+      }
+
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 2rem;
+      }
+
+      h1 {
+        color: #1e293b;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        color: #1e293b;
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #475569;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+
+      .label-with-hint {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .hint {
+        font-size: 0.75rem;
+        color: #64748b;
+        font-weight: normal;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      input.valid {
+        border-color: #10b981;
+      }
+
+      input.invalid {
+        border-color: #ef4444;
+      }
+
+      .error-message {
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: block;
+        min-height: 1rem;
+      }
+
+      .success-message {
+        color: #10b981;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: block;
+      }
+
+      .password-strength {
+        margin-top: 0.5rem;
+      }
+
+      .strength-bar {
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 0.25rem;
+      }
+
+      .strength-fill {
+        height: 100%;
+        transition: all 0.3s;
+        border-radius: 2px;
+      }
+
+      .strength-weak {
+        width: 33%;
+        background: #ef4444;
+      }
+
+      .strength-medium {
+        width: 66%;
+        background: #f59e0b;
+      }
+
+      .strength-strong {
+        width: 100%;
+        background: #10b981;
+      }
+
+      .strength-text {
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .strength-weak-text {
+        color: #ef4444;
+      }
+      .strength-medium-text {
+        color: #f59e0b;
+      }
+      .strength-strong-text {
+        color: #10b981;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .checkbox-group input[type='checkbox'] {
+        width: auto;
+        margin-top: 0.25rem;
+      }
+
+      .checkbox-group label {
+        margin-bottom: 0;
+        font-weight: normal;
+      }
+
+      button {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .validation-rules {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .validation-rules h3 {
+        font-size: 0.875rem;
+        color: #1e293b;
+        margin-bottom: 0.75rem;
+      }
+
+      .validation-rules ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .validation-rules li {
+        font-size: 0.75rem;
+        color: #64748b;
+        padding: 0.25rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .validation-rules li::before {
+        content: '○';
+        color: #cbd5e1;
+      }
+
+      .validation-rules li.valid::before {
+        content: '✓';
+        color: #10b981;
+      }
+
+      .validation-rules li.invalid::before {
+        content: '✗';
+        color: #ef4444;
+      }
+
+      .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 0.75rem;
+        font-family: 'Monaco', 'Courier New', monospace;
+        margin-top: 0.5rem;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .code-block pre {
+        margin: 0;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+      }
+
+      .badge-success {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .badge-error {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .checking {
+        color: #3b82f6;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>🔐 User Registration</h1>
+
+        <form id="registration-form">
+          <div class="form-group">
+            <label for="username">
+              <div class="label-with-hint">
+                <span>Username</span>
+                <span class="hint">Must be unique</span>
+              </div>
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              minlength="3"
+              maxlength="20"
+              pattern="[a-zA-Z0-9_]+"
+              placeholder="Enter username"
+              data-message="Username must be 3-20 characters (letters, numbers, underscore only)"
+            />
+            <span class="checking" id="username-checking" style="display: none">Checking availability...</span>
+            <span class="error-message" id="username-error"></span>
+            <span class="success-message" id="username-success"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="user@example.com" data-message="Please enter a valid email address" />
+            <span class="error-message" id="email-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              <div class="label-with-hint">
+                <span>Password</span>
+                <span class="hint">Min 8 characters</span>
+              </div>
+            </label>
+            <input type="password" id="password" name="password" required minlength="8" placeholder="Enter password" />
+            <div class="password-strength" id="password-strength" style="display: none">
+              <div class="strength-bar">
+                <div class="strength-fill" id="strength-fill"></div>
+              </div>
+              <span class="strength-text" id="strength-text"></span>
+            </div>
+            <span class="error-message" id="password-error"></span>
+          </div>
+
+          <div class="validation-rules">
+            <h3>Password Requirements:</h3>
+            <ul id="password-rules">
+              <li id="rule-length">At least 8 characters</li>
+              <li id="rule-lowercase">Contains lowercase letter</li>
+              <li id="rule-uppercase">Contains uppercase letter</li>
+              <li id="rule-number">Contains number</li>
+              <li id="rule-special">Contains special character (!@#$%^&*)</li>
+            </ul>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Re-enter password" />
+            <span class="error-message" id="confirmPassword-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required min="13" max="120" placeholder="Enter your age" data-message="You must be at least 13 years old to register" />
+            <span class="error-message" id="age-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country" required>
+              <option value="">Select a country</option>
+              <option value="US">United States</option>
+              <option value="UK">United Kingdom</option>
+              <option value="CA">Canada</option>
+              <option value="AU">Australia</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+              <option value="JP">Japan</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="error-message" id="country-error"></span>
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="terms" name="terms" required />
+              <label for="terms"> I agree to the Terms of Service and Privacy Policy </label>
+            </div>
+            <span class="error-message" id="terms-error"></span>
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="newsletter" name="newsletter" />
+              <label for="newsletter"> Send me updates and newsletters </label>
+            </div>
+          </div>
+
+          <button type="submit" id="submit-btn">Create Account</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>📊 Form State</h2>
+        <div style="margin-bottom: 1rem">
+          <span class="badge badge-error" id="valid-badge">Invalid</span>
+          <span class="badge badge-error" id="dirty-badge">Clean</span>
+          <span class="badge badge-error" id="touched-badge">Untouched</span>
+        </div>
+
+        <h2>📝 Form Values</h2>
+        <div class="code-block">
+          <pre id="values-display">{}</pre>
+        </div>
+
+        <h2>⚠️ Validation Errors</h2>
+        <div class="code-block">
+          <pre id="errors-display">{}</pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { formula } from 'https://esm.sh/@webhelpers/formula@latest';
+
+      const form = document.getElementById('registration-form');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const usernameInput = document.getElementById('username');
+      const submitBtn = document.getElementById('submit-btn');
+
+      // Simulated database of taken usernames
+      const takenUsernames = ['admin', 'user', 'test', 'john', 'jane'];
+      let usernameCheckTimeout;
+
+      // Initialize formula
+      const formulaForm = formula({
+        defaultValues: {
+          username: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          age: '',
+          country: '',
+          terms: false,
+          newsletter: false,
+        },
+      });
+
+      formulaForm.init(form);
+
+      // Password strength checker
+      function checkPasswordStrength(password) {
+        let strength = 0;
+        const rules = {
+          length: password.length >= 8,
+          lowercase: /[a-z]/.test(password),
+          uppercase: /[A-Z]/.test(password),
+          number: /[0-9]/.test(password),
+          special: /[!@#$%^&*]/.test(password),
+        };
+
+        // Update rule indicators
+        Object.keys(rules).forEach((rule) => {
+          const element = document.getElementById(`rule-${rule}`);
+          if (rules[rule]) {
+            element.className = 'valid';
+            strength++;
+          } else {
+            element.className = password.length > 0 ? 'invalid' : '';
+          }
+        });
+
+        return { strength, rules };
+      }
+
+      // Update password strength display
+      function updatePasswordStrength(password) {
+        const strengthContainer = document.getElementById('password-strength');
+        const strengthFill = document.getElementById('strength-fill');
+        const strengthText = document.getElementById('strength-text');
+
+        if (!password) {
+          strengthContainer.style.display = 'none';
+          return;
+        }
+
+        strengthContainer.style.display = 'block';
+        const { strength } = checkPasswordStrength(password);
+
+        strengthFill.className = 'strength-fill';
+        strengthText.className = 'strength-text';
+
+        if (strength <= 2) {
+          strengthFill.classList.add('strength-weak');
+          strengthText.classList.add('strength-weak-text');
+          strengthText.textContent = 'Weak password';
+        } else if (strength <= 3) {
+          strengthFill.classList.add('strength-medium');
+          strengthText.classList.add('strength-medium-text');
+          strengthText.textContent = 'Medium password';
+        } else {
+          strengthFill.classList.add('strength-strong');
+          strengthText.classList.add('strength-strong-text');
+          strengthText.textContent = 'Strong password';
+        }
+      }
+
+      // Async username availability check
+      async function checkUsernameAvailability(username) {
+        const checkingEl = document.getElementById('username-checking');
+        const errorEl = document.getElementById('username-error');
+        const successEl = document.getElementById('username-success');
+
+        if (!username || username.length < 3) {
+          checkingEl.style.display = 'none';
+          successEl.textContent = '';
+          return;
+        }
+
+        checkingEl.style.display = 'block';
+        errorEl.textContent = '';
+        successEl.textContent = '';
+
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        checkingEl.style.display = 'none';
+
+        if (takenUsernames.includes(username.toLowerCase())) {
+          errorEl.textContent = 'Username is already taken';
+          usernameInput.classList.add('invalid');
+          usernameInput.classList.remove('valid');
+        } else {
+          successEl.textContent = '✓ Username is available';
+          usernameInput.classList.add('valid');
+          usernameInput.classList.remove('invalid');
+        }
+      }
+
+      // Custom validation for password confirmation
+      function validatePasswordMatch() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        const errorEl = document.getElementById('confirmPassword-error');
+
+        if (confirmPassword && password !== confirmPassword) {
+          errorEl.textContent = 'Passwords do not match';
+          confirmPasswordInput.classList.add('invalid');
+          confirmPasswordInput.classList.remove('valid');
+          return false;
+        } else if (confirmPassword) {
+          errorEl.textContent = '';
+          confirmPasswordInput.classList.add('valid');
+          confirmPasswordInput.classList.remove('invalid');
+          return true;
+        }
+        return true;
+      }
+
+      // Password input handler
+      passwordInput.addEventListener('input', (e) => {
+        updatePasswordStrength(e.target.value);
+        validatePasswordMatch();
+      });
+
+      // Confirm password input handler
+      confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+
+      // Username input handler with debounce
+      usernameInput.addEventListener('input', (e) => {
+        clearTimeout(usernameCheckTimeout);
+        usernameCheckTimeout = setTimeout(() => {
+          checkUsernameAvailability(e.target.value);
+        }, 500);
+      });
+
+      // Subscribe to form values
+      formulaForm.formValues.subscribe((values) => {
+        document.getElementById('values-display').textContent = JSON.stringify(values, null, 2);
+        console.log('Form values:', values);
+      });
+
+      // Subscribe to form errors
+      formulaForm.errors.subscribe((errors) => {
+        document.getElementById('errors-display').textContent = JSON.stringify(errors, null, 2);
+
+        // Update inline error messages for standard fields
+        ['username', 'email', 'password', 'age', 'country', 'terms'].forEach((field) => {
+          const errorEl = document.getElementById(`${field}-error`);
+          if (errorEl && field !== 'username') {
+            // Clear error if no error exists for this field
+            if (errors[field]?.message) {
+              errorEl.textContent = errors[field].message;
+            } else {
+              errorEl.textContent = '';
+            }
+          }
+        });
+
+        // Update valid badge based on errors
+        const hasErrors = Object.keys(errors).some((key) => errors[key]?.message);
+        const validBadge = document.getElementById('valid-badge');
+        validBadge.className = `badge ${hasErrors ? 'badge-error' : 'badge-success'}`;
+        validBadge.textContent = hasErrors ? 'Invalid' : 'Valid';
+
+        // Update submit button state
+        submitBtn.disabled = hasErrors;
+
+        console.log('Form errors:', errors);
+      });
+
+      // Subscribe to dirty state
+      formulaForm.dirty.subscribe((dirty) => {
+        const isDirty = Object.values(dirty).some((v) => v);
+        const badge = document.getElementById('dirty-badge');
+        badge.className = `badge ${isDirty ? 'badge-success' : 'badge-error'}`;
+        badge.textContent = isDirty ? 'Dirty' : 'Clean';
+      });
+
+      // Subscribe to touched state
+      formulaForm.touched.subscribe((touched) => {
+        const isTouched = Object.values(touched).some((v) => v);
+        const badge = document.getElementById('touched-badge');
+        badge.className = `badge ${isTouched ? 'badge-success' : 'badge-error'}`;
+        badge.textContent = isTouched ? 'Touched' : 'Untouched';
+      });
+
+      // Handle form submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Final validation
+        const password = passwordInput.value;
+        const { strength } = checkPasswordStrength(password);
+
+        if (strength < 3) {
+          alert('Please use a stronger password (at least Medium strength)');
+          return;
+        }
+
+        if (!validatePasswordMatch()) {
+          alert('Passwords do not match');
+          return;
+        }
+
+        // Check username availability one more time
+        if (takenUsernames.includes(usernameInput.value.toLowerCase())) {
+          alert('Username is not available');
+          return;
+        }
+
+        const values = formulaForm.formValues.get();
+        alert(`Registration Successful!\n\nWelcome, ${values.username}!`);
+        console.log('Registration submitted:', values);
+      });
+    </script>
+  </body>
+</html>

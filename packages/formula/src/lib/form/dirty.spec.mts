@@ -1,6 +1,7 @@
 import { map } from 'nanostores';
 import { createDirtyHandler } from './dirty.mjs';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import type { FormElement } from '../shared/fields.mjs';
 
 describe('Formula Dirty Check', () => {
   const storeMock = {
@@ -8,9 +9,9 @@ describe('Formula Dirty Check', () => {
     formValues: map({}),
   };
 
-  let element;
-  let elements;
-  let destroyHandler;
+  let element: FormElement;
+  let elements: FormElement[] = [];
+  let destroyHandler: () => void;
 
   beforeEach(() => {
     element = document.createElement('input');
@@ -19,7 +20,7 @@ describe('Formula Dirty Check', () => {
     elements = [element];
 
     document.body.appendChild(element);
-    destroyHandler = createDirtyHandler('testing', elements, storeMock);
+    destroyHandler = createDirtyHandler('testing', elements, storeMock as any);
   });
 
   afterEach(() => {
@@ -48,29 +49,29 @@ describe('Formula Dirty Check', () => {
   it('should update when value changes from initial', () => {
     //  Set initial value in store first
     storeMock.formValues.set({ testing: '' });
-    
+
     // Create handler after initial value is set
     const testElement = document.createElement('input');
     testElement.type = 'text';
     testElement.setAttribute('name', 'testField');
     testElement.value = '';
     document.body.appendChild(testElement);
-    
-    const testHandler = createDirtyHandler('testField', [testElement], storeMock);
+
+    const testHandler = createDirtyHandler('testField', [testElement], storeMock as any);
 
     // Simulate user interaction
     testElement.focus();
     testElement.value = 'changed';
-    
+
     // Update store to reflect the change (as would happen via event handler)
     storeMock.formValues.set({ testing: '', testField: 'changed' });
-    
+
     testElement.blur();
 
     storeMock.dirty.subscribe((v) => {
-      expect(v.testField).toBe(true);
+      expect((v as Record<string, boolean>).testField).toBe(true);
     })();
-    
+
     testHandler();
     document.body.removeChild(testElement);
   });
@@ -83,11 +84,11 @@ describe('Formula Dirty Check', () => {
       testElement.setAttribute('name', 'testField');
       document.body.appendChild(testElement);
 
-      const handler = createDirtyHandler('testField', [testElement], storeMock);
-      
+      const handler = createDirtyHandler('testField', [testElement], storeMock as any);
+
       // Subscribe should have been called once
       expect(subscribeSpy).toHaveBeenCalledTimes(1);
-      
+
       // Get the unsubscribe function
       const unsubCall = subscribeSpy.mock.results[0].value;
       expect(unsubCall).toBeInstanceOf(Function);
@@ -105,12 +106,12 @@ describe('Formula Dirty Check', () => {
       document.body.appendChild(testElement);
 
       const removeEventListenerSpy = vi.spyOn(testElement, 'removeEventListener');
-      const handler = createDirtyHandler('testField', [testElement], storeMock);
-      
+      const handler = createDirtyHandler('testField', [testElement], storeMock as any);
+
       handler();
-      
+
       expect(removeEventListenerSpy).toHaveBeenCalledWith('blur', expect.any(Function));
-      
+
       document.body.removeChild(testElement);
       removeEventListenerSpy.mockRestore();
     });

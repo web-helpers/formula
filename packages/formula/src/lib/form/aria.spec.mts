@@ -1,3 +1,4 @@
+import type { FormElement } from '../shared/fields.mjs';
 import { setAriaRole, setAriaStates } from './aria.mjs';
 import { describe, it, expect, afterEach } from 'vitest';
 
@@ -6,14 +7,14 @@ describe('Formula ARIA', () => {
     /**
      * @type {HTMLDivElement}
      */
-    let element;
+    let element: FormElement;
 
     afterEach(() => {
       document.body.removeChild(element);
     });
 
     it('should set radio and radiogroup', () => {
-      element = document.createElement('div');
+      element = document.createElement('div') as unknown as FormElement;
       const group = [];
       for (let i = 0; i < 4; i++) {
         const input = document.createElement('input');
@@ -87,7 +88,7 @@ describe('Formula ARIA', () => {
     /**
      * @type {HTMLInputElement}
      */
-    let element;
+    let element: FormElement;
 
     afterEach(() => {
       document.body.removeChild(element);

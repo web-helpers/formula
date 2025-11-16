@@ -3,18 +3,22 @@ import type { FormulaStores } from '../shared/types.mjs';
 
 /**
  * Check if two arrays have the same elements, regardless of the order
+ * @param array1 The first array to compare
+ * @param array2 The second array to compare
+ *
+ * @returns boolean indicating if the arrays match
  */
-const matchingArrays = (array1: unknown[], array2: unknown[]): boolean =>
-  array1.length === array2.length && array1.every((e) => array2.includes(e));
+const matchingArrays = (array1: unknown[], array2: unknown[]): boolean => array1.length === array2.length && array1.every((e) => array2.includes(e));
 
 /**
  * Creates a handler to set the dirty state for a group of elements
+ * @param name The name of the form field group
+ * @param elements The group of form elements to monitor
+ * @param stores The formula stores containing the dirty and formValues stores
+ *
+ * @returns A function to destroy the handlers and stop monitoring
  */
-export function createDirtyHandler(
-  name: string,
-  elements: FormElement[],
-  stores: FormulaStores
-): () => void {
+export function createDirtyHandler(name: string, elements: FormElement[], stores: FormulaStores): () => void {
   const elementHandlers = new Map<FormElement, () => void>();
   const initialValues = new Map<string, unknown>();
   let subscriptionUnsub: (() => void) | undefined;
@@ -38,6 +42,12 @@ export function createDirtyHandler(
   unsubInitial();
   subscriptionUnsub = undefined; // No ongoing subscription needed for initial values
 
+  /**
+   * Creates an event handler for a form element to check if it is dirty
+   * @param groupName The name of the form field group
+   *
+   * @returns A function to handle the blur event
+   */
   function createElementHandler(groupName: string): () => void {
     return () => {
       const startValue = initialValues.get(groupName);

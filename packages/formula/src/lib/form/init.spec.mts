@@ -1,10 +1,12 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { createReset } from './init.mjs';
 import { createFormStores } from '../shared/stores.mjs';
+import type { FormulaStores } from '../shared/types.mjs';
+import type { FormElement } from '../shared/fields.mjs';
 
 describe('Form Initialization and Reset', () => {
-  let form;
-  let stores;
+  let form: HTMLFormElement;
+  let stores: FormulaStores;
 
   beforeEach(() => {
     form = document.createElement('form');
@@ -26,7 +28,7 @@ describe('Form Initialization and Reset', () => {
       input.value = 'John';
       form.appendChild(input);
 
-      const allGroups = [['firstName', [input]]];
+      const allGroups: [string, FormElement[]][] = [['firstName', [input]]];
       const reset = createReset(form, allGroups, stores, {});
 
       expect(reset).toBeInstanceOf(Function);
@@ -39,7 +41,7 @@ describe('Form Initialization and Reset', () => {
       input.value = 'Initial';
       form.appendChild(input);
 
-      const allGroups = [['firstName', [input]]];
+      const allGroups: [string, FormElement[]][] = [['firstName', [input]]];
       const options = {};
       const reset = createReset(form, allGroups, stores, options);
 
@@ -60,11 +62,11 @@ describe('Form Initialization and Reset', () => {
       input.value = 'test@example.com';
       form.appendChild(input);
 
-      const allGroups = [['email', [input]]];
+      const allGroups: [string, FormElement[]][] = [['email', [input]]];
       const reset = createReset(form, allGroups, stores, {});
 
       // Set error
-      stores.errors.set({ email: { valid: false, message: 'Error' } });
+      stores.errors.set({ email: { valid: false, invalid: true, message: 'Error', errors: {} } });
       expect(stores.errors.get().email.valid).toBe(false);
 
       // Reset
@@ -79,7 +81,7 @@ describe('Form Initialization and Reset', () => {
       input.value = 'valid';
       form.appendChild(input);
 
-      const allGroups = [['field1', [input]]];
+      const allGroups: [string, FormElement[]][] = [['field1', [input]]];
       const reset = createReset(form, allGroups, stores, {});
 
       // Set invalid
@@ -104,7 +106,7 @@ describe('Form Initialization and Reset', () => {
       input2.value = 'value2';
       form.appendChild(input2);
 
-      const allGroups = [
+      const allGroups: [string, FormElement[]][] = [
         ['field1', [input1]],
         ['field2', [input2]],
       ];
@@ -134,7 +136,7 @@ describe('Form Initialization and Reset', () => {
       input2.value = 'value2';
       form.appendChild(input2);
 
-      const allGroups = [
+      const allGroups: [string, FormElement[]][] = [
         ['field1', [input1]],
         ['field2', [input2]],
       ];
@@ -158,12 +160,12 @@ describe('Form Initialization and Reset', () => {
       input.value = 'JohnDoe';
       form.appendChild(input);
 
-      const allGroups = [['username', [input]]];
+      const allGroups: [string, FormElement[]][] = [['username', [input]]];
       const options = {
         enrich: {
           username: {
-            toLowerCase: (value) => value.toLowerCase(),
-            length: (value) => value.length,
+            toLowerCase: (value: unknown) => (value as string).toLowerCase(),
+            length: (value: unknown) => (value as string).length,
           },
         },
       };
@@ -197,14 +199,14 @@ describe('Form Initialization and Reset', () => {
       input2.value = 'value2';
       form.appendChild(input2);
 
-      const allGroups = [
+      const allGroups: [string, FormElement[]][] = [
         ['field1', [input1]],
         ['field2', [input2]],
       ];
       const options = {
         enrich: {
           field1: {
-            transform: (value) => value.toUpperCase(),
+            transform: (value: unknown) => (value as string).toUpperCase(),
           },
         },
       };
@@ -222,7 +224,7 @@ describe('Form Initialization and Reset', () => {
       input.value = 'initial';
       form.appendChild(input);
 
-      const allGroups = [['field1', [input]]];
+      const allGroups: [string, FormElement[]][] = [['field1', [input]]];
       const reset = createReset(form, allGroups, stores, {});
 
       // Change DOM value
@@ -248,7 +250,7 @@ describe('Form Initialization and Reset', () => {
       input2.value = 'john@example.com';
       form.appendChild(input2);
 
-      const allGroups = [
+      const allGroups: [string, FormElement[]][] = [
         ['firstName', [input1]],
         ['email', [input2]],
       ];
@@ -271,7 +273,7 @@ describe('Form Initialization and Reset', () => {
       input.value = '';
       form.appendChild(input);
 
-      const allGroups = [['field1', [input]]];
+      const allGroups: [string, FormElement[]][] = [['field1', [input]]];
       const options = {
         defaultValues: { field1: 'default' },
       };
@@ -294,7 +296,7 @@ describe('Form Initialization and Reset', () => {
       checkbox.checked = true;
       form.appendChild(checkbox);
 
-      const allGroups = [['agree', [checkbox]]];
+      const allGroups: [string, FormElement[]][] = [['agree', [checkbox]]];
       const reset = createReset(form, allGroups, stores, {});
 
       // Uncheck
@@ -323,7 +325,7 @@ describe('Form Initialization and Reset', () => {
       select.appendChild(option2);
       form.appendChild(select);
 
-      const allGroups = [['country', [select]]];
+      const allGroups: [string, FormElement[]][] = [['country', [select]]];
       const reset = createReset(form, allGroups, stores, {});
 
       // Change selection
@@ -351,7 +353,7 @@ describe('Form Initialization and Reset', () => {
       form.appendChild(checkbox1);
       form.appendChild(checkbox2);
 
-      const allGroups = [['interests', [checkbox1, checkbox2]]];
+      const allGroups: [string, FormElement[]][] = [['interests', [checkbox1, checkbox2]]];
       const reset = createReset(form, allGroups, stores, {});
 
       // Change checkboxes

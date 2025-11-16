@@ -1,15 +1,17 @@
 import { map } from 'nanostores';
 import { createTouchHandlers } from './touch.mjs';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import type { FormulaStores } from '../shared/types.mjs';
+import type { FormElement } from '../shared/fields.mjs';
 
 describe('Formula Touch Handler', () => {
   const storeMock = {
     touched: map({}),
-  };
+  } as unknown as FormulaStores;
 
-  let element;
-  let elements;
-  let destroyHandler;
+  let element: HTMLInputElement;
+  let elements: FormElement[];
+  let destroyHandler: () => void;
 
   beforeEach(() => {
     element = document.createElement('input');

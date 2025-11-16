@@ -15,7 +15,7 @@ function getInitialFormValues(
   node: HTMLElement,
   allGroups: [string, FormElement[]][],
   stores: FormulaStores,
-  options?: InitOptions
+  options?: InitOptions,
 ): [Record<string, unknown>, Record<string, FieldValidity>, Record<string, Record<string, unknown>>] {
   const formValues: Record<string, unknown> = {};
   const validityValues: Record<string, FieldValidity> = {};
@@ -44,12 +44,7 @@ function getInitialFormValues(
 /**
  * Create the form reset method
  */
-export function createReset(
-  node: HTMLElement,
-  allGroups: [string, FormElement[]][],
-  stores: FormulaStores,
-  options?: InitOptions
-): () => void {
+export function createReset(node: HTMLElement, allGroups: [string, FormElement[]][], stores: FormulaStores, options?: InitOptions): () => void {
   const [formValues, validityValues, enrichmentValues] = getInitialFormValues(node, allGroups, stores, options);
 
   /**

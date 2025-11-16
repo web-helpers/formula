@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { createForm } from './form.mjs';
+import { createForm, type Formula } from './form.mjs';
 
 describe('Formula Form', () => {
-  let form;
-  let formula;
-  let formInstance;
+  let form: HTMLFormElement;
+  let formula: Formula;
+  let formInstance: any;
 
   beforeEach(() => {
     form = document.createElement('form');
@@ -29,7 +29,7 @@ describe('Formula Form', () => {
 
   describe('Form Initialization', () => {
     it('should initialize form and return form instance', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
       expect(formInstance).toBeDefined();
@@ -39,7 +39,7 @@ describe('Formula Form', () => {
     });
 
     it('should set data-formula-form attribute on form element', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
       expect(form.hasAttribute('data-formula-form')).toBe(true);
@@ -47,7 +47,7 @@ describe('Formula Form', () => {
     });
 
     it('should create stores', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
       expect(formula.stores).toBeDefined();
@@ -58,7 +58,7 @@ describe('Formula Form', () => {
     });
 
     it('should set formReady to true after initialization', async () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
       const ready = await new Promise((resolve) => {
@@ -68,17 +68,19 @@ describe('Formula Form', () => {
           }
         });
       });
-      
+
       expect(ready).toBe(true);
     });
 
     it('should handle hidden fields', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
-      const input = form.querySelector('input[name="firstName"]');
-      input.value = 'John';
-      input.dispatchEvent(new KeyboardEvent('keyup', { key: 'n' }));
+      const input = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+      if (input) {
+        input.value = 'John';
+        input.dispatchEvent(new KeyboardEvent('keyup', { key: 'n' }));
+      }
 
       const values = formula.stores.formValues.get();
       expect(values.token).toBe('secret123');
@@ -93,13 +95,14 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(customForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(customForm);
 
-      const input = customForm.querySelector('input[name="custom"]');
-      input.value = 'test';
-      input.dispatchEvent(new Event('input'));
-
+      const input = customForm.querySelector<HTMLInputElement>('input[name="custom"]');
+      if (input) {
+        input.value = 'test';
+        input.dispatchEvent(new Event('input'));
+      }
       const values = formula.stores.formValues.get();
       expect(values.custom).toBe('test');
 
@@ -114,10 +117,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(customForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(customForm);
 
-      const input = customForm.querySelector('input[name="multi"]');
+      const input = customForm.querySelector<HTMLInputElement>('input[name="multi"]');
+      if (!input) return;
 
       // Test input event
       input.value = 'a';
@@ -150,10 +154,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(selectForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(selectForm);
 
-      const select = selectForm.querySelector('select');
+      const select = selectForm.querySelector<HTMLSelectElement>('select');
+      if (!select) return;
       select.value = 'uk';
       select.dispatchEvent(new Event('change'));
 
@@ -172,10 +177,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(radioForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(radioForm);
 
-      const radios = radioForm.querySelectorAll('input[type="radio"]');
+      const radios = radioForm.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+      if (radios.length < 2) return;
       radios[1].checked = true;
       radios[1].dispatchEvent(new Event('change'));
 
@@ -193,10 +199,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(checkForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(checkForm);
 
-      const checkbox = checkForm.querySelector('input[type="checkbox"]');
+      const checkbox = checkForm.querySelector<HTMLInputElement>('input[type="checkbox"]');
+      if (!checkbox) return;
       checkbox.checked = true;
       checkbox.dispatchEvent(new Event('change'));
 
@@ -214,7 +221,7 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(fileForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(fileForm);
 
       const fileInput = fileForm.querySelector('input[type="file"]');
@@ -232,10 +239,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(rangeForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(rangeForm);
 
-      const range = rangeForm.querySelector('input[type="range"]');
+      const range = rangeForm.querySelector<HTMLInputElement>('input[type="range"]');
+      if (!range) return;
       range.value = '75';
       range.dispatchEvent(new Event('change'));
 
@@ -253,10 +261,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(colorForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(colorForm);
 
-      const color = colorForm.querySelector('input[type="color"]');
+      const color = colorForm.querySelector<HTMLInputElement>('input[type="color"]');
+      if (!color) return;
       color.value = '#ff0000';
       color.dispatchEvent(new Event('change'));
 
@@ -274,10 +283,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(dateForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(dateForm);
 
-      const date = dateForm.querySelector('input[type="date"]');
+      const date = dateForm.querySelector<HTMLInputElement>('input[type="date"]');
+      if (!date) return;
       date.value = '2024-01-01';
       date.dispatchEvent(new Event('change'));
 
@@ -295,10 +305,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(timeForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(timeForm);
 
-      const time = timeForm.querySelector('input[type="time"]');
+      const time = timeForm.querySelector<HTMLInputElement>('input[type="time"]');
+      if (!time) return;
       time.value = '14:30';
       time.dispatchEvent(new Event('change'));
 
@@ -316,10 +327,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(weekForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(weekForm);
 
-      const week = weekForm.querySelector('input[type="week"]');
+      const week = weekForm.querySelector<HTMLInputElement>('input[type="week"]');
+      if (!week) return;
       week.value = '2024-W01';
       week.dispatchEvent(new Event('change'));
 
@@ -337,10 +349,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(numberForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(numberForm);
 
-      const number = numberForm.querySelector('input[type="number"]');
+      const number = numberForm.querySelector<HTMLInputElement>('input[type="number"]');
+      if (!number) return;
       number.value = '25';
       number.dispatchEvent(new Event('change'));
 
@@ -365,10 +378,11 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(hiddenForm);
 
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(hiddenForm);
 
-      const visibleInput = hiddenForm.querySelector('input[name="visible"]');
+      const visibleInput = hiddenForm.querySelector<HTMLInputElement>('input[name="visible"]');
+      if (!visibleInput) return;
       visibleInput.value = 'test';
       visibleInput.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
 
@@ -383,10 +397,10 @@ describe('Formula Form', () => {
 
   describe('Form Submission', () => {
     it('should handle form submit event', async () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         const unsubscribe = formula.stores.submitValues.subscribe((values) => {
           if (Object.keys(values).length > 0) {
             expect(values).toBeDefined();
@@ -395,8 +409,10 @@ describe('Formula Form', () => {
           }
         });
 
-        const input = form.querySelector('input[name="firstName"]');
-        input.value = 'John';
+        const input = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+        if (input) {
+          input.value = 'John';
+        }
         form.dispatchEvent(new Event('submit'));
       });
     });
@@ -404,7 +420,7 @@ describe('Formula Form', () => {
 
   describe('Form Update', () => {
     it('should update form with new options', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
       const newOptions = {
@@ -418,17 +434,17 @@ describe('Formula Form', () => {
     });
 
     it('should set formReady to false during update', async () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
-      let readyStates = [];
+      const readyStates: boolean[] = [];
       formula.stores.formReady.subscribe((ready) => {
         readyStates.push(ready);
       });
 
       formula.updateForm({});
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise<void>((resolve) => setTimeout(resolve, 100));
       // Should have gone false then true
       expect(readyStates).toContain(false);
       expect(readyStates).toContain(true);
@@ -439,7 +455,7 @@ describe('Formula Form', () => {
         defaultValues: { firstName: 'Initial' },
       };
 
-      formula = createForm(initialOptions);
+      formula = createForm(initialOptions, undefined, undefined, {});
       formInstance = formula.init(form);
 
       formula.updateForm();
@@ -451,10 +467,11 @@ describe('Formula Form', () => {
 
   describe('Form Destroy', () => {
     it('should clean up event handlers on destroy', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
-      const input = form.querySelector('input[name="firstName"]');
+      const input = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+      if (!input) return;
       input.value = 'Test';
       input.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
 
@@ -473,7 +490,7 @@ describe('Formula Form', () => {
     });
 
     it('should set formReady to false on destroy', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
       formInstance.destroy();
@@ -483,10 +500,11 @@ describe('Formula Form', () => {
     });
 
     it('should clear custom validity on destroy', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
-      const input = form.querySelector('input[name="firstName"]');
+      const input = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+      if (!input) return;
       input.setCustomValidity('Custom error');
 
       formInstance.destroy();
@@ -495,7 +513,7 @@ describe('Formula Form', () => {
     });
 
     it('should remove submit event listener on destroy', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
       let submitCount = 0;
@@ -516,12 +534,18 @@ describe('Formula Form', () => {
 
   describe('Form Reset', () => {
     it('should reset form values', () => {
-      formula = createForm({
-        defaultValues: { firstName: 'Default' },
-      });
+      formula = createForm(
+        {
+          defaultValues: { firstName: 'Default' },
+        },
+        undefined,
+        undefined,
+        {},
+      );
       formInstance = formula.init(form);
 
-      const input = form.querySelector('input[name="firstName"]');
+      const input = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+      if (!input) return;
       input.value = 'Changed';
       input.dispatchEvent(new KeyboardEvent('keyup', { key: 'd' }));
 
@@ -533,10 +557,11 @@ describe('Formula Form', () => {
     });
 
     it('should reset touched state', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
-      const input = form.querySelector('input[name="firstName"]');
+      const input = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+      if (!input) return;
       input.dispatchEvent(new Event('focus'));
 
       expect(formula.stores.touched.get().firstName).toBe(true);
@@ -547,10 +572,11 @@ describe('Formula Form', () => {
     });
 
     it('should reset dirty state', () => {
-      formula = createForm({});
+      formula = createForm({}, undefined, undefined, {});
       formInstance = formula.init(form);
 
-      const input = form.querySelector('input[name="firstName"]');
+      const input = form.querySelector<HTMLInputElement>('input[name="firstName"]');
+      if (!input) return;
       input.value = 'Changed';
       input.dispatchEvent(new KeyboardEvent('keyup', { key: 'd' }));
       input.dispatchEvent(new Event('blur'));
@@ -566,7 +592,7 @@ describe('Formula Form', () => {
   describe('Global Store', () => {
     it('should add form to global store if form has id', () => {
       const globalStore = new Map();
-      formula = createForm({}, globalStore);
+      formula = createForm({}, globalStore, undefined, {});
       formInstance = formula.init(form);
 
       expect(globalStore.has('test-form')).toBe(true);
@@ -575,7 +601,7 @@ describe('Formula Form', () => {
 
     it('should remove form from global store on destroy', () => {
       const globalStore = new Map();
-      formula = createForm({}, globalStore);
+      formula = createForm({}, globalStore, undefined, {});
       formInstance = formula.init(form);
 
       expect(globalStore.has('test-form')).toBe(true);
@@ -587,7 +613,7 @@ describe('Formula Form', () => {
 
     it('should remove form from global store on destroyForm', () => {
       const globalStore = new Map();
-      formula = createForm({}, globalStore);
+      formula = createForm({}, globalStore, undefined, {});
       formInstance = formula.init(form);
 
       expect(globalStore.has('test-form')).toBe(true);
@@ -606,14 +632,16 @@ describe('Formula Form', () => {
       `;
       document.body.appendChild(groupContainer);
 
-      formula = createForm({}, undefined, 'testGroup');
+      formula = createForm({}, undefined, 'testGroup', {});
       formInstance = formula.init(groupContainer);
 
       expect(groupContainer.hasAttribute('data-formula-row')).toBe(true);
       expect(groupContainer.getAttribute('data-formula-row')).toBe('true');
 
-      const input = groupContainer.querySelector('input');
-      expect(input.getAttribute('data-in-group')).toBe('testGroup');
+      const input = groupContainer.querySelector<HTMLInputElement>('input');
+      if (input) {
+        expect(input.getAttribute('data-in-group')).toBe('testGroup');
+      }
 
       formInstance.destroy();
       document.body.removeChild(groupContainer);
@@ -628,20 +656,23 @@ describe('Formula Form', () => {
       container.appendChild(testForm);
       document.body.appendChild(container);
 
-      await new Promise((resolve) => {
-        container.addEventListener('form:preChanges', (e) => {
-          expect(e.detail).toBe(null);
+      await new Promise<void>((resolve) => {
+        container.addEventListener('form:preChanges', (e: Event) => {
+          const customEvent = e as CustomEvent;
+          expect(customEvent.detail).toBe(null);
           formInstance.destroy();
           document.body.removeChild(container);
           resolve();
         });
 
-        formula = createForm({});
+        formula = createForm({}, undefined, undefined, {});
         formInstance = formula.init(testForm);
 
-        const input = testForm.querySelector('input');
-        input.value = 'trigger';
-        input.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
+        const input = testForm.querySelector<HTMLInputElement>('input');
+        if (input) {
+          input.value = 'trigger';
+          input.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
+        }
       });
     });
 
@@ -652,20 +683,23 @@ describe('Formula Form', () => {
       container.appendChild(testForm);
       document.body.appendChild(container);
 
-      await new Promise((resolve) => {
-        container.addEventListener('form:postChanges', (e) => {
-          expect(e.detail).toHaveProperty('test', 'trigger');
+      await new Promise<void>((resolve) => {
+        container.addEventListener('form:postChanges', (e: Event) => {
+          const customEvent = e as CustomEvent;
+          expect(customEvent.detail).toHaveProperty('test', 'trigger');
           formInstance.destroy();
           document.body.removeChild(container);
           resolve();
         });
 
-        formula = createForm({});
+        formula = createForm({}, undefined, undefined, {});
         formInstance = formula.init(testForm);
 
-        const input = testForm.querySelector('input');
-        input.value = 'trigger';
-        input.dispatchEvent(new KeyboardEvent('keyup', { key: 'r' }));
+        const input = testForm.querySelector<HTMLInputElement>('input');
+        if (input) {
+          input.value = 'trigger';
+          input.dispatchEvent(new KeyboardEvent('keyup', { key: 'r' }));
+        }
       });
     });
   });

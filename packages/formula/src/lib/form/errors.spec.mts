@@ -1,9 +1,10 @@
+import { type FormElement } from '../shared/fields.mts';
 import { createValidationChecker } from './errors.mjs';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 describe('Formula Field Validation', () => {
-  let validationChecker;
-  let element;
+  let validationChecker: (element: FormElement, value: any) => { valid: boolean; message?: string };
+  let element: FormElement;
   let elGroup;
 
   beforeEach(() => {
@@ -18,21 +19,26 @@ describe('Formula Field Validation', () => {
 
     document.body.appendChild(element);
 
-    validationChecker = createValidationChecker('testing', elGroup, {}, {
-      messages: {
-        testing: {
-          patternMismatch: 'You have not matched the pattern',
+    validationChecker = createValidationChecker(
+      'testing',
+      elGroup,
+      {},
+      {
+        messages: {
+          testing: {
+            patternMismatch: 'You have not matched the pattern',
+          },
         },
-      },
-      validators: {
-        testing: {
-          startsWithCapital: (value) => {
-            const firstLetterCode = value.charCodeAt(0);
-            return firstLetterCode >= 65 && firstLetterCode <= 90 ? null : 'The first character must be a capital letter';
+        validators: {
+          testing: {
+            startsWithCapital: (value: any) => {
+              const firstLetterCode = value.charCodeAt(0);
+              return firstLetterCode >= 65 && firstLetterCode <= 90 ? null : 'The first character must be a capital letter';
+            },
           },
         },
       },
-    });
+    );
   });
 
   afterEach(() => {

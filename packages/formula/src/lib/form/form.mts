@@ -27,7 +27,7 @@ export function createForm(
   options: FormulaOptions,
   globalStore: Map<string, FormulaStores> | undefined,
   groupName: string | undefined,
-  initialData: Record<string, unknown>
+  initialData: Record<string, unknown>,
 ): Formula {
   const eventHandlers = new Map<FormElement, Array<() => void>>();
   const hiddenGroups = new Map<string, FormElement[]>();
@@ -107,7 +107,7 @@ export function createForm(
           if ((el as HTMLInputElement).type !== 'hidden') {
             cleanups.push(createHandler(name, 'keyup', el, elements, stores, innerOpt, hiddenGroups));
           }
-          
+
           if (cleanups.length > 0) {
             eventHandlers.set(el, cleanups);
           }
@@ -130,7 +130,7 @@ export function createForm(
     unsub && unsub();
     [...eventHandlers].forEach(([el, fns]) => {
       el.setCustomValidity?.('');
-      fns.forEach(fn => fn());
+      fns.forEach((fn) => fn());
     });
     [...touchHandlers, ...dirtyHandlers].forEach((fn) => fn());
     [eventHandlers, touchHandlers, dirtyHandlers].forEach((h) => h.clear());

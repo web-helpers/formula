@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { atom, map } from 'nanostores';
-import { createHandler, createSubmitHandler } from './event';
+import { createHandler, createSubmitHandler } from './event.mjs';
 
 describe('Formula Event Handlers', () => {
   const storeMock = {
     formValues: map({}),
     errors: map({}),
     formValid: atom(true),
-  };
+  } as any;
 
   afterEach(() => {
     storeMock.formValues.set({});
@@ -16,9 +16,9 @@ describe('Formula Event Handlers', () => {
   });
 
   describe('Select Field', () => {
-    let el;
-    let opts;
-    let destroyHandler;
+    let el: HTMLSelectElement;
+    let opts: HTMLOptionElement[];
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       el = document.createElement('select');
@@ -53,7 +53,7 @@ describe('Formula Event Handlers', () => {
     it('should update the value when there is a change event', () => {
       opts[1].selected = true;
       el.dispatchEvent(new Event('change'));
-      
+
       // Check immediately - the handler should update synchronously
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: 'B' });
@@ -64,7 +64,7 @@ describe('Formula Event Handlers', () => {
       opts[0].selected = true;
       opts[1].selected = true;
       el.dispatchEvent(new Event('change'));
-      
+
       // Check immediately - the handler should update synchronously
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: ['A', 'B'] });
@@ -72,8 +72,8 @@ describe('Formula Event Handlers', () => {
   });
 
   describe('Checkbox', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       el = document.createElement('input');
@@ -95,7 +95,7 @@ describe('Formula Event Handlers', () => {
 
       el.click();
       el.dispatchEvent(new Event('change'));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: true });
     });
@@ -113,17 +113,17 @@ describe('Formula Event Handlers', () => {
 
       el.click();
       el.dispatchEvent(new Event('change'));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: ['test1'] });
-      
+
       document.body.removeChild(el2);
     });
   });
 
   describe('Radio Group', () => {
-    let elements;
-    let destroyHandlers;
+    let elements: HTMLInputElement[];
+    let destroyHandlers: (() => void)[];
 
     beforeEach(() => {
       const el1 = document.createElement('input');
@@ -155,7 +155,7 @@ describe('Formula Event Handlers', () => {
     it('should set the value when selecting a radio', () => {
       elements[0].click();
       elements[0].dispatchEvent(new Event('change'));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: 'A' });
     });
@@ -165,15 +165,15 @@ describe('Formula Event Handlers', () => {
       elements[0].dispatchEvent(new Event('change'));
       elements[1].click();
       elements[1].dispatchEvent(new Event('change'));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: 'B' });
     });
   });
 
   describe('Text Fields', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       el = document.createElement('input');
@@ -193,7 +193,7 @@ describe('Formula Event Handlers', () => {
 
       el.value = 'A';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'A' }));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: 'A' });
     });
@@ -212,18 +212,18 @@ describe('Formula Event Handlers', () => {
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'A' }));
       el2.value = 'B';
       el2.dispatchEvent(new KeyboardEvent('keyup', { key: 'B' }));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: ['A', 'B'] });
-      
+
       secondHandler();
       document.body.removeChild(el2);
     });
   });
 
   describe('Number Fields', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       el = document.createElement('input');
@@ -243,7 +243,7 @@ describe('Formula Event Handlers', () => {
 
       el.value = '5';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: '5' }));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: 5 });
     });
@@ -262,18 +262,18 @@ describe('Formula Event Handlers', () => {
       el.dispatchEvent(new KeyboardEvent('keyup', { key: '1' }));
       el2.value = '2';
       el2.dispatchEvent(new KeyboardEvent('keyup', { key: '2' }));
-      
+
       const value = storeMock.formValues.get();
       expect(value).toStrictEqual({ testing: [1, 2] });
-      
+
       secondHandler();
       document.body.removeChild(el2);
     });
   });
 
   describe('Bug Fix: Enrichment Store Merging', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       storeMock.enrichment = map({});
@@ -293,10 +293,10 @@ describe('Formula Event Handlers', () => {
       const options = {
         enrich: {
           field1: {
-            getLength: (value) => value.length,
+            getLength: (value: string) => value.length,
           },
           field2: {
-            getUpper: (value) => value.toUpperCase(),
+            getUpper: (value: string) => value.toUpperCase(),
           },
         },
       };
@@ -306,7 +306,7 @@ describe('Formula Event Handlers', () => {
         field2: { getUpper: 'EXISTING' },
       });
 
-      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMock, options, new Map());
+      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMock, options as any, new Map());
 
       el.value = 'test';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
@@ -321,8 +321,8 @@ describe('Formula Event Handlers', () => {
   });
 
   describe('Bug Fix: Hidden Fields State Mutation', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       el = document.createElement('input');
@@ -361,17 +361,17 @@ describe('Formula Event Handlers', () => {
       expect(value).toHaveProperty('visible', 'changed');
       expect(value).toHaveProperty('hidden1', 'hiddenValue');
       expect(value).toHaveProperty('other', 'data');
-      
+
       // Original state should not have been mutated
       expect(originalState).not.toHaveProperty('hidden1');
-      
+
       document.body.removeChild(hidden1);
     });
   });
 
   describe('Form Validation', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
     const storeMockWithValidity = {
       formValues: map({}),
       errors: map({}),
@@ -398,7 +398,7 @@ describe('Formula Event Handlers', () => {
     it('should run form validators when field changes', () => {
       const options = {
         formValidators: {
-          passwordMatch: (values) => {
+          passwordMatch: (values: Record<string, any>) => {
             if (values.field1 !== 'match') {
               return 'Passwords must match';
             }
@@ -407,7 +407,7 @@ describe('Formula Event Handlers', () => {
         },
       };
 
-      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMockWithValidity, options, new Map());
+      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMockWithValidity as any, options as any, new Map());
 
       el.value = 'nomatch';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'n' }));
@@ -420,7 +420,7 @@ describe('Formula Event Handlers', () => {
     it('should clear form validity when all validators pass', () => {
       const options = {
         formValidators: {
-          passwordMatch: (values) => {
+          passwordMatch: (values: Record<string, any>) => {
             if (values.field1 !== 'match') {
               return 'Passwords must match';
             }
@@ -429,7 +429,7 @@ describe('Formula Event Handlers', () => {
         },
       };
 
-      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMockWithValidity, options, new Map());
+      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMockWithValidity as any, options as any, new Map());
 
       el.value = 'match';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'm' }));
@@ -442,12 +442,12 @@ describe('Formula Event Handlers', () => {
     it('should handle multiple form validators', () => {
       const options = {
         formValidators: {
-          validator1: (values) => (values.field1.length < 5 ? 'Too short' : null),
-          validator2: (values) => (values.field1.includes('test') ? null : 'Must include test'),
+          validator1: (values: Record<string, any>) => (values.field1.length < 5 ? 'Too short' : null),
+          validator2: (values: Record<string, any>) => (values.field1.includes('test') ? null : 'Must include test'),
         },
       };
 
-      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMockWithValidity, options, new Map());
+      destroyHandler = createHandler('field1', 'keyup', el, [el], storeMockWithValidity as any, options as any, new Map());
 
       el.value = 'hi';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'i' }));
@@ -460,8 +460,8 @@ describe('Formula Event Handlers', () => {
   });
 
   describe('Hidden Fields', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       el = document.createElement('input');
@@ -528,8 +528,8 @@ describe('Formula Event Handlers', () => {
   });
 
   describe('Enrichment', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       storeMock.enrichment = map({});
@@ -549,13 +549,13 @@ describe('Formula Event Handlers', () => {
       const options = {
         enrich: {
           username: {
-            toLowerCase: (value) => value.toLowerCase(),
-            getLength: (value) => value.length,
+            toLowerCase: (value: string) => value.toLowerCase(),
+            getLength: (value: string) => value.length,
           },
         },
       };
 
-      destroyHandler = createHandler('username', 'keyup', el, [el], storeMock, options, new Map());
+      destroyHandler = createHandler('username', 'keyup', el, [el], storeMock, options as any, new Map());
 
       el.value = 'JohnDoe';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 'e' }));
@@ -572,12 +572,12 @@ describe('Formula Event Handlers', () => {
       const options = {
         enrich: {
           otherField: {
-            transform: (value) => value.toUpperCase(),
+            transform: (value: string) => value.toUpperCase(),
           },
         },
       };
 
-      destroyHandler = createHandler('username', 'keyup', el, [el], storeMock, options, new Map());
+      destroyHandler = createHandler('username', 'keyup', el, [el], storeMock, options as any, new Map());
 
       el.value = 'test';
       el.dispatchEvent(new KeyboardEvent('keyup', { key: 't' }));
@@ -588,8 +588,8 @@ describe('Formula Event Handlers', () => {
   });
 
   describe('Callbacks', () => {
-    let el;
-    let destroyHandler;
+    let el: HTMLInputElement;
+    let destroyHandler: () => void;
 
     beforeEach(() => {
       el = document.createElement('input');
@@ -617,7 +617,7 @@ describe('Formula Event Handlers', () => {
         expect.objectContaining({
           name: 'field1',
           value: 'test',
-        })
+        }),
       );
     });
 
@@ -635,7 +635,7 @@ describe('Formula Event Handlers', () => {
     });
 
     it('should call both preChanges and postChanges in correct order', () => {
-      const callOrder = [];
+      const callOrder: string[] = [];
       const preChanges = vi.fn(() => callOrder.push('pre'));
       const postChanges = vi.fn(() => callOrder.push('post'));
       const options = { preChanges, postChanges };
@@ -650,8 +650,8 @@ describe('Formula Event Handlers', () => {
   });
 
   describe('Submit Handler', () => {
-    let form;
-    let storeMockWithSubmit;
+    let form: HTMLFormElement;
+    let storeMockWithSubmit: any;
 
     beforeEach(() => {
       form = document.createElement('form');

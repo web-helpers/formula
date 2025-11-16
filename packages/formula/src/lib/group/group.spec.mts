@@ -1,9 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createGroup } from './group.mjs';
+import type { BeakerStores } from '../shared/types.mjs';
+import type { Beaker } from './group.mjs';
 
 describe('Formula Group (Beaker)', () => {
-  let container;
-  let beakerStores;
+  let container: HTMLDivElement;
+  let beakerStores: Map<string, BeakerStores>;
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -30,14 +32,14 @@ describe('Formula Group (Beaker)', () => {
     });
 
     it('should initialize with default values', () => {
-      const group = createGroup({
-        defaultValues: [
-          { name: 'John' },
-          { name: 'Jane' },
-        ],
-      }, beakerStores);
+      const group = createGroup(
+        {
+          defaultValues: [{ name: 'John' }, { name: 'Jane' }],
+        },
+        beakerStores,
+      ) as Beaker & BeakerStores;
 
-      const values = group.formValues.get();
+      const values = group.stores.formValues.get();
       expect(values).toHaveLength(2);
       expect(values[0]).toStrictEqual({ name: 'John' });
       expect(values[1]).toStrictEqual({ name: 'Jane' });
@@ -46,9 +48,12 @@ describe('Formula Group (Beaker)', () => {
 
   describe('Bug Fix: State Mutation in setupSubscriptions', () => {
     it('should not mutate state array directly in subscriptions', () => {
-      const group = createGroup({
-        defaultValues: [{ name: 'Test1' }, { name: 'Test2' }],
-      }, beakerStores);
+      const group = createGroup(
+        {
+          defaultValues: [{ name: 'Test1' }, { name: 'Test2' }],
+        },
+        beakerStores,
+      );
 
       const row1 = document.createElement('div');
       const input1 = document.createElement('input');
@@ -68,14 +73,14 @@ describe('Formula Group (Beaker)', () => {
       const instance = group.group(container);
 
       // Get initial state
-      const initialState = group.formValues.get();
+      const initialState = group.stores.formValues.get();
       const initialLength = initialState.length;
 
       // Store reference to check mutation
       const stateRef = initialState;
 
       // Trigger a change that would update subscriptions
-      group.formValues.set([...initialState, { name: 'Test3' }]);
+      group.stores.formValues.set([...initialState, { name: 'Test3' }]);
 
       // Original reference should not be mutated
       expect(stateRef.length).toBe(initialLength);
@@ -89,13 +94,13 @@ describe('Formula Group (Beaker)', () => {
       const group = createGroup({}, beakerStores);
       group.init([{ name: 'Original1' }, { name: 'Original2' }]);
 
-      const originalState = group.formValues.get();
+      const originalState = group.stores.formValues.get();
       const originalRef = originalState;
 
       // Set new value at index 1
       group.set(1, { name: 'Modified2' });
 
-      const newState = group.formValues.get();
+      const newState = group.stores.formValues.get();
 
       // Should be different array reference
       expect(newState).not.toBe(originalRef);
@@ -114,14 +119,14 @@ describe('Formula Group (Beaker)', () => {
       const group = createGroup({}, beakerStores);
       group.init([{ name: 'Item1' }, { name: 'Item2' }, { name: 'Item3' }]);
 
-      const originalState = group.formValues.get();
+      const originalState = group.stores.formValues.get();
       const originalRef = originalState;
       const originalLength = originalState.length;
 
       // Delete item at index 1
       group.delete(1);
 
-      const newState = group.formValues.get();
+      const newState = group.stores.formValues.get();
 
       // Original reference should not be mutated
       expect(originalRef.length).toBe(originalLength);
@@ -138,27 +143,26 @@ describe('Formula Group (Beaker)', () => {
       group.init([{ name: 'Item1' }, { name: 'Item2' }]);
 
       // Set some touched states
-      group.touched.set([{ name: true }, { name: true }]);
-      group.dirty.set([{ name: false }, { name: true }]);
+      group.stores.touched.set([{ name: true }, { name: true }]);
+      group.stores.dirty.set([{ name: false }, { name: true }]);
 
       group.delete(0);
 
       // All stores should be updated
-      expect(group.formValues.get()).toHaveLength(1);
-      expect(group.touched.get()).toHaveLength(1);
-      expect(group.dirty.get()).toHaveLength(1);
+      expect(group.stores.formValues.get()).toHaveLength(1);
+      expect(group.stores.touched.get()).toHaveLength(1);
+      expect(group.stores.dirty.get()).toHaveLength(1);
     });
   });
 
   describe('Bug Fix: cleanupStores early return', () => {
     it('should cleanup all stores not just formValues', () => {
-      const group = createGroup({
-        defaultValues: [
-          { name: 'Test1' },
-          { name: 'Test2' },
-          { name: 'Test3' },
-        ],
-      }, beakerStores);
+      const group = createGroup(
+        {
+          defaultValues: [{ name: 'Test1' }, { name: 'Test2' }, { name: 'Test3' }],
+        },
+        beakerStores,
+      );
 
       const row1 = document.createElement('div');
       const input1 = document.createElement('input');
@@ -170,24 +174,24 @@ describe('Formula Group (Beaker)', () => {
       const instance = group.group(container);
 
       // Initially should have 3 items in all stores
-      expect(group.formValues.get()).toHaveLength(3);
+      expect(group.stores.formValues.get()).toHaveLength(3);
 
       // Manually set other stores to have 3 items
-      group.touched.set([{ name: false }, { name: false }, { name: false }]);
-      group.dirty.set([{ name: false }, { name: false }, { name: false }]);
-      group.errors.set([{}, {}, {}]);
+      group.stores.touched.set([{ name: false }, { name: false }, { name: false }]);
+      group.stores.dirty.set([{ name: false }, { name: false }, { name: false }]);
+      group.stores.errors.set([{}, {}, {}]);
 
       // Remove 2 rows, leaving only 1
       container.removeChild(row1);
 
       // Wait for MutationObserver
-      return new Promise((resolve) => {
+      return new Promise<void>((resolve) => {
         setTimeout(() => {
           // All stores should be cleaned up to match row count
           // The cleanup should continue past formValues
-          const touched = group.touched.get();
-          const dirty = group.dirty.get();
-          const errors = group.errors.get();
+          const touched = group.stores.touched.get();
+          const dirty = group.stores.dirty.get();
+          const errors = group.stores.errors.get();
 
           // With the fix, these should be cleaned up
           expect(touched.length).toBeLessThanOrEqual(1);
@@ -203,9 +207,12 @@ describe('Formula Group (Beaker)', () => {
 
   describe('Bug Fix: Race condition in subscription setup', () => {
     it('should handle initial flag per subscription not globally', () => {
-      const group = createGroup({
-        defaultValues: [{ name: 'Test' }],
-      }, beakerStores);
+      const group = createGroup(
+        {
+          defaultValues: [{ name: 'Test' }],
+        },
+        beakerStores,
+      );
 
       const row = document.createElement('div');
       const input = document.createElement('input');
@@ -219,14 +226,14 @@ describe('Formula Group (Beaker)', () => {
       const instance = group.group(container);
 
       // Verify the group was set up correctly
-      expect(group.formValues.get()).toHaveLength(1);
-      expect(group.formValues.get()[0]).toHaveProperty('name', 'Test');
+      expect(group.stores.formValues.get()).toHaveLength(1);
+      expect(group.stores.formValues.get()[0]).toHaveProperty('name', 'Test');
 
       // The fix ensures each subscription has its own initial flag
       // If the bug existed, all subscriptions would share the flag and some stores wouldn't update
       // We verify by checking that stores are properly initialized
-      expect(group.touched.get()).toBeDefined();
-      expect(group.dirty.get()).toBeDefined();
+      expect(group.stores.touched.get()).toBeDefined();
+      expect(group.stores.dirty.get()).toBeDefined();
 
       instance.destroy();
     });
@@ -234,9 +241,12 @@ describe('Formula Group (Beaker)', () => {
 
   describe('Bug Fix: Incorrect method call form.init()', () => {
     it('should call form.init() not form.form()', () => {
-      const group = createGroup({
-        defaultValues: [{ name: 'Test' }],
-      }, beakerStores);
+      const group = createGroup(
+        {
+          defaultValues: [{ name: 'Test' }],
+        },
+        beakerStores,
+      );
 
       const row = document.createElement('div');
       const input = document.createElement('input');
@@ -261,7 +271,7 @@ describe('Formula Group (Beaker)', () => {
 
       group.add({ name: 'Item2' });
 
-      const values = group.formValues.get();
+      const values = group.stores.formValues.get();
       expect(values).toHaveLength(2);
       expect(values[0]).toStrictEqual({ name: 'Item1' });
       expect(values[1]).toStrictEqual({ name: 'Item2' });
@@ -273,15 +283,15 @@ describe('Formula Group (Beaker)', () => {
 
       group.clear();
 
-      expect(group.formValues.get()).toStrictEqual([]);
+      expect(group.stores.formValues.get()).toStrictEqual([]);
     });
 
     it('should register in global beakerStores map', () => {
       const group = createGroup({}, beakerStores);
-      
+
       const row = document.createElement('div');
       container.appendChild(row);
-      
+
       const instance = group.group(container);
 
       expect(beakerStores.has('test-group')).toBe(true);

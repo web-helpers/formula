@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formula Web Component Example</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+    <style>
+      :root {
+        --pico-form-element-invalid-border-color: var(--pico-del-color);
+      }
+      body {
+        padding: 2em;
+      }
+      pre {
+        background-color: var(--pico-secondary-background);
+        padding: 1em;
+        border-radius: 4px;
+        white-space: pre-wrap;
+      }
+      .error-message {
+        color: var(--pico-del-color);
+        font-size: 0.9em;
+        display: none;
+      }
+      input[data-formula-invalid='true'] + .error-message,
+      input[aria-invalid='true'] + .error-message {
+        display: block;
+      }
+      input[data-formula-invalid='true'],
+      input[aria-invalid='true'] {
+        border-color: var(--pico-del-color);
+      }
+    </style>
+    <script type="module" src="https://esm.sh/@webhelpers/formula/webcomponent"></script>
+  </head>
+  <body>
+    <main class="container">
+      <hgroup>
+        <h1>Formula Web Component Example</h1>
+        <p>A demonstration of the <code>&lt;formula-form&gt;</code> web component with live state updates.</p>
+      </hgroup>
+
+      <article>
+        <formula-form handle-submit>
+          <form>
+            <label for="name">
+              Name
+              <input type="text" id="name" name="name" required minlength="2" />
+              <small class="error-message" data-formula-error-for="name"></small>
+            </label>
+
+            <label for="email">
+              Email Address
+              <input type="email" id="email" name="email" required />
+              <small class="error-message" data-formula-error-for="email"></small>
+            </label>
+
+            <label for="password">
+              Password
+              <input type="password" id="password" name="password" required minlength="8" />
+              <small class="error-message" data-formula-error-for="password"></small>
+            </label>
+
+            <button type="submit">Submit</button>
+          </form>
+        </formula-form>
+      </article>
+
+      <h2>Live Form State</h2>
+      <div class="grid">
+        <article>
+          <header>Values</header>
+          <pre id="values-output">{}</pre>
+        </article>
+        <article>
+          <header>Errors</header>
+          <pre id="errors-output">{}</pre>
+        </article>
+      </div>
+      <div class="grid">
+        <article>
+          <header>Touched</header>
+          <pre id="touched-output">{}</pre>
+        </article>
+        <article>
+          <header>Dirty</header>
+          <pre id="dirty-output">{}</pre>
+        </article>
+      </div>
+      <div class="grid">
+        <article>
+          <header>Form Valid</header>
+          <pre id="valid-output">false</pre>
+        </article>
+        <article>
+          <header>Form Ready</header>
+          <pre id="ready-output">false</pre>
+        </article>
+      </div>
+    </main>
+
+    <script type="module">
+      const formulaForm = document.querySelector('formula-form');
+
+      // Outputs for displaying state
+      const outputs = {
+        values: document.getElementById('values-output'),
+        errors: document.getElementById('errors-output'),
+        touched: document.getElementById('touched-output'),
+        dirty: document.getElementById('dirty-output'),
+        valid: document.getElementById('valid-output'),
+        ready: document.getElementById('ready-output'),
+      };
+
+      let fullState = {};
+
+      // Function to update UI and error messages
+      const updateUI = (newState) => {
+        fullState = { ...fullState, ...newState };
+
+        Object.entries(fullState).forEach(([key, value]) => {
+          if (outputs[key]) {
+            outputs[key].textContent = JSON.stringify(value, null, 2);
+          }
+        });
+
+        // Display error messages
+        document.querySelectorAll('[data-formula-error-for]').forEach((el) => {
+          const fieldName = el.dataset.formulaErrorFor;
+          if (fullState.errors && fullState.errors[fieldName] && fullState.touched && fullState.touched[fieldName]) {
+            // The errors store contains FieldValidity objects with a 'message' property
+            const errorData = fullState.errors[fieldName];
+            el.textContent = errorData.message || '';
+          } else {
+            el.textContent = '';
+          }
+        });
+      };
+
+      // Listen to all events and update UI
+      formulaForm.addEventListener('form:connect', (e) => {
+        const formulaInstance = e.target.formula;
+        const initialState = {
+          values: formulaInstance.stores.formValues.get(),
+          errors: formulaInstance.stores.errors.get(),
+          touched: formulaInstance.stores.touched.get(),
+          dirty: formulaInstance.stores.dirty.get(),
+          valid: formulaInstance.stores.formValid.get(),
+          ready: formulaInstance.stores.formReady.get(),
+        };
+        updateUI(initialState);
+      });
+
+      formulaForm.addEventListener('form:values', (e) => updateUI({ values: e.detail }));
+      formulaForm.addEventListener('form:errors', (e) => updateUI({ errors: e.detail }));
+      formulaForm.addEventListener('form:touched', (e) => updateUI({ touched: e.detail }));
+      formulaForm.addEventListener('form:dirty', (e) => updateUI({ dirty: e.detail }));
+      formulaForm.addEventListener('form:valid', (e) => updateUI({ valid: e.detail }));
+      formulaForm.addEventListener('form:ready', (e) => updateUI({ ready: e.detail }));
+
+      // Handle submission
+      formulaForm.addEventListener('form:submit', (e) => {
+        console.log('Form submitted:', e.detail);
+        alert('Form submitted! Check the console for the data.');
+        // In a real app, you would send this data to a server
+        // e.g., fetch('/api/submit', { method: 'POST', body: JSON.stringify(e.detail) });
+      });
+    </script>
+  </body>
+</html>

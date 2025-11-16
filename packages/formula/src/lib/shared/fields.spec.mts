@@ -2,8 +2,8 @@ import { getFormFields, getGroupFields } from './fields.mjs';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('Formula Fields Methods', () => {
-  let root;
-  let groupEl;
+  let root: HTMLFormElement;
+  let groupEl: HTMLDivElement;
   beforeAll(() => {
     root = document.createElement('form');
     const inputWithName1 = document.createElement('input');

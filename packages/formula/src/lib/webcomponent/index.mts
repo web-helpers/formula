@@ -40,17 +40,13 @@ export class FormulaWebComponent extends HTMLElement {
   }
 
   #getComponentOptions() {
-    this.options = this.hasAttribute('formula-options') 
-      ? JSON.parse(this.getAttribute('formula-options')!) 
-      : undefined;
+    this.options = this.hasAttribute('formula-options') ? JSON.parse(this.getAttribute('formula-options')!) : undefined;
 
     this.rootSelector = this.getAttribute('root-selector') ?? undefined;
   }
 
   #connectForm() {
-    this.formEl = this.rootSelector 
-      ? (document ?? this).querySelector(this.rootSelector)! as HTMLElement
-      : this.firstElementChild as HTMLElement;
+    this.formEl = this.rootSelector ? ((document ?? this).querySelector(this.rootSelector)! as HTMLElement) : (this.firstElementChild as HTMLElement);
 
     if (this.getAttribute('handle-submit') === 'true') {
       this.formEl.addEventListener('submit', this.#onHandleSubmit.bind(this));
@@ -74,8 +70,8 @@ export class FormulaWebComponent extends HTMLElement {
           new CustomEvent(this.eventNames.get(key)!, {
             bubbles: true,
             detail: value,
-          })
-        )
+          }),
+        ),
       );
       this.#subscriptions.push(unsub);
     });
@@ -88,7 +84,7 @@ export class FormulaWebComponent extends HTMLElement {
       new CustomEvent('form:submit', {
         bubbles: true,
         detail: this.formula.stores.formValues.get(),
-      })
+      }),
     );
   };
 }

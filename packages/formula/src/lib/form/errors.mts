@@ -88,7 +88,7 @@ export function createValidationChecker(
         el.setCustomValidity(customErrors[firstErrorKey]);
       }
     }
-    
+
     const valid = el.checkValidity();
     if (!valid) {
       el.setAttribute('data-formula-invalid', 'true');

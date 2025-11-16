@@ -19,10 +19,7 @@ export interface Beaker {
 
 let groupCounter = 0;
 
-export function createGroup(
-  options: BeakerOptions,
-  beakerStores: Map<string, BeakerStores>
-): Beaker {
+export function createGroup(options: BeakerOptions, beakerStores: Map<string, BeakerStores>): Beaker {
   const groupStores = createGroupStores(options);
   let groupName: string;
   let globalObserver: MutationObserver;
@@ -45,9 +42,7 @@ export function createGroup(
     for (const key of Object.keys(groupStores)) {
       if (['formValues', 'initialValues', 'submitValues'].includes(key)) continue;
       const state = (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].get();
-      (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].set(
-        Array.isArray(state) ? state.slice(0, rows.length) : state
-      );
+      (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].set(Array.isArray(state) ? state.slice(0, rows.length) : state);
     }
   }
 
@@ -89,7 +84,7 @@ export function createGroup(
         },
         undefined,
         groupName,
-        currentVals[i] || {}
+        currentVals[i] || {},
       );
       const instance = form.init(row);
       formulaInstances.set(row, form);

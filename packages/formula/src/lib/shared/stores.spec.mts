@@ -1,4 +1,5 @@
 import { createFormStores } from './stores.mjs';
+import { describe, it, expect } from 'vitest';
 
 describe('Formula Stores', () => {
   it('should create empty default stores', () => {
@@ -60,7 +61,7 @@ describe('Formula Stores', () => {
       },
       enrich: {
         foo: {
-          valueLength: (value) => value.length,
+          valueLength: (value: unknown) => (value as string).length,
         },
       },
     });

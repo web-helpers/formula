@@ -32,12 +32,7 @@ function getMultiSelectOptionValues(collection: HTMLCollectionOf<HTMLOptionEleme
 /**
  * Sets the value of the element
  */
-function setElementValue(
-  element: FormElement,
-  value: unknown,
-  isMultiValue: boolean,
-  elementGroup: FormElement[]
-): void {
+function setElementValue(element: FormElement, value: unknown, isMultiValue: boolean, elementGroup: FormElement[]): void {
   if (isMultiValue) {
     const valueArray = Array.isArray(value) ? value : [];
     elementGroup.forEach((el, i) => {
@@ -68,11 +63,7 @@ function setElementValue(
 /**
  * Get the value or values from an element
  */
-function getElementValues(
-  element: FormElement,
-  isMultiValue: boolean,
-  elementGroup: FormElement[]
-): unknown {
+function getElementValues(element: FormElement, isMultiValue: boolean, elementGroup: FormElement[]): unknown {
   let elValue: unknown;
 
   if (element instanceof HTMLSelectElement) {
@@ -113,7 +104,7 @@ export function createFieldExtract(
   name: string,
   elementGroup: FormElement[],
   stores: FormulaStores,
-  options?: ExtractOptions
+  options?: ExtractOptions,
 ): (element: FormElement, isInit: boolean, isReset: boolean) => FieldExtractResult {
   const values = stores.formValues.get();
   const validator = createValidationChecker(name, elementGroup, values, options);

@@ -2,13 +2,13 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { createEnrichField } from './enrichment.mjs';
 
 describe('Formula Enrichment', () => {
-  let enrich;
+  let enrich: (value: any) => Record<string, any>;
 
   beforeEach(() => {
     enrich = createEnrichField('testing', {
       enrich: {
         testing: {
-          getLength: (value) => value.length,
+          getLength: (value: any) => value.length,
         },
       },
     });
@@ -24,15 +24,15 @@ describe('Formula Enrichment', () => {
       const multiEnrich = createEnrichField('testing', {
         enrich: {
           testing: {
-            getLength: (value) => value.length,
-            getUpper: (value) => value.toUpperCase(),
-            getLower: (value) => value.toLowerCase(),
+            getLength: (value: any) => value.length,
+            getUpper: (value: any) => value.toUpperCase(),
+            getLower: (value: any) => value.toLowerCase(),
           },
         },
       });
 
       const result = multiEnrich('Hello');
-      
+
       expect(result).toStrictEqual({
         getLength: 5,
         getUpper: 'HELLO',

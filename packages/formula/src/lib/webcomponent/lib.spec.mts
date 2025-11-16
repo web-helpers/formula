@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { eventsWithFormKeys } from './lib.mjs';
+import type { FormulaStores } from '../shared/types.mjs';
 
 describe('eventsWithFormKeys', () => {
   it('should convert camelCase store keys to colon-separated event names', () => {
@@ -7,7 +8,7 @@ describe('eventsWithFormKeys', () => {
       formValues: {},
       formValid: {},
       errors: {},
-    };
+    } as unknown as FormulaStores;
 
     const eventMap = eventsWithFormKeys(stores);
 
@@ -20,7 +21,7 @@ describe('eventsWithFormKeys', () => {
       errors: {},
       touched: {},
       dirty: {},
-    };
+    } as unknown as FormulaStores;
 
     const eventMap = eventsWithFormKeys(stores);
 
@@ -34,7 +35,7 @@ describe('eventsWithFormKeys', () => {
       formValidity: {},
       submitValues: {},
       enrichment: {},
-    };
+    } as unknown as FormulaStores;
 
     const eventMap = eventsWithFormKeys(stores);
 
@@ -48,7 +49,7 @@ describe('eventsWithFormKeys', () => {
       formValues: {},
       errors: {},
       touched: {},
-    };
+    } as unknown as FormulaStores;
 
     const eventMap = eventsWithFormKeys(stores);
 
@@ -63,7 +64,7 @@ describe('eventsWithFormKeys', () => {
     const stores = {
       formValid: {},
       formReady: {},
-    };
+    } as unknown as FormulaStores;
 
     const eventMap = eventsWithFormKeys(stores);
 
