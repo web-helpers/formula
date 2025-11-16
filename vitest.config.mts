@@ -17,12 +17,12 @@ export default defineConfig({
       provider: playwright(),
       headless: true,
     },
-    include: ['packages/formula/src/**/*.spec.mjs'],
+    include: ['packages/formula/src/**/*.spec.mts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      include: ['packages/formula/src/**/*.mjs'],
-      exclude: ['packages/formula/src/**/*.spec.mjs'],
+      include: ['packages/formula/src/**/*.mts'],
+      exclude: ['packages/formula/src/**/*.spec.mts'],
     },
   },
 });
