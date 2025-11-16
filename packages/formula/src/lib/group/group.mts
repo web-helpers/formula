@@ -1,7 +1,7 @@
 import { createGroupStores } from '../shared/stores.mjs';
 import { createForm } from '../form/form.mjs';
 
-import type { BeakerStores, BeakerOptions, FormulaStores, FormulaOptions } from '../shared/types.mjs';
+import type { BeakerStores, BeakerOptions, FormulaOptions } from '../shared/types.mjs';
 import type { Formula } from '../form/form.mjs';
 
 export interface Beaker {

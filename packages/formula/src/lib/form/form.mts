@@ -1,4 +1,4 @@
-import { getFormFields, getGroupFields } from '../shared/fields.mjs';
+import { getFormFields, getGroupFields, type FormElement } from '../shared/fields.mjs';
 import { createHandler, createSubmitHandler } from './event.mjs';
 import { createReset } from './init.mjs';
 import { createTouchHandlers } from './touch.mjs';
@@ -19,7 +19,7 @@ export interface Formula {
 
 export interface FormulaForm {
   root: HTMLElement;
-  elements: Array<[string, HTMLElement[]]>;
+  elements: Array<[string, FormElement[]]>;
   destroy: () => void;
 }
 
@@ -29,8 +29,8 @@ export function createForm(
   groupName: string | undefined,
   initialData: Record<string, unknown>
 ): Formula {
-  const eventHandlers = new Map<HTMLElement, Array<() => void>>();
-  const hiddenGroups = new Map<string, HTMLElement[]>();
+  const eventHandlers = new Map<FormElement, Array<() => void>>();
+  const hiddenGroups = new Map<string, FormElement[]>();
   const touchHandlers = new Set<() => void>();
   const dirtyHandlers = new Set<() => void>();
 
@@ -41,7 +41,7 @@ export function createForm(
   let unsub = () => {};
   let innerReset = () => {};
 
-  let groupedMap: Array<[string, HTMLElement[]]> = [];
+  let groupedMap: Array<[string, FormElement[]]> = [];
 
   function bindElements(node: HTMLElement, innerOpt: FormulaOptions = {}) {
     if (!innerOpt?.preChanges) {
@@ -66,7 +66,7 @@ export function createForm(
         const formulaName = e.dataset.formulaName;
         const name = formulaName || e.getAttribute('name') || '';
         return entryMap.set(name, [...(entryMap.get(name) || []), e]);
-      }, new Map<string, HTMLElement[]>()),
+      }, new Map<string, FormElement[]>()),
     ];
 
     innerReset = createReset(node, groupedMap, stores, innerOpt);
@@ -129,7 +129,7 @@ export function createForm(
   function cleanupSubscriptions() {
     unsub && unsub();
     [...eventHandlers].forEach(([el, fns]) => {
-      (el as HTMLInputElement).setCustomValidity?.('');
+      el.setCustomValidity?.('');
       fns.forEach(fn => fn());
     });
     [...touchHandlers, ...dirtyHandlers].forEach((fn) => fn());

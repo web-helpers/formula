@@ -50,7 +50,7 @@ function setElementValue(
   } else {
     if (element instanceof HTMLSelectElement) {
       const valueArray = Array.isArray(value) ? value : [value];
-      [...element.options].forEach((el) => {
+      Array.from(element.options).forEach((el) => {
         el.selected = valueArray.includes(el.value);
       });
     } else if (element.type === 'checkbox') {
