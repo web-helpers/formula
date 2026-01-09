@@ -110,6 +110,11 @@ dist
 # Vitest
 __screenshots__/
 
+# Vite cache
+.vite/
+.vitepress/cache/
+node_modules/.vite/
+
 # OSX
 
 .DS_Store
