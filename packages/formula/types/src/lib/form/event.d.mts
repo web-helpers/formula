@@ -1,62 +1,25 @@
+import type { FormElement } from '../shared/fields.mjs';
+import type { FormulaStores, FieldValidity, FormValidatorFn, EnrichFields } from '../shared/types.mjs';
+interface EventOptions {
+    formValidators?: Record<string, FormValidatorFn>;
+    enrich?: EnrichFields;
+    preChanges?: (extracted: FieldExtractResult) => void;
+    postChanges?: (values: Record<string, unknown>) => void;
+}
+interface FieldExtractResult extends FieldValidity {
+    name: string;
+    value: unknown;
+}
 /**
  * Update the value and error stores, also update form validity
- * @param {FormulaField} details
- * @param {import('../shared/stores.mjs').FormulaStores} stores
- * @param {import('./form.mjs').FormulaOptions} options
- * @param {Map<string, HTMLInputElement[]>} hiddenFields
- * @param {(value: unknown | unknown[]) => Record<string, unknown>} enrich
  */
-export function valueUpdate(
-  details: FormulaField,
-  stores: import('../shared/stores.mjs').FormulaStores,
-  options: import('./form.mjs').FormulaOptions,
-  hiddenFields: Map<string, HTMLInputElement[]>,
-  enrich: (value: unknown | unknown[]) => Record<string, unknown>
-): void;
+export declare function valueUpdate(details: FieldExtractResult, stores: FormulaStores, options: EventOptions | undefined, hiddenFields: Map<string, FormElement[]>, enrich?: (value: unknown) => Record<string, unknown>): void;
 /**
- * Creates an event handler for the passed element with it's data handler and returns a function
- * to remove it
- * @param {string} name
- * @param {string} eventName
- * @param {import('../shared/fields.mjs').FormEl} element
- * @param {import('../shared/fields.mjs').FormEl[]} groupElements
- * @param {import('../shared/stores.mjs').FormulaStores} stores
- * @param {import('./form.mjs').FormulaOptions} options
- * @param {HTMLInputElement[]} hiddenGroups
- * @returns {() => void)} Function to remove the event listener
+ * Creates an event handler for the passed element with its data handler
  */
-export function createHandler(
-  name: string,
-  eventName: string,
-  element: import('../shared/fields.mjs').FormEl,
-  groupElements: import('../shared/fields.mjs').FormEl[],
-  stores: import('../shared/stores.mjs').FormulaStores,
-  options: import('./form.mjs').FormulaOptions,
-  hiddenGroups: HTMLInputElement[]
-): () => void;
+export declare function createHandler(name: string, eventName: string, element: FormElement, groupElements: FormElement[], stores: FormulaStores, options: EventOptions | undefined, hiddenGroups: Map<string, FormElement[]>): () => void;
 /**
- * Create a handler for a form element submission, when called it copies the contents
- * of the current value store to the submit store and then unsubscribes
- * @param {import('../shared/stores.mjs').FormulaStores} stores
- * @param {HTMLFormElement} form
+ * Create a handler for a form element submission
  */
-export function createSubmitHandler(stores: import('../shared/stores.mjs').FormulaStores, form: HTMLFormElement): () => void;
-export type FormulaError = {
-  /**
-   * - If the field is valid
-   */
-  valid: boolean;
-  /**
-   * - If the field is invalid
-   */
-  invalid: boolean;
-  /**
-   * The message returned from the HTML element
-   */
-  'message-': string;
-  /**
-   * - The errors from the {@link https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation|Contraint Validation API}
-   */
-  errors: Record<string, boolean>;
-};
-export type FormulaField = FormulaError;
+export declare function createSubmitHandler(stores: FormulaStores, form: HTMLFormElement): () => void;
+export {};

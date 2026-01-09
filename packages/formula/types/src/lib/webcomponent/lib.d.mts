@@ -1,6 +1,5 @@
+import type { FormulaStores } from '../shared/types.mjs';
 /**
- * Return a tuple of [key, key:joined, store] for each store
- * @param {import("../shared/stores.mjs").FormulaStores} stores
- * @returns {Map<string, string>}
+ * Return a map of store keys to event names (camelCase to kebab-case with form: prefix)
  */
-export function eventsWithFormKeys(stores: import('../shared/stores.mjs').FormulaStores): Map<string, string>;
+export declare function eventsWithFormKeys(stores: FormulaStores): Map<string, string>;

@@ -107,6 +107,15 @@ dist
 .moon/cache
 .moon/docker
 
+# Vitest
+__screenshots__/
+
+# Vite cache
+.vite/
+.vitepress/cache/
+packages/docs-site/.vitepress/cache/
+node_modules/.vite/
+
 # OSX
 
 .DS_Store

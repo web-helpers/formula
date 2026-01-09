@@ -1,28 +1,47 @@
 /**
- * Sets the ARIA role for the given element based on its input type.
- * @param {import('../shared/fields.mjs').FormEl} el - The form element.
- * @param {import('../shared/fields.mjs').FormEl[]} elements - A collection of form elements.
+ * Functions for setting ARIA roles and states on form elements, this provides better accessibility
+ * support for screen readers and other assistive technologies within Formula forms.
+ *
+ * @module formula/lib/form/aria
+ * @license MIT
+ * @author Tane Piper <me@tane.dev>
  */
-export function setAriaRole(el: import('../shared/fields.mjs').FormEl, elements: import('../shared/fields.mjs').FormEl[]): void;
+import type { FormElement } from '../shared/fields.mjs';
 /**
- * Sets ARIA states based on the attributes of the form element.
- * @param {import('../shared/fields.mjs').FormEl} el - The form element.
+ * Sets the ARIA role for the given element based on its input type
+ * @param el The form element to set the ARIA role for
+ * @param elements The group of elements the form element belongs to
+ *
+ * @returns void
  */
-export function setAriaStates(el: import('../shared/fields.mjs').FormEl): void;
+export declare function setAriaRole(el: FormElement, elements: FormElement[]): void;
 /**
- * Updates the ARIA checked state for the given element and other elements in the group.
- * @param {import('../shared/fields.mjs').FormEl} element - The form element.
- * @param {import('../shared/fields.mjs').FormEl[]} elGroup - A collection of form elements.
+ * Sets ARIA states based on the attributes of the form element
+ * @param el The form element to set ARIA states for
+ *
+ * @returns void
  */
-export function setAriaValue(element: import('../shared/fields.mjs').FormEl, elGroup: import('../shared/fields.mjs').FormEl[]): void;
+export declare function setAriaStates(el: FormElement): void;
 /**
- * Sets the ARIA role for the container element based on whether it is a group or not.
- * @param {HTMLElement} container - The container element.
- * @param {boolean} isGroup - Whether the container is a group.
+ * Updates the ARIA checked state for the given element
+ * @param element The form element to update the ARIA checked state for
+ * @param elGroup The group of elements the form element belongs to
+ *
+ * @returns void
  */
-export function setAriaContainer(container: HTMLElement, isGroup: boolean): void;
+export declare function setAriaValue(element: FormElement, elGroup: FormElement[]): void;
 /**
- * Adds the ARIA button role to all buttons in the container that do not have an ARIA role.
- * @param {HTMLElement} container - The container element with buttons.
+ * Sets the ARIA role for the container element
+ * @param container The container element to set the ARIA role for
+ * @param isGroup Whether the container is a group of elements
+ *
+ * @returns void
  */
-export function setAriaButtons(container: HTMLElement): void;
+export declare function setAriaContainer(container: HTMLElement, isGroup: boolean): void;
+/**
+ * Adds the ARIA button role to all buttons in the container
+ * @param container The container element containing the buttons
+ *
+ * @returns void
+ */
+export declare function setAriaButtons(container: HTMLElement): void;

@@ -1,13 +1,23 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "checkJs": false,
-    "allowJs": true,
-    "outDir": "../../.moon/cache/types/packages/docs-site"
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "jsx": "preserve"
   },
-  "references": [
-    {
-      "path": "../formula"
-    }
+  "include": [
+    ".vitepress/**/*.ts",
+    ".vitepress/**/*.mts",
+    ".vitepress/**/*.vue",
+    "docs/**/*.md"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vitepress/cache",
+    ".vitepress/dist"
   ]
 }

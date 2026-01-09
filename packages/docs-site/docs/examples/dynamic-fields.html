@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formula Dynamic Fields Example</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 2rem;
+      }
+
+      h1 {
+        color: #1e293b;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      h2 {
+        color: #1e293b;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+      }
+
+      .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #475569;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #f5576c;
+        box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.1);
+      }
+
+      .item-card {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+
+      .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .item-title {
+        font-weight: 600;
+        color: #1e293b;
+      }
+
+      .item-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 1rem;
+      }
+
+      @media (max-width: 640px) {
+        .item-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        width: 100%;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(245, 87, 108, 0.3);
+      }
+
+      .btn-secondary {
+        background: #6366f1;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #4f46e5;
+      }
+
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+        padding: 0.5rem 1rem;
+      }
+
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+
+      .btn-success {
+        background: #10b981;
+        color: white;
+      }
+
+      .btn-success:hover {
+        background: #059669;
+      }
+
+      .summary-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+      }
+
+      .summary-row.total {
+        border-top: 2px solid rgba(255, 255, 255, 0.3);
+        padding-top: 0.75rem;
+        margin-top: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 0.75rem;
+        font-family: 'Monaco', 'Courier New', monospace;
+        margin-top: 0.5rem;
+      }
+
+      .code-block pre {
+        margin: 0;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: #dcfce7;
+        color: #166534;
+        margin-right: 0.5rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #64748b;
+      }
+
+      .error-message {
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>🛒 Shopping Cart Form</h1>
+
+        <form id="cart-form">
+          <div class="form-section">
+            <h2>Customer Information</h2>
+            <div class="form-group">
+              <label for="customerName">Name</label>
+              <input type="text" id="customerName" name="customerName" required minlength="2" placeholder="Enter customer name" />
+              <span class="error-message" id="customerName-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required placeholder="customer@example.com" />
+              <span class="error-message" id="email-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="shippingAddress">Shipping Address</label>
+              <textarea id="shippingAddress" name="shippingAddress" required rows="3" placeholder="Enter full shipping address"></textarea>
+              <span class="error-message" id="shippingAddress-error"></span>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h2>Cart Items</h2>
+            <div id="items-container"></div>
+            <button type="button" class="btn btn-secondary" id="add-item-btn">➕ Add Item</button>
+          </div>
+
+          <div class="form-section">
+            <h2>Discount & Notes</h2>
+            <div class="form-group">
+              <label for="discountCode">Discount Code (Optional)</label>
+              <input
+                type="text"
+                id="discountCode"
+                name="discountCode"
+                placeholder="Enter discount code"
+                pattern="[A-Z0-9]{4,10}"
+                title="Discount code must be 4-10 uppercase letters or numbers"
+              />
+              <span class="error-message" id="discountCode-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="notes">Order Notes (Optional)</label>
+              <textarea id="notes" name="notes" rows="3" placeholder="Any special instructions?"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">💳 Process Order</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>📊 Order Summary</h2>
+
+        <div class="summary-card">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="subtotal">$0.00</span>
+          </div>
+          <div class="summary-row" id="discount-row" style="display: none">
+            <span>Discount (10%):</span>
+            <span id="discount">-$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Tax (10%):</span>
+            <span id="tax">$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping:</span>
+            <span id="shipping">$5.00</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total:</span>
+            <span id="total">$5.00</span>
+          </div>
+        </div>
+
+        <h2>📝 Form State</h2>
+        <div class="code-block">
+          <pre id="values-display">{}</pre>
+        </div>
+
+        <h2>⚠️ Validation Errors</h2>
+        <div class="code-block">
+          <pre id="errors-display">{}</pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { formula } from 'https://esm.sh/@webhelpers/formula@latest';
+
+      const form = document.getElementById('cart-form');
+      const itemsContainer = document.getElementById('items-container');
+      const addItemBtn = document.getElementById('add-item-btn');
+      const valuesDisplay = document.getElementById('values-display');
+      const errorsDisplay = document.getElementById('errors-display');
+
+      let itemCount = 0;
+
+      // Initialize formula with default values
+      const formulaForm = formula({
+        defaultValues: {
+          customerName: '',
+          email: '',
+          shippingAddress: '',
+          discountCode: '',
+          notes: '',
+        },
+      });
+
+      formulaForm.init(form);
+
+      // Function to calculate totals
+      function calculateTotals(values) {
+        let subtotal = 0;
+
+        // Calculate subtotal from all items
+        Object.keys(values).forEach((key) => {
+          if (key.startsWith('item-') && key.endsWith('-total')) {
+            const total = parseFloat(values[key]) || 0;
+            subtotal += total;
+          }
+        });
+
+        // Check for discount code
+        const discountCode = values.discountCode?.toUpperCase() || '';
+        const hasDiscount = discountCode === 'FORM';
+        const discount = hasDiscount ? subtotal * 0.1 : 0;
+        const subtotalAfterDiscount = subtotal - discount;
+
+        const tax = subtotalAfterDiscount * 0.1;
+        const shipping = subtotal >= 500 ? 15.0 : 5.0;
+        const total = subtotalAfterDiscount + tax + shipping;
+
+        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+
+        // Show/hide discount row
+        const discountRow = document.getElementById('discount-row');
+        if (hasDiscount) {
+          discountRow.style.display = 'flex';
+          document.getElementById('discount').textContent = `-$${discount.toFixed(2)}`;
+        } else {
+          discountRow.style.display = 'none';
+        }
+
+        document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+        document.getElementById('shipping').textContent = `$${shipping.toFixed(2)}`;
+        document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+      }
+
+      // Function to create item card
+      function createItemCard(index) {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'item-card';
+        itemCard.id = `item-${index}`;
+        itemCard.innerHTML = `
+        <div class="item-header">
+          <span class="item-title">Item #${index + 1}</span>
+          <button type="button" class="btn btn-danger" onclick="removeItem(${index})">
+            🗑️ Remove
+          </button>
+        </div>
+        <div class="item-grid">
+          <div class="form-group">
+            <label for="item-${index}-name">Product Name</label>
+            <input 
+              type="text" 
+              id="item-${index}-name" 
+              name="item-${index}-name" 
+              required
+              placeholder="Product name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="item-${index}-quantity">Quantity</label>
+            <input 
+              type="number" 
+              id="item-${index}-quantity" 
+              name="item-${index}-quantity" 
+              min="1" 
+              value="1"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="item-${index}-price">Price ($)</label>
+            <input 
+              type="number" 
+              id="item-${index}-price" 
+              name="item-${index}-price" 
+              min="0" 
+              step="0.01" 
+              value="0"
+              required
+            />
+          </div>
+        </div>
+        <input type="hidden" id="item-${index}-total" name="item-${index}-total" value="0" />
+      `;
+
+        itemsContainer.appendChild(itemCard);
+
+        // Add event listeners for quantity and price to calculate total
+        const quantityInput = itemCard.querySelector(`#item-${index}-quantity`);
+        const priceInput = itemCard.querySelector(`#item-${index}-price`);
+        const totalInput = itemCard.querySelector(`#item-${index}-total`);
+
+        function updateItemTotal() {
+          const quantity = parseFloat(quantityInput.value) || 0;
+          const price = parseFloat(priceInput.value) || 0;
+          const total = quantity * price;
+          totalInput.value = total.toFixed(2);
+          totalInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        quantityInput.addEventListener('input', updateItemTotal);
+        priceInput.addEventListener('input', updateItemTotal);
+
+        // Trigger initial calculation and notify Formula of new fields
+        updateItemTotal();
+
+        // Call updateForm to notify Formula about the new fields
+        formulaForm.updateForm();
+      }
+
+      // Make removeItem globally accessible
+      window.removeItem = function (index) {
+        const itemCard = document.getElementById(`item-${index}`);
+        if (itemCard) {
+          itemCard.remove();
+          // Trigger update by dispatching input event on form
+          form.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+
+      // Add item button handler
+      addItemBtn.addEventListener('click', () => {
+        createItemCard(itemCount);
+        itemCount++;
+      });
+
+      // Subscribe to form values
+      formulaForm.formValues.subscribe((values) => {
+        valuesDisplay.textContent = JSON.stringify(values, null, 2);
+        calculateTotals(values);
+        console.log('Form values:', values);
+      });
+
+      // Subscribe to form errors
+      formulaForm.errors.subscribe((errors) => {
+        errorsDisplay.textContent = JSON.stringify(errors, null, 2);
+
+        // Update inline error messages
+        ['customerName', 'email', 'shippingAddress', 'discountCode'].forEach((field) => {
+          const errorEl = document.getElementById(`${field}-error`);
+          if (errorEl && errors[field]?.message) {
+            errorEl.textContent = errors[field].message;
+          } else if (errorEl) {
+            errorEl.textContent = '';
+          }
+        });
+
+        console.log('Form errors:', errors);
+      });
+
+      // Handle form submission
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const values = formulaForm.formValues.get();
+
+        // Build order summary
+        const items = [];
+        Object.keys(values).forEach((key) => {
+          const match = key.match(/^item-(\d+)-name$/);
+          if (match) {
+            const index = match[1];
+            items.push({
+              name: values[`item-${index}-name`],
+              quantity: values[`item-${index}-quantity`],
+              price: values[`item-${index}-price`],
+              total: values[`item-${index}-total`],
+            });
+          }
+        });
+
+        const subtotal = items.reduce((sum, item) => sum + parseFloat(item.total), 0);
+
+        // Check for discount code
+        const discountCode = values.discountCode?.toUpperCase() || '';
+        const hasDiscount = discountCode === 'FORM';
+        const discount = hasDiscount ? subtotal * 0.1 : 0;
+        const subtotalAfterDiscount = subtotal - discount;
+
+        const tax = subtotalAfterDiscount * 0.1;
+        const shipping = subtotal > 500 ? 15.0 : 5.0;
+        const total = subtotalAfterDiscount + tax + shipping;
+
+        const orderSummary = {
+          customer: {
+            name: values.customerName,
+            email: values.email,
+            address: values.shippingAddress,
+          },
+          items,
+          pricing: {
+            subtotal: subtotal.toFixed(2),
+            discount: hasDiscount ? discount.toFixed(2) : '0.00',
+            discountApplied: hasDiscount,
+            tax: tax.toFixed(2),
+            shipping: shipping.toFixed(2),
+            total: total.toFixed(2),
+          },
+          discountCode: values.discountCode,
+          notes: values.notes,
+        };
+
+        alert(`Order Submitted!\n\n${JSON.stringify(orderSummary, null, 2)}`);
+        console.log('Order submitted:', orderSummary);
+      });
+
+      // Add initial item
+      createItemCard(itemCount);
+      itemCount++;
+    </script>
+  </body>
+</html>

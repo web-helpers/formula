@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formula Basic Form Example</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #f1f5f9;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        max-width: 1200px;
+        width: 100%;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 2rem;
+      }
+
+      h1 {
+        color: #1e293b;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #475569;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      input:invalid:not(:placeholder-shown) {
+        border-color: #ef4444;
+      }
+
+      .error-message {
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: block;
+        min-height: 1rem;
+      }
+
+      button {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .state-section {
+        margin-bottom: 1.5rem;
+      }
+
+      .state-section h2 {
+        color: #1e293b;
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
+      }
+
+      .state-badges {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .badge-success {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .badge-error {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 0.75rem;
+        font-family: 'Monaco', 'Courier New', monospace;
+        margin-top: 0.5rem;
+      }
+
+      .code-block pre {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>📝 Basic Form</h1>
+        <form id="basic-form">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" required minlength="2" placeholder="Enter your first name" />
+            <span class="error-message" id="firstName-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" required minlength="2" placeholder="Enter your last name" />
+            <span class="error-message" id="lastName-error"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email" />
+            <span class="error-message" id="email-error"></span>
+          </div>
+
+          <button type="submit">Submit Form</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="state-section">
+          <h2>📊 Form State</h2>
+          <div class="state-badges">
+            <div id="dirty-badge" class="badge badge-error"><span>💾</span> Clean</div>
+            <div id="touched-badge" class="badge badge-error"><span>👆</span> Untouched</div>
+          </div>
+        </div>
+
+        <div class="state-section">
+          <h2>📝 Values</h2>
+          <div class="code-block">
+            <pre id="values-display">{}</pre>
+          </div>
+        </div>
+
+        <div class="state-section">
+          <h2>⚠️ Errors</h2>
+          <div class="code-block">
+            <pre id="errors-display">{}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      // Import Formula from esm.sh CDN
+      import { formula } from 'https://esm.sh/@webhelpers/formula@latest';
+
+      // Get the form element
+      const form = document.getElementById('basic-form');
+
+      // Create formula instance with default values
+      const formulaForm = formula({
+        defaultValues: {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+        },
+      });
+
+      // Initialize the form
+      const instance = formulaForm.init(form);
+
+      // Get display elements
+      const valuesDisplay = document.getElementById('values-display');
+      const errorsDisplay = document.getElementById('errors-display');
+      const dirtyBadge = document.getElementById('dirty-badge');
+      const touchedBadge = document.getElementById('touched-badge');
+
+      // Subscribe to form values
+      formulaForm.formValues.subscribe((values) => {
+        valuesDisplay.textContent = JSON.stringify(values, null, 2);
+        console.log('Form values:', values);
+      });
+
+      // Subscribe to form errors and update error messages
+      formulaForm.errors.subscribe((errors) => {
+        errorsDisplay.textContent = JSON.stringify(errors, null, 2);
+
+        // Update inline error messages
+        ['firstName', 'lastName', 'email'].forEach((field) => {
+          const errorEl = document.getElementById(`${field}-error`);
+          if (errors[field]?.message) {
+            errorEl.textContent = errors[field].message;
+          } else {
+            errorEl.textContent = '';
+          }
+        });
+
+        console.log('Form errors:', errors);
+      });
+
+      // Subscribe to dirty state
+      formulaForm.dirty.subscribe((dirty) => {
+        const isDirty = Object.values(dirty).some((v) => v);
+        dirtyBadge.className = `badge ${isDirty ? 'badge-error' : 'badge-success'}`;
+        dirtyBadge.innerHTML = `<span>💾</span> ${isDirty ? 'Dirty' : 'Clean'}`;
+        console.log('Form is dirty:', isDirty);
+      });
+
+      // Subscribe to touched state
+      formulaForm.touched.subscribe((touched) => {
+        const isTouched = Object.values(touched).some((v) => v);
+        touchedBadge.className = `badge ${isTouched ? 'badge-error' : 'badge-success'}`;
+        touchedBadge.innerHTML = `<span>👆</span> ${isTouched ? 'Touched' : 'Untouched'}`;
+        console.log('Form is touched:', isTouched);
+      });
+
+      // Handle form submission
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const values = formulaForm.formValues.get();
+        alert(`Form submitted!\n\n${JSON.stringify(values, null, 2)}`);
+        console.log('Form submitted with values:', values);
+      });
+    </script>
+  </body>
+</html>

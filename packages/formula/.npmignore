@@ -1,3 +1,6 @@
 moon.yml
-playwrite.config.js
 tsconfig.json
+src/
+index.mts
+vite.config.mts
+*.spec.mts
