@@ -16,25 +16,25 @@
     "packages/*"
   ],
   "dependencies": {
-    "nanostores": "1.0.1"
+    "nanostores": "1.1.0"
   },
   "devDependencies": {
-    "@vitest/browser": "4.0.9",
-    "@vitest/browser-playwright": "4.0.9",
-    "@vitest/coverage-v8": "^4.0.9",
-    "@vitest/ui": "4.0.9",
-    "astro": "^5.15.8",
+    "@vitest/browser": "4.0.16",
+    "@vitest/browser-playwright": "4.0.16",
+    "@vitest/coverage-v8": "4.0.16",
+    "@vitest/ui": "4.0.16",
+    "astro": "5.16.8",
     "custom-elements-manifest": "2.1.0",
-    "eslint": "9.39.1",
-    "playwright": "1.56.1",
-    "prettier": "3.6.2",
+    "eslint": "9.39.2",
+    "playwright": "^1.57.0",
+    "prettier": "3.7.4",
     "tsconfig-moon": "1.4.1",
     "typescript": "5.9.3",
     "vitepress": "1.6.4",
-    "vitest": "4.0.9",
+    "vitest": "4.0.16",
     "web-component-analyzer": "2.0.0"
   },
-  "packageManager": "npm@9.6.4",
+  "packageManager": "npm@11.7.0",
   "engines": {
     "node": "24.10.0",
     "npm": ">=11.6.0"

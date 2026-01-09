@@ -113,6 +113,7 @@ __screenshots__/
 # Vite cache
 .vite/
 .vitepress/cache/
+packages/docs-site/.vitepress/cache/
 node_modules/.vite/
 
 # OSX
