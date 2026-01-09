@@ -56,44 +56,150 @@ npm install @webhelpers/formula
 
 The simplest way to get started is with the web component. Just wrap your existing HTML form and import Formula:
 
-```html
+::: code-group
+
+```html [npm]
 <!DOCTYPE html>
 <html>
   <head>
     <title>My Reactive Form</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; background: #f5f5f5; padding: 2rem; }
+      .card { background: white; border-radius: 12px; padding: 2rem; max-width: 400px; 
+              margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+      h2 { margin: 0 0 1.5rem; color: #333; }
+      .field { margin-bottom: 1rem; }
+      label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: #555; }
+      input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;
+              font-size: 1rem; transition: border-color 0.2s; }
+      input:focus { outline: none; border-color: #6366f1; }
+      input:invalid:not(:placeholder-shown) { border-color: #ef4444; }
+      button { width: 100%; padding: 0.75rem; background: #6366f1; color: white;
+               border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+      button:hover { background: #4f46e5; }
+      button:disabled { background: #a5a5a5; cursor: not-allowed; }
+      .output { margin-top: 1.5rem; padding: 1rem; background: #1e1e1e; 
+                border-radius: 8px; font-family: monospace; font-size: 0.85rem; }
+      .output pre { margin: 0; color: #a5d6ff; white-space: pre-wrap; }
+    </style>
   </head>
   <body>
-    <formula-form handle-submit>
-      <form>
-        <input name="email" type="email" required />
-        <input name="password" type="password" required minlength="8" />
-        <button type="submit">Submit</button>
-      </form>
-    </formula-form>
+    <div class="card">
+      <h2>🧪 Sign Up</h2>
+      <formula-form handle-submit>
+        <form>
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" 
+                   placeholder="Min 8 characters" required minlength="8" />
+          </div>
+          <button type="submit">Create Account</button>
+        </form>
+      </formula-form>
+      <div class="output">
+        <pre id="output">{ "email": "", "password": "" }</pre>
+      </div>
+    </div>
 
     <script type="module">
       import '@webhelpers/formula/webcomponent';
 
       const form = document.querySelector('formula-form');
+      const output = document.getElementById('output');
 
-      // Listen to real-time form values as users type
+      // Live output as users type
       form.addEventListener('form:values', (e) => {
-        console.log('Form data:', e.detail);
+        output.textContent = JSON.stringify(e.detail, null, 2);
       });
 
-      // Handle form submission with your API
       form.addEventListener('form:submit', async (e) => {
-        await fetch('/api/submit', {
-          method: 'POST',
-          body: JSON.stringify(e.detail),
-        });
+        e.preventDefault();
+        alert('Form submitted! Check the console.');
+        console.log('Submitted:', e.detail);
       });
     </script>
   </body>
 </html>
 ```
 
-That's it! Your form now has reactive state management, automatic validation, and real-time updates. No build tools needed if you use a CDN like `esm.sh`.
+```html [CDN (esm.sh)]
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Reactive Form</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; background: #f5f5f5; padding: 2rem; }
+      .card { background: white; border-radius: 12px; padding: 2rem; max-width: 400px; 
+              margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+      h2 { margin: 0 0 1.5rem; color: #333; }
+      .field { margin-bottom: 1rem; }
+      label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: #555; }
+      input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;
+              font-size: 1rem; transition: border-color 0.2s; }
+      input:focus { outline: none; border-color: #6366f1; }
+      input:invalid:not(:placeholder-shown) { border-color: #ef4444; }
+      button { width: 100%; padding: 0.75rem; background: #6366f1; color: white;
+               border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+      button:hover { background: #4f46e5; }
+      button:disabled { background: #a5a5a5; cursor: not-allowed; }
+      .output { margin-top: 1.5rem; padding: 1rem; background: #1e1e1e; 
+                border-radius: 8px; font-family: monospace; font-size: 0.85rem; }
+      .output pre { margin: 0; color: #a5d6ff; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>🧪 Sign Up</h2>
+      <formula-form handle-submit>
+        <form>
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" 
+                   placeholder="Min 8 characters" required minlength="8" />
+          </div>
+          <button type="submit">Create Account</button>
+        </form>
+      </formula-form>
+      <div class="output">
+        <pre id="output">{ "email": "", "password": "" }</pre>
+      </div>
+    </div>
+
+    <script type="module">
+      // No build step required - import directly from esm.sh
+      import 'https://esm.sh/@webhelpers/formula/webcomponent';
+
+      const form = document.querySelector('formula-form');
+      const output = document.getElementById('output');
+
+      // Live output as users type
+      form.addEventListener('form:values', (e) => {
+        output.textContent = JSON.stringify(e.detail, null, 2);
+      });
+
+      form.addEventListener('form:submit', async (e) => {
+        e.preventDefault();
+        alert('Form submitted! Check the console.');
+        console.log('Submitted:', e.detail);
+      });
+    </script>
+  </body>
+</html>
+```
+
+:::
+
+That's it! Your form now has reactive state management, automatic validation, and real-time updates. The CDN option requires no build tools - just add the script and start using Formula immediately.
 
 ## Why Formula?
 

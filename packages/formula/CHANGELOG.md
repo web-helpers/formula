@@ -5,13 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2026-01-09
 
 ### Added
 
-- Comprehensive test suite with Vitest and Playwright browser provider
-  - **163 test cases across 14 test files** covering all form functionality and bug fixes
-  - Real browser DOM testing with Playwright headless Chromium
+- Comprehensive real browser test suite with Vitest and Playwright browser provider
+  - **163 test cases across 14 test files** covering most form functionality in the HTML spec
   - Tests for memory leaks, state mutations, race conditions, and edge cases
   - New test files: `extract.spec.mjs` (16 tests), `group.spec.mjs` (12 tests), `form.spec.mjs` (35 tests), `init.spec.mjs` (14 tests), `index.spec.mjs` (20 tests - webcomponent), `lib.spec.mjs` (5 tests - webcomponent)
   - Enhanced test files: `dirty.spec.mjs` (6 tests), `enrichment.spec.mjs` (4 tests), `event.spec.mjs` (26 tests), `errors.spec.mjs` (6 tests), `touch.spec.mjs` (3 tests), `fields.spec.mjs` (2 tests), `stores.spec.mjs` (6 tests), `aria.spec.mjs` (8 tests)

@@ -29,7 +29,9 @@ export function createForm(
   groupName: string | undefined,
   initialData: Record<string, unknown>,
 ): Formula {
-  const eventHandlers = new Map<FormElement, Array<() => void>>();
+  // WeakMap allows garbage collection of handlers when elements are removed from DOM
+  const eventHandlers = new WeakMap<FormElement, Array<() => void>>();
+  const trackedElements = new Set<FormElement>(); // Track elements for cleanup iteration
   const hiddenGroups = new Map<string, FormElement[]>();
   const touchHandlers = new Set<() => void>();
   const dirtyHandlers = new Set<() => void>();
@@ -38,8 +40,8 @@ export function createForm(
   const isGroup = typeof groupName !== 'undefined';
   const initialOptions = options;
   let submitHandler: ((e: Event) => void) | undefined = undefined;
-  let unsub = () => {};
-  let innerReset = () => {};
+  let unsub = () => { };
+  let innerReset = () => { };
 
   let groupedMap: Array<[string, FormElement[]]> = [];
 
@@ -72,7 +74,8 @@ export function createForm(
     innerReset = createReset(node, groupedMap, stores, innerOpt);
 
     groupedMap.forEach(([name, elements]) => {
-      if ((elements[0] as HTMLInputElement).type === 'hidden') {
+      const firstEl = elements[0];
+      if (firstEl instanceof HTMLInputElement && firstEl.type === 'hidden') {
         hiddenGroups.set(name, elements);
         return;
       }
@@ -94,8 +97,10 @@ export function createForm(
             cleanups.push(createHandler(name, event, el, elements, stores, innerOpt, hiddenGroups));
           });
           eventHandlers.set(el, cleanups);
+          trackedElements.add(el);
         } else if (el instanceof HTMLSelectElement) {
           eventHandlers.set(el, [createHandler(name, 'change', el, elements, stores, innerOpt, hiddenGroups)]);
+          trackedElements.add(el);
         } else {
           const changeEventTypes = ['radio', 'checkbox', 'file', 'range', 'color', 'date', 'time', 'week', 'number'];
           const cleanups: Array<() => void> = [];
@@ -110,6 +115,7 @@ export function createForm(
 
           if (cleanups.length > 0) {
             eventHandlers.set(el, cleanups);
+            trackedElements.add(el);
           }
         }
       });
@@ -128,12 +134,17 @@ export function createForm(
 
   function cleanupSubscriptions() {
     unsub && unsub();
-    [...eventHandlers].forEach(([el, fns]) => {
-      el.setCustomValidity?.('');
-      fns.forEach((fn) => fn());
+    trackedElements.forEach((el) => {
+      const fns = eventHandlers.get(el);
+      if (fns) {
+        el.setCustomValidity?.('');
+        fns.forEach((fn) => fn());
+        eventHandlers.delete(el);
+      }
     });
+    trackedElements.clear();
     [...touchHandlers, ...dirtyHandlers].forEach((fn) => fn());
-    [eventHandlers, touchHandlers, dirtyHandlers].forEach((h) => h.clear());
+    [touchHandlers, dirtyHandlers].forEach((h) => h.clear());
     if (submitHandler && currentNode instanceof HTMLFormElement) {
       currentNode.removeEventListener('submit', submitHandler);
     }

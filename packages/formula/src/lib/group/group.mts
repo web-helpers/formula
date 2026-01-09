@@ -17,6 +17,25 @@ export interface Beaker {
   clear: () => void;
 }
 
+/**
+ * Type for dynamic store access - provides get/set methods for any store value
+ */
+type StoreAccessor = Record<string, { get: () => unknown; set: (value: unknown) => void }>;
+
+/**
+ * Helper to get a value from a store by key
+ */
+function getStoreValue(stores: BeakerStores, key: string): unknown {
+  return (stores as StoreAccessor)[key].get();
+}
+
+/**
+ * Helper to set a value on a store by key
+ */
+function setStoreValue(stores: BeakerStores, key: string, value: unknown): void {
+  (stores as StoreAccessor)[key].set(value);
+}
+
 let groupCounter = 0;
 
 export function createGroup(options: BeakerOptions, beakerStores: Map<string, BeakerStores>): Beaker {
@@ -41,8 +60,8 @@ export function createGroup(options: BeakerOptions, beakerStores: Map<string, Be
   function cleanupStores(rows: Element[]) {
     for (const key of Object.keys(groupStores)) {
       if (['formValues', 'initialValues', 'submitValues'].includes(key)) continue;
-      const state = (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].get();
-      (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].set(Array.isArray(state) ? state.slice(0, rows.length) : state);
+      const state = getStoreValue(groupStores, key);
+      setStoreValue(groupStores, key, Array.isArray(state) ? state.slice(0, rows.length) : state);
     }
   }
 
@@ -56,13 +75,13 @@ export function createGroup(options: BeakerOptions, beakerStores: Map<string, Be
           return;
         }
         initial = false;
-        const state = (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].get();
+        const state = getStoreValue(groupStores, key);
         if (Array.isArray(state)) {
           const newState = [...state];
           newState.splice(index, 1, value);
-          (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].set(newState);
+          setStoreValue(groupStores, key, newState);
         } else {
-          (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].set(state);
+          setStoreValue(groupStores, key, state);
         }
       });
       subscriptions.add(unsub);
@@ -152,11 +171,11 @@ export function createGroup(options: BeakerOptions, beakerStores: Map<string, Be
     },
     delete: (index: number) =>
       Object.keys(groupStores).forEach((key) => {
-        const state = (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].get();
+        const state = getStoreValue(groupStores, key);
         if (Array.isArray(state)) {
           const newState = [...state];
           newState.splice(index, 1);
-          (groupStores as Record<string, { get: () => unknown; set: (value: unknown) => void }>)[key].set(newState);
+          setStoreValue(groupStores, key, newState);
         }
       }),
     clear: () => groupStores.formValues.set([]),

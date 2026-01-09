@@ -66,7 +66,7 @@ export type EnrichFields = Record<string, Record<string, EnricherFn>>;
 /**
  * Form validator function
  */
-export type FormValidatorFn = (values: Record<string, unknown>) => string;
+export type FormValidatorFn = (values: Record<string, unknown>) => string | null;
 
 /**
  * Custom messages for validation errors
